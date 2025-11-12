@@ -1,0 +1,239 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Management
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(KASIR)
+  cabang    Cabang?  @relation(fields: [cabangId], references: [id])
+  cabangId  String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  transactions Transaction[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  OWNER
+  MANAGER
+  KASIR
+}
+
+// Cabang/Branch
+model Cabang {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  address   String?
+  phone     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users           User[]
+  stocks          Stock[]
+  transactions    Transaction[]
+  printerSettings PrinterSettings?
+
+  @@map("cabang")
+}
+
+// Kategori Produk (Seragam, Perlengkapan, dll)
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+
+  @@map("categories")
+}
+
+// Produk (Baju Seragam SD, Celana, dll)
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  category    Category    @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  productType ProductType @default(VARIANT) // SINGLE atau VARIANT
+  price       Float? // Hanya untuk SINGLE product
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  variants ProductVariant[]
+
+  @@map("products")
+}
+
+enum ProductType {
+  SINGLE // Produk tanpa varian (harga di product)
+  VARIANT // Produk dengan varian (harga di variant)
+}
+
+// Variant Produk (Size/Nomor: 6, 8, 10, dst)
+model ProductVariant {
+  id           String   @id @default(cuid())
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId    String
+  variantName  String // "Size", "Nomor", "Ukuran"
+  variantValue String // "6", "8", "10", "S", "M", "L"
+  sku          String   @unique // SKU/Barcode
+  price        Float // Harga per variant (bisa beda-beda)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  stocks             Stock[]
+  transactionItems   TransactionItem[]
+  priceDiscrepancies PriceDiscrepancy[]
+
+  @@unique([productId, variantName, variantValue])
+  @@map("product_variants")
+}
+
+// Stok per Cabang
+model Stock {
+  id               String         @id @default(cuid())
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
+  productVariantId String
+  cabang           Cabang         @relation(fields: [cabangId], references: [id])
+  cabangId         String
+  quantity         Int            @default(0)
+  minStock         Int            @default(5) // Alert kalau di bawah ini
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@unique([productVariantId, cabangId])
+  @@map("stocks")
+}
+
+// Transaksi Penjualan
+model Transaction {
+  id             String        @id @default(cuid())
+  transactionNo  String        @unique // INV-20251107-0001
+  cabang         Cabang        @relation(fields: [cabangId], references: [id])
+  cabangId       String
+  kasir          User          @relation(fields: [kasirId], references: [id])
+  kasirId        String
+  customerName   String?
+  customerPhone  String?
+  subtotal       Float
+  discount       Float         @default(0)
+  tax            Float         @default(0)
+  total          Float
+  paymentMethod  PaymentMethod
+  paymentStatus  PaymentStatus @default(COMPLETED)
+  // Payment Details
+  bankName       String? // Nama bank untuk DEBIT/TRANSFER
+  referenceNo    String? // Nomor referensi/approval
+  cardLastDigits String? // 4 digit terakhir kartu (DEBIT)
+  notes          String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  items              TransactionItem[]
+  priceDiscrepancies PriceDiscrepancy[]
+
+  @@map("transactions")
+}
+
+enum PaymentMethod {
+  CASH
+  DEBIT
+  TRANSFER
+  QRIS
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+// Item per Transaksi
+model TransactionItem {
+  id               String         @id @default(cuid())
+  transaction      Transaction    @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  transactionId    String
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+  productVariantId String
+  productName      String // Snapshot nama produk
+  variantInfo      String // Snapshot variant (Size: 10)
+  sku              String? // SKU snapshot
+  quantity         Int
+  price            Float // Harga saat transaksi
+  subtotal         Float
+  createdAt        DateTime       @default(now())
+
+  @@map("transaction_items")
+}
+
+// Price Discrepancy - Track price differences from offline transactions
+model PriceDiscrepancy {
+  id               String         @id @default(cuid())
+  transaction      Transaction    @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  transactionId    String
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+  productVariantId String
+  expectedPrice    Float // Current price in database
+  actualPrice      Float // Price used in transaction (offline data)
+  difference       Float // expectedPrice - actualPrice
+  reason           String // Explanation
+  resolved         Boolean        @default(false)
+  resolvedBy       String? // User ID who resolved
+  resolvedAt       DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@map("price_discrepancies")
+}
+
+// Global Settings
+model Settings {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
+
+model PrinterSettings {
+  id               String   @id @default(cuid())
+  cabangId         String?  @unique
+  autoPrintEnabled Boolean  @default(true)
+  printerName      String?
+  paperWidth       Int      @default(80)
+  showPreview      Boolean  @default(false)
+  printCopies      Int      @default(1)
+  storeName        String   @default("ANEKABUANA STORE")
+  branchName       String?
+  address          String?
+  phone            String?
+  footerText1      String?
+  footerText2      String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  cabang Cabang? @relation(fields: [cabangId], references: [id])
+
+  @@map("printer_settings")
+}
