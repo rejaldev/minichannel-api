@@ -513,6 +513,86 @@ router.get('/alerts/low-stock', authMiddleware, async (req, res) => {
   }
 });
 
+
+// Get product by barcode (uses SKU)
+router.get('/barcode/:barcode', async (req, res) => {
+  try {
+    const { barcode } = req.params;
+    
+    // Search by SKU (barcode scanner will scan SKU)
+    const variant = await prisma.productVariant.findUnique({
+      where: { sku: barcode },
+      include: {
+        product: {
+          include: {
+            category: true
+          }
+        },
+        stocks: {
+          include: {
+            cabang: true
+          }
+        }
+      }
+    });
+    
+    if (!variant) {
+      return res.status(404).json({ error: 'Produk tidak ditemukan' });
+    }
+    
+    res.json({ 
+      success: true,
+      data: {
+        id: variant.product.id,
+        name: variant.product.name,
+        description: variant.product.description,
+        category: variant.product.category,
+        variant: {
+          id: variant.id,
+          sku: variant.sku,
+          size: variant.size,
+          color: variant.color,
+          material: variant.material,
+          price: variant.price
+        },
+        stocks: variant.stocks
+      }
+    });
+  } catch (error) {
+    console.error('Get product by barcode error:', error);
+    res.status(500).json({ error: 'Gagal mencari produk' });
+  }
+});
+    
+    if (!variant) {
+      return res.status(404).json({ error: 'Produk tidak ditemukan' });
+    }
+    
+    res.json({ 
+      success: true,
+      data: {
+        id: variant.product.id,
+        name: variant.product.name,
+        description: variant.product.description,
+        category: variant.product.category,
+        variant: {
+          id: variant.id,
+          sku: variant.sku,
+          barcode: variant.barcode,
+          size: variant.size,
+          color: variant.color,
+          material: variant.material,
+          price: variant.price
+        },
+        stocks: variant.stocks
+      }
+    });
+  } catch (error) {
+    console.error('Get product by barcode error:', error);
+    res.status(500).json({ error: 'Gagal mencari produk' });
+  }
+});
+
 module.exports = router;
 
  
