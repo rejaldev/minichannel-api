@@ -44,9 +44,20 @@ router.get('/products/delta', authMiddleware, async (req, res) => {
       orderBy: { updatedAt: 'desc' }
     });
 
+    // Get unique categories from products
+    const categoryIds = [...new Set(products.map(p => p.categoryId).filter(Boolean))];
+    const categories = await prisma.category.findMany({
+      where: {
+        id: {
+          in: categoryIds
+        }
+      }
+    });
+
     res.json({
       count: products.length,
       products,
+      categories,
       syncedAt: new Date().toISOString()
     });
   } catch (error) {

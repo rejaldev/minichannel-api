@@ -2,7 +2,7 @@
 
 REST API untuk sistem Point of Sale Aneka Buana menggunakan Express.js + Prisma ORM + PostgreSQL.
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 npm install
@@ -11,7 +11,7 @@ npm start
 
 **URL:** http://localhost:5000
 
-## 🔧 Tech Stack
+## Tech Stack
 
 - **Runtime:** Node.js
 - **Framework:** Express.js
@@ -20,7 +20,7 @@ npm start
 - **Authentication:** JWT (jsonwebtoken + bcryptjs)
 - **CORS:** Enabled untuk frontend
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 backend/
@@ -33,7 +33,8 @@ backend/
 │   ├── categories.js      # Category management
 │   ├── transactions.js    # Transaction endpoints
 │   ├── cabang.js          # Branch management
-│   └── settings.js        # ⭐ NEW - Printer settings API
+│   ├── settings.js        # Printer settings API
+│   └── sync.js            # Desktop sync endpoints
 ├── middleware/
 │   └── auth.js            # JWT authentication middleware
 ├── lib/
@@ -42,7 +43,7 @@ backend/
 └── package.json
 ```
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### Authentication
 
@@ -83,7 +84,7 @@ POST   /api/transactions            # Create new transaction
 GET    /api/transactions/summary    # Get transaction summary
 ```
 
-### Settings (NEW!)
+### Settings
 
 ```
 GET    /api/settings/printer?cabangId=xxx    # Get printer settings by branch
@@ -124,7 +125,7 @@ PUT    /api/cabang/:id              # Update branch
 DELETE /api/cabang/:id              # Delete branch
 ```
 
-## 🔐 Authentication
+## Authentication
 
 All protected routes require JWT token in Authorization header:
 
@@ -138,7 +139,7 @@ Authorization: Bearer <token>
 - **MANAGER** - Manage products, view reports
 - **KASIR** - POS transactions only
 
-## 🗄️ Database Setup
+## Database Setup
 
 ### 1. Configure Environment
 
@@ -170,7 +171,7 @@ npx prisma studio
 
 **URL:** http://localhost:5555
 
-## 📊 Database Schema
+## Database Schema
 
 ### Main Tables
 
@@ -183,7 +184,7 @@ npx prisma studio
 - `transactions` - Transaction records
 - `transaction_items` - Transaction line items
 - `settings` - General app settings (key-value)
-- `printer_settings` - ⭐ NEW - Printer configuration per branch
+- `printer_settings` - Printer configuration per branch
 
 ### Relationships
 
@@ -197,25 +198,31 @@ cabang → printer_settings (1:1)
 cabang → users (1:N)
 ```
 
-## 🔄 Recent Updates
+## Recent Updates
+
+### v1.2.1 (Nov 15, 2025)
+
+- Created comprehensive API usage documentation
+- Identified unused endpoints for potential cleanup
+- All sync endpoints actively used by desktop POS
 
 ### v1.1.0 (Nov 13, 2025)
 
-- ✅ Added printer settings API (`/api/settings/printer`)
-- ✅ Database migration: `printer_settings` table
-- ✅ Per-branch printer configuration
-- ✅ Validation for paper width and print copies
-- ✅ Auto-create default settings on first GET
+- Added printer settings API (`/api/settings/printer`)
+- Database migration: `printer_settings` table
+- Per-branch printer configuration
+- Validation for paper width and print copies
+- Auto-create default settings on first GET
 
 ### v1.0.0
 
-- ✅ Complete REST API for POS system
-- ✅ JWT authentication with role-based access
-- ✅ Multi-branch stock management
-- ✅ Transaction tracking and reporting
-- ✅ PostgreSQL on Railway
+- Complete REST API for POS system
+- JWT authentication with role-based access
+- Multi-branch stock management
+- Transaction tracking and reporting
+- PostgreSQL on Railway
 
-## 🛠️ Available Scripts
+## Available Scripts
 
 ```bash
 # Development
@@ -233,7 +240,7 @@ pm2 logs backend       # View PM2 logs
 pm2 restart backend    # Restart server
 ```
 
-## 🔒 Security Features
+## Security Features
 
 - Password hashing with bcryptjs
 - JWT token expiration (24 hours)
@@ -241,14 +248,14 @@ pm2 restart backend    # Restart server
 - SQL injection protection via Prisma
 - Role-based access control
 
-## 🌐 CORS Configuration
+## CORS Configuration
 
 Allowed origins:
 
 - `http://localhost:3000` (Frontend dashboard)
 - `http://localhost:3001` (Desktop POS)
 
-## 📝 Environment Variables
+## Environment Variables
 
 ```env
 DATABASE_URL=postgresql://...     # PostgreSQL connection string
@@ -257,7 +264,7 @@ PORT=5000                         # Server port
 NODE_ENV=development              # Environment
 ```
 
-## 🚨 Error Handling
+## Error Handling
 
 Standard error responses:
 
@@ -278,7 +285,7 @@ HTTP Status Codes:
 - `404` - Not Found
 - `500` - Internal Server Error
 
-## 📚 Learn More
+## Learn More
 
 - [Express.js Documentation](https://expressjs.com/)
 - [Prisma Documentation](https://www.prisma.io/docs)
@@ -287,7 +294,7 @@ HTTP Status Codes:
 
 ---
 
-**Last Updated:** November 13, 2025  
-**Version:** 1.1.0  
+**Last Updated:** November 15, 2025  
+**Version:** 1.2.1  
 **Port:** 5000  
-**Status:** ✅ Production Ready
+**Status:** Production Ready
