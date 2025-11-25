@@ -83,6 +83,18 @@ async function main() {
 
   console.log('✅ Categories created:', categories.length);
 
+  // Buat Default Settings
+  await prisma.settings.upsert({
+    where: { key: 'minStock' },
+    update: {},
+    create: {
+      key: 'minStock',
+      value: '5'
+    }
+  });
+
+  console.log('✅ Default settings created: minStock = 5');
+
   console.log('');
   console.log('🎉 Seeding completed!');
   console.log('');

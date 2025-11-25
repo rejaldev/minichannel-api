@@ -117,7 +117,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
 // Create product with variants (Owner/Manager only)
 router.post('/', authMiddleware, ownerOrManager, async (req, res) => {
   try {
-    const { name, description, categoryId, productType, price, variants } = req.body;
+    const { name, description, categoryId, productType, price, variants, sku, stocks } = req.body;
 
     if (!name || !categoryId || !productType) {
       return res.status(400).json({ error: 'Name, category, and product type are required' });
@@ -127,6 +127,9 @@ router.post('/', authMiddleware, ownerOrManager, async (req, res) => {
     if (productType === 'SINGLE') {
       if (!price && price !== 0) {
         return res.status(400).json({ error: 'Price is required for single product' });
+      }
+      if (!sku) {
+        return res.status(400).json({ error: 'SKU is required for single product' });
       }
     } else if (productType === 'VARIANT') {
       if (!variants || variants.length === 0) {
@@ -155,7 +158,7 @@ router.post('/', authMiddleware, ownerOrManager, async (req, res) => {
       // Create variants if product type is VARIANT
       if (productType === 'VARIANT' && variants && variants.length > 0) {
         for (const variant of variants) {
-          await tx.productVariant.create({
+          const newVariant = await tx.productVariant.create({
             data: {
               productId: newProduct.id,
               variantName: variant.variantName,
@@ -164,18 +167,66 @@ router.post('/', authMiddleware, ownerOrManager, async (req, res) => {
               price: parseFloat(variant.price)
             }
           });
+
+          // Create stocks for each cabang if provided
+          if (variant.stocks && variant.stocks.length > 0) {
+            for (const stock of variant.stocks) {
+              await tx.stock.upsert({
+                where: {
+                  variantId_cabangId: {
+                    variantId: newVariant.id,
+                    cabangId: stock.cabangId
+                  }
+                },
+                update: {
+                  quantity: stock.quantity !== undefined ? parseInt(stock.quantity) : 0,
+                  price: stock.price !== undefined ? parseFloat(stock.price) : 0
+                },
+                create: {
+                  variantId: newVariant.id,
+                  cabangId: stock.cabangId,
+                  quantity: stock.quantity !== undefined ? parseInt(stock.quantity) : 0,
+                  price: stock.price !== undefined ? parseFloat(stock.price) : 0
+                }
+              });
+            }
+          }
         }
       } else if (productType === 'SINGLE') {
         // Create default variant for SINGLE product
-        await tx.productVariant.create({
+        const newVariant = await tx.productVariant.create({
           data: {
             productId: newProduct.id,
             variantName: 'Default',
             variantValue: 'Standard',
-            sku: `${newProduct.id}-DEFAULT`,
+            sku: sku || `${newProduct.id}-DEFAULT`,
             price: parseFloat(price)
           }
         });
+
+        // Create stocks for each cabang if provided
+        if (stocks && stocks.length > 0) {
+          for (const stock of stocks) {
+            await tx.stock.upsert({
+              where: {
+                variantId_cabangId: {
+                  variantId: newVariant.id,
+                  cabangId: stock.cabangId
+                }
+              },
+              update: {
+                quantity: stock.quantity !== undefined ? parseInt(stock.quantity) : 0,
+                price: stock.price !== undefined ? parseFloat(stock.price) : 0
+              },
+              create: {
+                variantId: newVariant.id,
+                cabangId: stock.cabangId,
+                quantity: stock.quantity !== undefined ? parseInt(stock.quantity) : 0,
+                price: stock.price !== undefined ? parseFloat(stock.price) : 0
+              }
+            });
+          }
+        }
       }
 
       return tx.product.findUnique({
@@ -244,13 +295,13 @@ router.put('/:id', authMiddleware, ownerOrManager, async (req, res) => {
                 },
                 update: {
                   quantity: parseInt(stock.quantity) || 0,
-                  minStock: parseInt(stock.minStock) || 5
+                  price: stock.price !== undefined ? parseFloat(stock.price) : 0
                 },
                 create: {
                   productVariantId: variant.id,
                   cabangId: stock.cabangId,
                   quantity: parseInt(stock.quantity) || 0,
-                  minStock: parseInt(stock.minStock) || 5
+                  price: stock.price !== undefined ? parseFloat(stock.price) : 0
                 }
               });
             }
@@ -299,13 +350,13 @@ router.put('/:id', authMiddleware, ownerOrManager, async (req, res) => {
                   },
                   update: {
                     quantity: parseInt(stock.quantity) || 0,
-                    minStock: parseInt(stock.minStock) || 5
+                    price: stock.price !== undefined ? parseFloat(stock.price) : 0
                   },
                   create: {
                     productVariantId: variant.id,
                     cabangId: stock.cabangId,
                     quantity: parseInt(stock.quantity) || 0,
-                    minStock: parseInt(stock.minStock) || 5
+                    price: stock.price !== undefined ? parseFloat(stock.price) : 0
                   }
                 });
               }
@@ -330,7 +381,7 @@ router.put('/:id', authMiddleware, ownerOrManager, async (req, res) => {
                     productVariantId: newVariant.id,
                     cabangId: stock.cabangId,
                     quantity: parseInt(stock.quantity) || 0,
-                    minStock: parseInt(stock.minStock) || 5
+                    price: stock.price !== undefined ? parseFloat(stock.price) : 0
                   }
                 });
               }
@@ -479,7 +530,7 @@ router.get('/stock/:variantId', authMiddleware, async (req, res) => {
 // Update stock (Owner/Manager only)
 router.put('/stock/:variantId/:cabangId', authMiddleware, ownerOrManager, async (req, res) => {
   try {
-    const { quantity, minStock } = req.body;
+    const { quantity, price } = req.body;
     const { variantId, cabangId } = req.params;
 
     const stock = await prisma.stock.upsert({
@@ -491,13 +542,13 @@ router.put('/stock/:variantId/:cabangId', authMiddleware, ownerOrManager, async 
       },
       update: {
         quantity: quantity !== undefined ? parseInt(quantity) : undefined,
-        minStock: minStock !== undefined ? parseInt(minStock) : undefined
+        price: price !== undefined ? parseFloat(price) : undefined
       },
       create: {
         productVariantId: variantId,
         cabangId: cabangId,
         quantity: parseInt(quantity) || 0,
-        minStock: parseInt(minStock) || 5
+        price: parseFloat(price) || 0
       },
       include: {
         cabang: true,
@@ -521,9 +572,15 @@ router.get('/alerts/low-stock', authMiddleware, async (req, res) => {
   try {
     const { cabangId } = req.query;
 
+    // Get minStock from settings
+    const minStockSetting = await prisma.settings.findUnique({
+      where: { key: 'minStock' }
+    });
+    const minStock = parseInt(minStockSetting?.value) || 5;
+
     const where = {
       quantity: {
-        lte: prisma.stock.fields.minStock
+        lte: minStock
       }
     };
     

@@ -206,7 +206,7 @@ model Stock {
   cabang           Cabang         @relation(fields: [cabangId], references: [id])
   cabangId         String
   quantity         Int            @default(0)
-  minStock         Int            @default(5) // Alert kalau di bawah ini
+  price            Float          @default(0) // Price per cabang
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 
