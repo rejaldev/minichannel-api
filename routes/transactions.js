@@ -30,6 +30,13 @@ router.post('/', authMiddleware, async (req, res) => {
       bankName,
       referenceNo,
       cardLastDigits,
+      // Split Payment
+      isSplitPayment = false,
+      paymentAmount1,
+      paymentMethod2,
+      paymentAmount2,
+      bankName2,
+      referenceNo2,
       notes 
     } = req.body;
 
@@ -44,6 +51,27 @@ router.post('/', authMiddleware, async (req, res) => {
       return res.status(400).json({ 
         error: 'Invalid payment method. Must be CASH, DEBIT, TRANSFER, or QRIS' 
       });
+    }
+
+    // Split Payment Validation
+    if (isSplitPayment) {
+      if (!paymentMethod2 || !paymentAmount1 || !paymentAmount2) {
+        return res.status(400).json({ 
+          error: 'Split payment requires paymentMethod2, paymentAmount1, and paymentAmount2' 
+        });
+      }
+
+      if (!['CASH', 'DEBIT', 'TRANSFER', 'QRIS'].includes(paymentMethod2)) {
+        return res.status(400).json({ 
+          error: 'Invalid payment method 2. Must be CASH, DEBIT, TRANSFER, or QRIS' 
+        });
+      }
+
+      if (paymentMethod === paymentMethod2) {
+        return res.status(400).json({ 
+          error: 'Payment methods must be different for split payment' 
+        });
+      }
     }
 
     // Calculate totals and validate stock
@@ -101,6 +129,16 @@ router.post('/', authMiddleware, async (req, res) => {
 
     const total = subtotal - discount + tax;
 
+    // Validate split payment amounts match total
+    if (isSplitPayment) {
+      const sumPayments = paymentAmount1 + paymentAmount2;
+      if (Math.abs(sumPayments - total) > 0.01) { // Allow 0.01 difference for rounding
+        return res.status(400).json({ 
+          error: `Split payment amounts (${sumPayments}) must equal total (${total})` 
+        });
+      }
+    }
+
     // Create transaction with items and update stock in a transaction
     const transaction = await prisma.$transaction(async (tx) => {
       // Create transaction
@@ -121,6 +159,13 @@ router.post('/', authMiddleware, async (req, res) => {
           bankName: bankName || null,
           referenceNo: referenceNo || null,
           cardLastDigits: cardLastDigits || null,
+          // Split Payment
+          isSplitPayment: isSplitPayment || false,
+          paymentAmount1: isSplitPayment ? paymentAmount1 : null,
+          paymentMethod2: isSplitPayment ? paymentMethod2 : null,
+          paymentAmount2: isSplitPayment ? paymentAmount2 : null,
+          bankName2: isSplitPayment ? (bankName2 || null) : null,
+          referenceNo2: isSplitPayment ? (referenceNo2 || null) : null,
           notes: notes || null,
           items: {
             create: itemsWithDetails.map(item => ({

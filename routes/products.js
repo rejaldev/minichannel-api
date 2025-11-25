@@ -395,11 +395,51 @@ router.put('/:id', authMiddleware, ownerOrManager, async (req, res) => {
 // Delete product (Owner only)
 router.delete('/:id', authMiddleware, ownerOrManager, async (req, res) => {
   try {
+    // Check if product exists
+    const product = await prisma.product.findUnique({
+      where: { id: req.params.id },
+      include: {
+        variants: {
+          include: {
+            transactionItems: {
+              take: 1 // Just need to know if any exist
+            }
+          }
+        }
+      }
+    });
+
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    // Check if any variant has been used in transactions
+    const hasTransactions = product.variants.some(
+      variant => variant.transactionItems.length > 0
+    );
+
+    if (hasTransactions) {
+      // Soft delete - set as inactive instead
+      await prisma.product.update({
+        where: { id: req.params.id },
+        data: { isActive: false }
+      });
+
+      return res.json({ 
+        message: 'Product has transaction history. Product has been deactivated instead of deleted.',
+        action: 'deactivated'
+      });
+    }
+
+    // Safe to hard delete - no transaction history
     await prisma.product.delete({
       where: { id: req.params.id }
     });
 
-    res.json({ message: 'Product deleted successfully' });
+    res.json({ 
+      message: 'Product deleted successfully',
+      action: 'deleted'
+    });
   } catch (error) {
     console.error('Delete product error:', error);
     if (error.code === 'P2025') {

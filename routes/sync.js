@@ -81,7 +81,27 @@ router.post('/transactions/batch', authMiddleware, async (req, res) => {
     // Process each transaction
     for (const txData of transactions) {
       try {
-        const { cabangId, customerName, customerPhone, items, discount, paymentMethod, bankName, referenceNo, notes, createdAt } = txData;
+        const { 
+          cabangId, 
+          kasirId, 
+          kasirName,
+          customerName, 
+          customerPhone, 
+          items, 
+          discount, 
+          paymentMethod, 
+          bankName, 
+          referenceNo,
+          // Split Payment
+          isSplitPayment,
+          paymentAmount1,
+          paymentMethod2,
+          paymentAmount2,
+          bankName2,
+          referenceNo2,
+          notes, 
+          createdAt 
+        } = txData;
 
         if (!cabangId || !items || items.length === 0 || !paymentMethod) {
           errors.push({
@@ -100,12 +120,12 @@ router.post('/transactions/batch', authMiddleware, async (req, res) => {
           }
           const total = subtotal - (discount || 0);
 
-          // Create transaction (use offline createdAt if provided)
+          // Create transaction (use offline createdAt if provided, use kasirId from request)
           const newTransaction = await tx.transaction.create({
             data: {
               transactionNo: txData.transactionNo || `INV-${Date.now()}`,
               cabangId,
-              kasirId: req.user.id,
+              kasirId: kasirId || req.user.id, // Use kasirId from offline transaction, fallback to req.user.id
               customerName,
               customerPhone,
               subtotal,
@@ -116,6 +136,13 @@ router.post('/transactions/batch', authMiddleware, async (req, res) => {
               paymentStatus: 'COMPLETED',
               bankName,
               referenceNo,
+              // Split Payment
+              isSplitPayment: isSplitPayment || false,
+              paymentAmount1: isSplitPayment ? paymentAmount1 : null,
+              paymentMethod2: isSplitPayment ? paymentMethod2 : null,
+              paymentAmount2: isSplitPayment ? paymentAmount2 : null,
+              bankName2: isSplitPayment ? (bankName2 || null) : null,
+              referenceNo2: isSplitPayment ? (referenceNo2 || null) : null,
               notes,
               createdAt: createdAt ? new Date(createdAt) : undefined // Honor offline timestamp
             }

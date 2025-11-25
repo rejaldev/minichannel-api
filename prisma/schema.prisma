@@ -24,7 +24,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  transactions Transaction[]
+  transactions    Transaction[]
+  processedReturns Return[]
 
   @@map("users")
 }
@@ -33,6 +34,65 @@ enum UserRole {
   OWNER
   MANAGER
   KASIR
+}
+
+// Return/Refund Management
+model Return {
+  id              String       @id @default(cuid())
+  returnNo        String       @unique // RET-20251124-0001
+  transaction     Transaction  @relation(fields: [transactionId], references: [id])
+  transactionId   String
+  cabang          Cabang       @relation(fields: [cabangId], references: [id])
+  cabangId        String
+  processedBy     User         @relation(fields: [processedById], references: [id])
+  processedById   String
+  reason          ReturnReason
+  notes           String?
+  subtotal        Float // Total nilai return
+  refundMethod    PaymentMethod
+  refundAmount    Float
+  status          ReturnStatus @default(PENDING)
+  approvedBy      String? // Manager yang approve
+  approvedAt      DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  items ReturnItem[]
+
+  @@map("returns")
+}
+
+enum ReturnReason {
+  DAMAGED // Barang Rusak
+  WRONG_ITEM // Salah Barang
+  EXPIRED // Kadaluarsa
+  CUSTOMER_REQUEST // Permintaan Customer
+  OTHER // Lainnya
+}
+
+enum ReturnStatus {
+  PENDING // Menunggu approval
+  APPROVED // Disetujui
+  REJECTED // Ditolak
+  COMPLETED // Selesai (stock sudah dikembalikan)
+}
+
+// Item yang diretur
+model ReturnItem {
+  id               String         @id @default(cuid())
+  return           Return         @relation(fields: [returnId], references: [id], onDelete: Cascade)
+  returnId         String
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+  productVariantId String
+  productName      String // Snapshot
+  variantInfo      String // Snapshot
+  sku              String? // Snapshot
+  quantity         Int // Jumlah yang diretur
+  price            Float // Harga saat transaksi
+  subtotal         Float // quantity * price
+  createdAt        DateTime       @default(now())
+
+  @@map("return_items")
 }
 
 // Cabang/Branch
@@ -48,6 +108,7 @@ model Cabang {
   users           User[]
   stocks          Stock[]
   transactions    Transaction[]
+  returns         Return[]
   printerSettings PrinterSettings?
 
   @@map("cabang")
@@ -78,9 +139,37 @@ model Product {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  variants ProductVariant[]
+  variants     ProductVariant[]
+  variantTypes VariantType[]
 
   @@map("products")
+}
+
+// Tipe Varian (Ukuran, Warna, dll) - for dynamic variant creation
+model VariantType {
+  id        String   @id @default(cuid())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  name      String // "Ukuran", "Warna", "Material"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  options VariantOption[]
+
+  @@unique([productId, name])
+  @@map("variant_types")
+}
+
+// Opsi dari Tipe Varian (6, 8, 10 untuk Ukuran, dst)
+model VariantOption {
+  id            String      @id @default(cuid())
+  variantType   VariantType @relation(fields: [variantTypeId], references: [id], onDelete: Cascade)
+  variantTypeId String
+  value         String // "6", "8", "10", "Merah", "Biru"
+  createdAt     DateTime    @default(now())
+
+  @@unique([variantTypeId, value])
+  @@map("variant_options")
 }
 
 enum ProductType {
@@ -102,6 +191,7 @@ model ProductVariant {
 
   stocks             Stock[]
   transactionItems   TransactionItem[]
+  returnItems        ReturnItem[]
   priceDiscrepancies PriceDiscrepancy[]
 
   @@unique([productId, variantName, variantValue])
@@ -144,12 +234,20 @@ model Transaction {
   bankName       String? // Nama bank untuk DEBIT/TRANSFER
   referenceNo    String? // Nomor referensi/approval
   cardLastDigits String? // 4 digit terakhir kartu (DEBIT)
+  // Split Payment
+  isSplitPayment Boolean       @default(false)
+  paymentAmount1 Float? // Jumlah pembayaran metode 1
+  paymentMethod2 PaymentMethod? // Metode pembayaran kedua
+  paymentAmount2 Float? // Jumlah pembayaran metode 2
+  bankName2      String? // Nama bank untuk metode 2
+  referenceNo2   String? // Nomor referensi metode 2
   notes          String?
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
   items              TransactionItem[]
   priceDiscrepancies PriceDiscrepancy[]
+  returns            Return[]
 
   @@map("transactions")
 }
