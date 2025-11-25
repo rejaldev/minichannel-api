@@ -59,12 +59,19 @@ DELETE /api/auth/users/:id          # Delete user (OWNER only)
 
 ```
 GET    /api/products                # Get all products with filters
-GET    /api/products/:id            # Get product by ID
-POST   /api/products                # Create new product
-PUT    /api/products/:id            # Update product
+GET    /api/products/:id            # Get product by ID with variants & stocks
+POST   /api/products                # Create new product (supports per-cabang pricing)
+PUT    /api/products/:id            # Update product (supports per-cabang pricing)
 DELETE /api/products/:id            # Delete product
 GET    /api/products/:id/stock      # Get product stock by cabang
+GET    /api/products/barcode/:sku   # Get product by SKU barcode (for scanner)
 ```
+
+**Per-Cabang Pricing (v1.4.0):**
+- Products store price & stock per cabang (branch)
+- SINGLE products create default variant with custom SKU
+- VARIANT products support multiple variants, each with stocks array
+- Stocks array format: `[{ cabangId, cabangName, quantity, price }]`
 
 ### Categories
 
@@ -246,7 +253,32 @@ pm2 restart backend    # Restart server
 - JWT token expiration (24 hours)
 - CORS configuration for trusted origins
 - SQL injection protection via Prisma
-- Role-based access control
+- Role-based access control (OWNER, MANAGER, KASIR)
+- Middleware authentication for protected routes
+
+## Recent Updates
+
+### v1.4.0 - Per-Cabang Pricing
+- Added `price` column to `stocks` table (migration 20251125121527)
+- Updated product create/update endpoints to handle stocks array with price
+- Support for SINGLE products with per-cabang pricing
+- Support for VARIANT products with per-cabang pricing per variant
+- Updated Prisma schema with price field in Stock model
+- Unique constraint: `@@unique([productVariantId, cabangId])`
+
+### v1.3.0 - Return & Refund
+- Added Return and ReturnItem models
+- Return management API endpoints
+- Transaction-based return system
+
+### v1.2.0 - Barcode Scanner
+- Added `/api/products/barcode/:sku` endpoint
+- SKU-based product search for barcode scanners
+
+### v1.1.0 - Printer Settings
+- Centralized printer settings via API
+- Per-branch printer configuration
+- Settings model with key-value storage
 
 ## CORS Configuration
 
