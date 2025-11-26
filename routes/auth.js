@@ -52,7 +52,7 @@ router.post('/register', async (req, res) => {
     });
 
     // Generate token
-    const token = generateToken(user.id, user.email, user.role);
+    const token = generateToken(user.id, user.email, user.role, user.cabangId);
 
     res.status(201).json({
       message: 'User berhasil dibuat',
@@ -105,7 +105,7 @@ router.post('/login', async (req, res) => {
     }
 
     // Generate token
-    const token = generateToken(user.id, user.email, user.role);
+    const token = generateToken(user.id, user.email, user.role, user.cabangId);
 
     // Response tanpa password
     const { password: _, ...userWithoutPassword } = user;

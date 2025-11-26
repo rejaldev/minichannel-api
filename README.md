@@ -142,9 +142,44 @@ Authorization: Bearer <token>
 
 ### User Roles
 
-- **OWNER** - Full access to all features
-- **MANAGER** - Manage products, view reports
-- **KASIR** - POS transactions only
+- **OWNER** - Full access to all features, can view all branches
+- **MANAGER** - Manage products, view reports, optional cabang assignment
+- **KASIR** - POS transactions only, **required** cabang assignment
+
+### User-Cabang Assignment
+
+Users (especially KASIR) can be assigned to specific branches:
+
+```json
+{
+  "id": "user123",
+  "email": "kasir@toko.com",
+  "name": "Kasir Toko",
+  "role": "KASIR",
+  "cabangId": "cabang-toko-001",
+  "cabang": {
+    "id": "cabang-toko-001",
+    "name": "Cabang Toko"
+  }
+}
+```
+
+**JWT Token includes cabangId:**
+```javascript
+{
+  "userId": "user123",
+  "email": "kasir@toko.com",
+  "role": "KASIR",
+  "cabangId": "cabang-toko-001",
+  "iat": 1732588800,
+  "exp": 1733193600
+}
+```
+
+**Transaction Filtering:**
+- Backend gets `cabangId` from `req.user.cabangId` (JWT token)
+- Users can only create transactions for their assigned cabang
+- Stock deducted from user's cabang automatically
 
 ## Database Setup
 
@@ -207,11 +242,59 @@ cabang → users (1:N)
 
 ## Recent Updates
 
+### v1.5.0 (Nov 26, 2025) - User-Cabang Mapping
+
+**JWT Token Enhancement:**
+- JWT token now includes `cabangId` field in payload
+- Token structure: `{ userId, email, role, cabangId }`
+- 7-day expiration period
+- Updated `lib/jwt.js` to accept cabangId parameter
+
+**Authentication Updates:**
+- Login endpoint returns user with cabang relation
+- Register endpoint saves user's cabangId
+- Token automatically includes user's assigned cabang
+
+**Transaction Filtering:**
+- Transaction POST endpoint now gets `cabangId` from `req.user.cabangId` (JWT token)
+- No longer accepts `cabangId` in request body
+- Validation ensures user has cabangId assigned before creating transaction
+- KASIR role automatically filtered to their assigned cabang
+- Stock deduction happens from user's assigned cabang only
+
+**User Management:**
+- Added `cabangId` field to User model (optional)
+- Users can be assigned to specific branches
+- KASIR role requires cabangId assignment
+- MANAGER/OWNER can optionally have cabangId
+
+**Security:**
+- Prevents users from creating transactions for other cabangs
+- Token-based cabang identification (not request body)
+- Role-based filtering enforced at middleware level
+
+### v1.4.0 - Per-Cabang Pricing
+- Added `price` column to `stocks` table (migration 20251125121527)
+- Updated product create/update endpoints to handle stocks array with price
+- Support for SINGLE products with per-cabang pricing
+- Support for VARIANT products with per-cabang pricing per variant
+- Updated Prisma schema with price field in Stock model
+- Unique constraint: `@@unique([productVariantId, cabangId])`
+
+### v1.3.0 - Return & Refund
+- Added Return and ReturnItem models
+- Return management API endpoints
+- Transaction-based return system
+
 ### v1.2.1 (Nov 15, 2025)
 
 - Created comprehensive API usage documentation
 - Identified unused endpoints for potential cleanup
 - All sync endpoints actively used by desktop POS
+
+### v1.2.0 - Barcode Scanner
+- Added `/api/products/barcode/:sku` endpoint
+- SKU-based product search for barcode scanners
 
 ### v1.1.0 (Nov 13, 2025)
 
@@ -250,35 +333,13 @@ pm2 restart backend    # Restart server
 ## Security Features
 
 - Password hashing with bcryptjs
-- JWT token expiration (24 hours)
+- JWT token expiration (7 days)
+- JWT includes cabangId for transaction filtering
 - CORS configuration for trusted origins
 - SQL injection protection via Prisma
 - Role-based access control (OWNER, MANAGER, KASIR)
 - Middleware authentication for protected routes
-
-## Recent Updates
-
-### v1.4.0 - Per-Cabang Pricing
-- Added `price` column to `stocks` table (migration 20251125121527)
-- Updated product create/update endpoints to handle stocks array with price
-- Support for SINGLE products with per-cabang pricing
-- Support for VARIANT products with per-cabang pricing per variant
-- Updated Prisma schema with price field in Stock model
-- Unique constraint: `@@unique([productVariantId, cabangId])`
-
-### v1.3.0 - Return & Refund
-- Added Return and ReturnItem models
-- Return management API endpoints
-- Transaction-based return system
-
-### v1.2.0 - Barcode Scanner
-- Added `/api/products/barcode/:sku` endpoint
-- SKU-based product search for barcode scanners
-
-### v1.1.0 - Printer Settings
-- Centralized printer settings via API
-- Per-branch printer configuration
-- Settings model with key-value storage
+- Token-based cabang identification (prevents cross-cabang access)
 
 ## CORS Configuration
 
@@ -326,7 +387,7 @@ HTTP Status Codes:
 
 ---
 
-**Last Updated:** November 15, 2025  
-**Version:** 1.2.1  
+**Last Updated:** November 26, 2025  
+**Version:** 1.5.0  
 **Port:** 5000  
 **Status:** Production Ready

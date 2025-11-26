@@ -24,8 +24,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  transactions    Transaction[]
-  processedReturns Return[]
+  transactions       Transaction[]
+  processedReturns   Return[]
+  requestedOrders    Order[]          @relation("RequestedOrders")
+  processedOrders    Order[]          @relation("ProcessedOrders")
+  stockTransfers     StockTransfer[]
 
   @@map("users")
 }
@@ -33,6 +36,7 @@ model User {
 enum UserRole {
   OWNER
   MANAGER
+  ADMIN
   KASIR
 }
 
@@ -105,11 +109,14 @@ model Cabang {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users           User[]
-  stocks          Stock[]
-  transactions    Transaction[]
-  returns         Return[]
-  printerSettings PrinterSettings?
+  users              User[]
+  stocks             Stock[]
+  transactions       Transaction[]
+  returns            Return[]
+  printerSettings    PrinterSettings?
+  requestedOrders    Order[]
+  transfersFrom      StockTransfer[]  @relation("TransfersFrom")
+  transfersTo        StockTransfer[]  @relation("TransfersTo")
 
   @@map("cabang")
 }
@@ -193,6 +200,8 @@ model ProductVariant {
   transactionItems   TransactionItem[]
   returnItems        ReturnItem[]
   priceDiscrepancies PriceDiscrepancy[]
+  orders             Order[]
+  stockTransfers     StockTransfer[]
 
   @@unique([productId, variantName, variantValue])
   @@map("product_variants")
@@ -334,4 +343,65 @@ model PrinterSettings {
   cabang Cabang? @relation(fields: [cabangId], references: [id])
 
   @@map("printer_settings")
+}
+
+// Order Management - Product requests from KASIR
+model Order {
+  id              String      @id @default(cuid())
+  orderNo         String      @unique // ORD-20251126-0001
+  requestedBy     User        @relation("RequestedOrders", fields: [requestedById], references: [id])
+  requestedById   String
+  cabang          Cabang      @relation(fields: [cabangId], references: [id])
+  cabangId        String
+  productName     String
+  productType     ProductType @default(SINGLE)
+  categoryId      String?
+  categoryName    String?
+  price           Float?
+  quantity        Int?
+  status          OrderStatus @default(PENDING)
+  notes           String?
+  rejectionReason String?
+  processedBy     User?       @relation("ProcessedOrders", fields: [processedById], references: [id])
+  processedById   String?
+  processedAt     DateTime?
+  productVariant  ProductVariant? @relation(fields: [productVariantId], references: [id])
+  productVariantId String? // Set when order is approved and product created
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING // Menunggu proses
+  APPROVED // Disetujui, produk dibuat
+  REJECTED // Ditolak
+}
+
+// Stock Transfer between branches
+model StockTransfer {
+  id              String         @id @default(cuid())
+  transferNo      String         @unique // TRF-20251126-0001
+  productVariant  ProductVariant @relation(fields: [variantId], references: [id])
+  variantId       String
+  fromCabang      Cabang         @relation("TransfersFrom", fields: [fromCabangId], references: [id])
+  fromCabangId    String
+  toCabang        Cabang         @relation("TransfersTo", fields: [toCabangId], references: [id])
+  toCabangId      String
+  quantity        Int
+  transferredBy   User           @relation(fields: [transferredById], references: [id])
+  transferredById String
+  notes           String?
+  status          TransferStatus @default(COMPLETED)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@map("stock_transfers")
+}
+
+enum TransferStatus {
+  PENDING // Menunggu approval
+  COMPLETED // Selesai
+  CANCELLED // Dibatalkan
 }

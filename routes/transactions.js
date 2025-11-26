@@ -19,7 +19,6 @@ function generateTransactionNo() {
 router.post('/', authMiddleware, async (req, res) => {
   try {
     const { 
-      cabangId, 
       customerName, 
       customerPhone, 
       items, // [{ productVariantId, quantity, price }]
@@ -40,10 +39,19 @@ router.post('/', authMiddleware, async (req, res) => {
       notes 
     } = req.body;
 
+    // Get cabangId from authenticated user's token
+    const cabangId = req.user.cabangId;
+
     // Validation
-    if (!cabangId || !items || items.length === 0 || !paymentMethod) {
+    if (!cabangId) {
       return res.status(400).json({ 
-        error: 'cabangId, items, and paymentMethod are required' 
+        error: 'User must be assigned to a cabang' 
+      });
+    }
+
+    if (!items || items.length === 0 || !paymentMethod) {
+      return res.status(400).json({ 
+        error: 'items and paymentMethod are required' 
       });
     }
 

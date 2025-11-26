@@ -173,8 +173,8 @@ router.post('/', authMiddleware, ownerOrManager, async (req, res) => {
             for (const stock of variant.stocks) {
               await tx.stock.upsert({
                 where: {
-                  variantId_cabangId: {
-                    variantId: newVariant.id,
+                  productVariantId_cabangId: {
+                    productVariantId: newVariant.id,
                     cabangId: stock.cabangId
                   }
                 },
@@ -183,7 +183,7 @@ router.post('/', authMiddleware, ownerOrManager, async (req, res) => {
                   price: stock.price !== undefined ? parseFloat(stock.price) : 0
                 },
                 create: {
-                  variantId: newVariant.id,
+                  productVariantId: newVariant.id,
                   cabangId: stock.cabangId,
                   quantity: stock.quantity !== undefined ? parseInt(stock.quantity) : 0,
                   price: stock.price !== undefined ? parseFloat(stock.price) : 0
@@ -209,8 +209,8 @@ router.post('/', authMiddleware, ownerOrManager, async (req, res) => {
           for (const stock of stocks) {
             await tx.stock.upsert({
               where: {
-                variantId_cabangId: {
-                  variantId: newVariant.id,
+                productVariantId_cabangId: {
+                  productVariantId: newVariant.id,
                   cabangId: stock.cabangId
                 }
               },
@@ -219,7 +219,7 @@ router.post('/', authMiddleware, ownerOrManager, async (req, res) => {
                 price: stock.price !== undefined ? parseFloat(stock.price) : 0
               },
               create: {
-                variantId: newVariant.id,
+                productVariantId: newVariant.id,
                 cabangId: stock.cabangId,
                 quantity: stock.quantity !== undefined ? parseInt(stock.quantity) : 0,
                 price: stock.price !== undefined ? parseFloat(stock.price) : 0
