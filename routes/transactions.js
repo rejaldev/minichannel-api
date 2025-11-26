@@ -368,6 +368,241 @@ router.get('/reports/summary', authMiddleware, ownerOrManager, async (req, res) 
   }
 });
 
+// Get sales trend (daily for last 7 days or last 30 days)
+router.get('/reports/sales-trend', authMiddleware, ownerOrManager, async (req, res) => {
+  try {
+    const { cabangId, days = 7 } = req.query;
+    const daysCount = parseInt(days);
+    
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - daysCount);
+    startDate.setHours(0, 0, 0, 0);
+
+    const where = {
+      createdAt: { gte: startDate }
+    };
+    if (cabangId) where.cabangId = cabangId;
+
+    const transactions = await prisma.transaction.findMany({
+      where,
+      select: {
+        createdAt: true,
+        total: true
+      }
+    });
+
+    // Group by date
+    const salesByDate = {};
+    for (let i = 0; i < daysCount; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateKey = date.toISOString().split('T')[0];
+      salesByDate[dateKey] = { date: dateKey, total: 0, count: 0 };
+    }
+
+    transactions.forEach(t => {
+      const dateKey = t.createdAt.toISOString().split('T')[0];
+      if (salesByDate[dateKey]) {
+        salesByDate[dateKey].total += t.total;
+        salesByDate[dateKey].count += 1;
+      }
+    });
+
+    const trend = Object.values(salesByDate).reverse();
+
+    res.json({ trend });
+  } catch (error) {
+    console.error('Get sales trend error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get top selling products
+router.get('/reports/top-products', authMiddleware, ownerOrManager, async (req, res) => {
+  try {
+    const { cabangId, limit = 10, startDate, endDate } = req.query;
+
+    const where = {};
+    if (cabangId) where.transaction = { cabangId };
+    if (startDate || endDate) {
+      where.transaction = { ...where.transaction, createdAt: {} };
+      if (startDate) where.transaction.createdAt.gte = new Date(startDate);
+      if (endDate) where.transaction.createdAt.lte = new Date(endDate);
+    }
+
+    const topProducts = await prisma.transactionItem.groupBy({
+      by: ['productVariantId'],
+      where,
+      _sum: {
+        quantity: true,
+        subtotal: true
+      },
+      _count: {
+        id: true
+      },
+      orderBy: {
+        _sum: {
+          quantity: 'desc'
+        }
+      },
+      take: parseInt(limit)
+    });
+
+    // Get product details
+    const productsWithDetails = await Promise.all(
+      topProducts.map(async (item) => {
+        const variant = await prisma.productVariant.findUnique({
+          where: { id: item.productVariantId },
+          include: {
+            product: {
+              select: {
+                name: true,
+                category: { select: { name: true } }
+              }
+            }
+          }
+        });
+
+        return {
+          productVariantId: item.productVariantId,
+          productName: variant?.product.name || 'Unknown',
+          variantName: variant?.variantName || '-',
+          variantValue: variant?.variantValue || '-',
+          category: variant?.product.category?.name || '-',
+          totalQuantity: item._sum.quantity,
+          totalRevenue: item._sum.subtotal,
+          transactionCount: item._count.id
+        };
+      })
+    );
+
+    res.json({ topProducts: productsWithDetails });
+  } catch (error) {
+    console.error('Get top products error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get branch performance comparison
+router.get('/reports/branch-performance', authMiddleware, ownerOrManager, async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    const where = {};
+    if (startDate || endDate) {
+      where.createdAt = {};
+      if (startDate) where.createdAt.gte = new Date(startDate);
+      if (endDate) where.createdAt.lte = new Date(endDate);
+    }
+
+    const branchStats = await prisma.transaction.groupBy({
+      by: ['cabangId'],
+      where,
+      _count: { id: true },
+      _sum: { total: true },
+      _avg: { total: true }
+    });
+
+    // Get cabang details
+    const branchPerformance = await Promise.all(
+      branchStats.map(async (stat) => {
+        const cabang = await prisma.cabang.findUnique({
+          where: { id: stat.cabangId }
+        });
+
+        return {
+          cabangId: stat.cabangId,
+          cabangName: cabang?.name || 'Unknown',
+          totalTransactions: stat._count.id,
+          totalRevenue: stat._sum.total || 0,
+          avgTransactionValue: Math.round(stat._avg.total || 0)
+        };
+      })
+    );
+
+    // Sort by revenue
+    branchPerformance.sort((a, b) => b.totalRevenue - a.totalRevenue);
+
+    res.json({ branchPerformance });
+  } catch (error) {
+    console.error('Get branch performance error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get time statistics (busiest hours/days)
+router.get('/reports/time-stats', authMiddleware, ownerOrManager, async (req, res) => {
+  try {
+    const { cabangId, startDate, endDate } = req.query;
+
+    const where = {};
+    if (cabangId) where.cabangId = cabangId;
+    if (startDate || endDate) {
+      where.createdAt = {};
+      if (startDate) where.createdAt.gte = new Date(startDate);
+      if (endDate) where.createdAt.lte = new Date(endDate);
+    }
+
+    const transactions = await prisma.transaction.findMany({
+      where,
+      select: {
+        createdAt: true,
+        total: true
+      }
+    });
+
+    // Group by hour (0-23)
+    const hourlyStats = Array(24).fill(0).map((_, i) => ({ hour: i, count: 0, total: 0 }));
+    
+    // Group by day of week (0=Sunday, 6=Saturday)
+    const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const dailyStats = Array(7).fill(0).map((_, i) => ({ 
+      day: dayNames[i], 
+      dayIndex: i, 
+      count: 0, 
+      total: 0 
+    }));
+
+    transactions.forEach(t => {
+      const hour = t.createdAt.getHours();
+      const day = t.createdAt.getDay();
+      
+      hourlyStats[hour].count += 1;
+      hourlyStats[hour].total += t.total;
+      
+      dailyStats[day].count += 1;
+      dailyStats[day].total += t.total;
+    });
+
+    // Find busiest hour and day
+    const busiestHour = hourlyStats.reduce((max, curr) => 
+      curr.count > max.count ? curr : max
+    );
+    
+    const busiestDay = dailyStats.reduce((max, curr) => 
+      curr.count > max.count ? curr : max
+    );
+
+    res.json({ 
+      hourlyStats: hourlyStats.filter(h => h.count > 0),
+      dailyStats,
+      busiestHour: {
+        hour: busiestHour.hour,
+        count: busiestHour.count,
+        total: busiestHour.total
+      },
+      busiestDay: {
+        day: busiestDay.day,
+        count: busiestDay.count,
+        total: busiestDay.total
+      }
+    });
+  } catch (error) {
+    console.error('Get time stats error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Cancel transaction (Owner only - for mistakes)
 router.put('/:id/cancel', authMiddleware, ownerOrManager, async (req, res) => {
   try {
