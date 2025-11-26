@@ -29,6 +29,7 @@ model User {
   requestedOrders    Order[]          @relation("RequestedOrders")
   processedOrders    Order[]          @relation("ProcessedOrders")
   stockTransfers     StockTransfer[]
+  stockAdjustments   StockAdjustment[]
 
   @@map("users")
 }
@@ -117,6 +118,7 @@ model Cabang {
   requestedOrders    Order[]
   transfersFrom      StockTransfer[]  @relation("TransfersFrom")
   transfersTo        StockTransfer[]  @relation("TransfersTo")
+  stockAdjustments   StockAdjustment[]
 
   @@map("cabang")
 }
@@ -202,6 +204,7 @@ model ProductVariant {
   priceDiscrepancies PriceDiscrepancy[]
   orders             Order[]
   stockTransfers     StockTransfer[]
+  stockAdjustments   StockAdjustment[]
 
   @@unique([productId, variantName, variantValue])
   @@map("product_variants")
@@ -219,8 +222,40 @@ model Stock {
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 
+  adjustments StockAdjustment[]
+
   @@unique([productVariantId, cabangId])
   @@map("stocks")
+}
+
+// Stock Adjustment History
+model StockAdjustment {
+  id               String              @id @default(cuid())
+  productVariant   ProductVariant      @relation(fields: [productVariantId], references: [id])
+  productVariantId String
+  stock            Stock               @relation(fields: [stockId], references: [id], onDelete: Cascade)
+  stockId          String
+  cabang           Cabang              @relation(fields: [cabangId], references: [id])
+  cabangId         String
+  adjustedBy       User                @relation(fields: [adjustedById], references: [id])
+  adjustedById     String
+  previousQty      Int // Stok sebelumnya
+  newQty           Int // Stok baru
+  difference       Int // newQty - previousQty
+  reason           AdjustmentReason?
+  notes            String? // Custom reason
+  createdAt        DateTime            @default(now())
+
+  @@map("stock_adjustments")
+}
+
+enum AdjustmentReason {
+  STOCK_OPNAME // Stok opname
+  DAMAGED // Barang rusak
+  LOST // Barang hilang
+  SUPPLIER_RETURN // Return supplier
+  INPUT_ERROR // Koreksi input
+  OTHER // Lainnya
 }
 
 // Transaksi Penjualan

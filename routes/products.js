@@ -530,37 +530,83 @@ router.get('/stock/:variantId', authMiddleware, async (req, res) => {
 // Update stock (Owner/Manager only)
 router.put('/stock/:variantId/:cabangId', authMiddleware, ownerOrManager, async (req, res) => {
   try {
-    const { quantity, price } = req.body;
+    const { quantity, price, reason, notes } = req.body;
     const { variantId, cabangId } = req.params;
 
-    const stock = await prisma.stock.upsert({
+    // Get current stock to log adjustment
+    const currentStock = await prisma.stock.findUnique({
       where: {
         productVariantId_cabangId: {
           productVariantId: variantId,
           cabangId: cabangId
         }
-      },
-      update: {
-        quantity: quantity !== undefined ? parseInt(quantity) : undefined,
-        price: price !== undefined ? parseFloat(price) : undefined
-      },
-      create: {
-        productVariantId: variantId,
-        cabangId: cabangId,
-        quantity: parseInt(quantity) || 0,
-        price: parseFloat(price) || 0
-      },
-      include: {
-        cabang: true,
-        productVariant: {
-          include: {
-            product: true
-          }
-        }
       }
     });
 
-    res.json(stock);
+    const previousQty = currentStock?.quantity || 0;
+    const newQty = parseInt(quantity);
+
+    // Update stock with transaction to ensure consistency
+    const result = await prisma.$transaction(async (tx) => {
+      // Update or create stock
+      const stock = await tx.stock.upsert({
+        where: {
+          productVariantId_cabangId: {
+            productVariantId: variantId,
+            cabangId: cabangId
+          }
+        },
+        update: {
+          quantity: quantity !== undefined ? newQty : undefined,
+          price: price !== undefined ? parseFloat(price) : undefined
+        },
+        create: {
+          productVariantId: variantId,
+          cabangId: cabangId,
+          quantity: newQty || 0,
+          price: parseFloat(price) || 0
+        },
+        include: {
+          cabang: true,
+          productVariant: {
+            include: {
+              product: true
+            }
+          }
+        }
+      });
+
+      // Log adjustment if quantity changed
+      if (quantity !== undefined && previousQty !== newQty) {
+        // Map reason string to enum
+        const reasonMap = {
+          'Stok opname': 'STOCK_OPNAME',
+          'Barang rusak': 'DAMAGED',
+          'Barang hilang': 'LOST',
+          'Return supplier': 'SUPPLIER_RETURN',
+          'Koreksi input': 'INPUT_ERROR',
+          'Lainnya': 'OTHER'
+        };
+
+        await tx.stockAdjustment.create({
+          data: {
+            stockId: stock.id,
+            productVariantId: variantId,
+            cabangId: cabangId,
+            adjustedById: req.user.id,
+            previousQty: previousQty,
+            newQty: newQty,
+            difference: newQty - previousQty,
+            reason: reason ? reasonMap[reason] : null,
+            notes: notes || null
+          }
+        });
+      }
+
+      return stock;
+    });
+
+    res.json(result);
   } catch (error) {
     console.error('Update stock error:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -606,6 +652,111 @@ router.get('/alerts/low-stock', authMiddleware, async (req, res) => {
     res.json(lowStocks);
   } catch (error) {
     console.error('Get low stock error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get stock adjustment history
+router.get('/stock/:variantId/:cabangId/adjustments', authMiddleware, async (req, res) => {
+  try {
+    const { variantId, cabangId } = req.params;
+    const { limit = 50 } = req.query;
+
+    const adjustments = await prisma.stockAdjustment.findMany({
+      where: {
+        productVariantId: variantId,
+        cabangId: cabangId
+      },
+      include: {
+        adjustedBy: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        },
+        productVariant: {
+          include: {
+            product: true
+          }
+        },
+        cabang: true
+      },
+      orderBy: { createdAt: 'desc' },
+      take: parseInt(limit)
+    });
+
+    res.json(adjustments);
+  } catch (error) {
+    console.error('Get adjustments error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get all stock adjustments (for reports)
+router.get('/adjustments/all', authMiddleware, ownerOrManager, async (req, res) => {
+  try {
+    const { cabangId, startDate, endDate, reason, limit = 100 } = req.query;
+
+    const where = {};
+    if (cabangId) where.cabangId = cabangId;
+    if (reason) where.reason = reason;
+    if (startDate || endDate) {
+      where.createdAt = {};
+      if (startDate) where.createdAt.gte = new Date(startDate);
+      if (endDate) where.createdAt.lte = new Date(endDate);
+    }
+
+    const adjustments = await prisma.stockAdjustment.findMany({
+      where,
+      include: {
+        adjustedBy: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true
+          }
+        },
+        productVariant: {
+          include: {
+            product: {
+              include: {
+                category: true
+              }
+            }
+          }
+        },
+        cabang: true
+      },
+      orderBy: { createdAt: 'desc' },
+      take: parseInt(limit)
+    });
+
+    // Summary stats
+    const stats = {
+      totalAdjustments: adjustments.length,
+      totalIncrease: adjustments
+        .filter(a => a.difference > 0)
+        .reduce((sum, a) => sum + a.difference, 0),
+      totalDecrease: adjustments
+        .filter(a => a.difference < 0)
+        .reduce((sum, a) => sum + Math.abs(a.difference), 0),
+      byReason: {}
+    };
+
+    adjustments.forEach(adj => {
+      if (adj.reason) {
+        stats.byReason[adj.reason] = (stats.byReason[adj.reason] || 0) + 1;
+      }
+    });
+
+    res.json({
+      data: adjustments,
+      stats
+    });
+  } catch (error) {
+    console.error('Get all adjustments error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
