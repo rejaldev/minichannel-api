@@ -120,9 +120,26 @@ router.post('/transactions/batch', authMiddleware, async (req, res) => {
           }
           const total = subtotal - (discount || 0);
 
+          // Check if transaction already exists (by ID or transactionNo)
+          const existingTransaction = await tx.transaction.findFirst({
+            where: {
+              OR: [
+                { id: txData.id },
+                { transactionNo: txData.transactionNo }
+              ]
+            }
+          });
+
+          // If transaction already exists, skip creation and return existing
+          if (existingTransaction) {
+            console.log(`[Sync] Transaction ${txData.transactionNo} already exists, skipping...`);
+            return existingTransaction;
+          }
+
           // Create transaction (use offline createdAt if provided, use kasirId from request)
           const newTransaction = await tx.transaction.create({
             data: {
+              id: txData.id, // Preserve offline ID
               transactionNo: txData.transactionNo || `INV-${Date.now()}`,
               cabangId,
               kasirId: kasirId || req.user.id, // Use kasirId from offline transaction, fallback to req.user.id

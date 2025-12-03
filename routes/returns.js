@@ -4,55 +4,124 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { authMiddleware } = require('../middleware/auth');
 
-// GET /api/returns - Get all returns
+// GET /api/returns/stats - Get return statistics
+router.get('/stats', authMiddleware, async (req, res) => {
+  try {
+    const { cabangId } = req.query;
+    const where = cabangId ? { cabangId } : {};
+    
+    const [pending, rejected, completed, totalRefund] = await Promise.all([
+      prisma.return.count({ where: { ...where, status: 'PENDING' } }),
+      prisma.return.count({ where: { ...where, status: 'REJECTED' } }),
+      prisma.return.count({ where: { ...where, status: 'COMPLETED' } }),
+      prisma.return.aggregate({
+        where: { ...where, status: 'COMPLETED' },
+        _sum: { refundAmount: true }
+      })
+    ]);
+    
+    res.json({
+      pending,
+      rejected,
+      completed,
+      total: pending + rejected + completed,
+      totalRefundAmount: totalRefund._sum.refundAmount || 0
+    });
+  } catch (error) {
+    console.error('Error fetching return stats:', error);
+    res.status(500).json({ error: 'Failed to fetch return statistics' });
+  }
+});
+
+// GET /api/returns - Get all returns with pagination
 router.get('/', authMiddleware, async (req, res) => {
   try {
-    const { cabangId, status, startDate, endDate } = req.query;
+    const { cabangId, status, startDate, endDate, search, page = 1, limit = 10 } = req.query;
 
     const where = {};
     if (cabangId) where.cabangId = cabangId;
-    if (status) where.status = status;
+    if (status && status !== 'ALL') where.status = status;
     if (startDate || endDate) {
       where.createdAt = {};
       if (startDate) where.createdAt.gte = new Date(startDate);
-      if (endDate) where.createdAt.lte = new Date(endDate);
+      if (endDate) {
+        const endDateTime = new Date(endDate);
+        endDateTime.setHours(23, 59, 59, 999);
+        where.createdAt.lte = endDateTime;
+      }
     }
 
-    const returns = await prisma.return.findMany({
-      where,
-      include: {
-        transaction: {
-          select: {
-            transactionNo: true,
-            customerName: true,
-            customerPhone: true,
+    // Search by return no or transaction no
+    if (search) {
+      where.OR = [
+        { returnNo: { contains: search, mode: 'insensitive' } },
+        { transaction: { transactionNo: { contains: search, mode: 'insensitive' } } }
+      ];
+    }
+
+    // Pagination
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const take = parseInt(limit);
+
+    const [returns, total] = await Promise.all([
+      prisma.return.findMany({
+        where,
+        skip,
+        take,
+        include: {
+          transaction: {
+            select: {
+              transactionNo: true,
+              customerName: true,
+              customerPhone: true,
+              paymentMethod: true,
+              total: true,
+              createdAt: true,
+            },
           },
-        },
-        processedBy: {
-          select: {
-            name: true,
+          cabang: {
+            select: {
+              id: true,
+              name: true,
+            },
           },
-        },
-        items: {
-          include: {
-            productVariant: {
-              include: {
-                product: {
-                  select: {
-                    name: true,
+          processedBy: {
+            select: {
+              id: true,
+              name: true,
+              role: true,
+            },
+          },
+          items: {
+            include: {
+              productVariant: {
+                include: {
+                  product: {
+                    select: {
+                      name: true,
+                    },
                   },
                 },
               },
             },
           },
         },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+      prisma.return.count({ where })
+    ]);
 
-    res.json({ returns });
+    res.json({
+      returns,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        totalPages: Math.ceil(total / parseInt(limit))
+      }
+    });
   } catch (error) {
     console.error('Error fetching returns:', error);
     res.status(500).json({ error: 'Failed to fetch returns' });
@@ -183,12 +252,19 @@ router.post('/', authMiddleware, async (req, res) => {
 
     // Create return
     const returnData = await prisma.$transaction(async (tx) => {
+      // Use cabangId from user if available, otherwise use transaction's cabangId
+      const returnCabangId = req.user.cabangId || transaction.cabangId;
+      
+      if (!returnCabangId) {
+        throw new Error('Cannot determine cabang for return. Transaction has no cabangId.');
+      }
+      
       const newReturn = await tx.return.create({
         data: {
           returnNo,
           transactionId,
-          cabangId: req.user.cabangId,
-          processedById: req.user.id,
+          cabangId: returnCabangId,
+          processedById: req.user.userId,
           reason,
           notes,
           subtotal,

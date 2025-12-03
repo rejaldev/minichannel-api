@@ -1,8 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
 require('dotenv').config();
 
 const app = express();
+const httpServer = createServer(app);
 const PORT = process.env.PORT || 5000;
 
 // CORS Configuration
@@ -13,9 +16,9 @@ const corsOptions = {
 
     const allowedOrigins = [
       'http://localhost:3000',
-      'http://localhost:3001',
+      'http://localhost:4000',
       'http://127.0.0.1:3000',
-      'http://127.0.0.1:3001',
+      'http://127.0.0.1:4000',
       process.env.CORS_ORIGIN, // From .env
     ].filter(Boolean);
 
@@ -29,6 +32,30 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200
 };
+
+// Initialize Socket.io
+const io = new Server(httpServer, {
+  cors: {
+    origin: ['http://localhost:4000', 'http://localhost:3000', 'http://127.0.0.1:4000', 'http://127.0.0.1:3000'],
+    credentials: true
+  }
+});
+
+// Initialize socket helper
+const socketHelper = require('./lib/socket');
+socketHelper.initSocket(io);
+
+// Make io accessible to routes
+app.set('io', io);
+
+// Socket.io connection handler
+io.on('connection', (socket) => {
+  console.log('[WebSocket] Client connected:', socket.id);
+  
+  socket.on('disconnect', () => {
+    console.log('[WebSocket] Client disconnected:', socket.id);
+  });
+});
 
 // Middleware
 app.use(cors(corsOptions));
@@ -72,6 +99,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server - localhost only
-app.listen(PORT, 'localhost', () => {
+httpServer.listen(PORT, 'localhost', () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🔌 WebSocket server ready on ws://localhost:${PORT}`);
 });

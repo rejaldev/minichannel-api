@@ -76,10 +76,9 @@ enum ReturnReason {
 }
 
 enum ReturnStatus {
-  PENDING // Menunggu approval
-  APPROVED // Disetujui
+  PENDING // Menunggu persetujuan
   REJECTED // Ditolak
-  COMPLETED // Selesai (stock sudah dikembalikan)
+  COMPLETED // Disetujui & Selesai (stock sudah dikembalikan)
 }
 
 // Item yang diretur
@@ -143,7 +142,6 @@ model Product {
   category    Category    @relation(fields: [categoryId], references: [id])
   categoryId  String
   productType ProductType @default(VARIANT) // SINGLE atau VARIANT
-  price       Float? // Hanya untuk SINGLE product
   isActive    Boolean     @default(true)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -194,7 +192,6 @@ model ProductVariant {
   variantName  String // "Size", "Nomor", "Ukuran"
   variantValue String // "6", "8", "10", "S", "M", "L"
   sku          String   @unique // SKU/Barcode
-  price        Float // Harga per variant (bisa beda-beda)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -364,8 +361,6 @@ model PrinterSettings {
   autoPrintEnabled Boolean  @default(true)
   printerName      String?
   paperWidth       Int      @default(80)
-  showPreview      Boolean  @default(false)
-  printCopies      Int      @default(1)
   storeName        String   @default("ANEKABUANA STORE")
   branchName       String?
   address          String?

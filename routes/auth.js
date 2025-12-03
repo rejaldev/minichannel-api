@@ -197,9 +197,14 @@ router.post('/users', authMiddleware, ownerOnly, async (req, res) => {
   try {
     const { email, password, name, role, cabangId } = req.body;
 
-    // Validasi
-    if (!email || !password || !name || !role || !cabangId) {
-      return res.status(400).json({ error: 'Semua field wajib diisi' });
+    // Validasi - ADMIN tidak butuh cabangId
+    if (!email || !password || !name || !role) {
+      return res.status(400).json({ error: 'Email, password, name, dan role wajib diisi' });
+    }
+
+    // Validate cabangId for non-ADMIN roles
+    if (role !== 'ADMIN' && role !== 'OWNER' && !cabangId) {
+      return res.status(400).json({ error: 'cabangId wajib diisi untuk role KASIR/MANAGER' });
     }
 
     // Cek email sudah terdaftar
