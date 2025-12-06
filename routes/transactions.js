@@ -1,6 +1,7 @@
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const { authMiddleware, ownerOrManager } = require('../middleware/auth');
+const { emitStockUpdated } = require('../lib/socket');
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -36,16 +37,17 @@ router.post('/', authMiddleware, async (req, res) => {
       paymentAmount2,
       bankName2,
       referenceNo2,
-      notes 
+      notes,
+      cabangId: bodyCabangId // Allow cabangId from body for Owner/Manager
     } = req.body;
 
-    // Get cabangId from authenticated user's token
-    const cabangId = req.user.cabangId;
+    // Get cabangId from authenticated user's token or from body (for Owner/Manager)
+    const cabangId = req.user.cabangId || bodyCabangId;
 
     // Validation
     if (!cabangId) {
       return res.status(400).json({ 
-        error: 'User must be assigned to a cabang' 
+        error: 'cabangId is required. User must be assigned to a cabang or provide cabangId in request.' 
       });
     }
 
@@ -217,12 +219,25 @@ router.post('/', authMiddleware, async (req, res) => {
         });
       }
 
-      return newTransaction;
+      return { newTransaction, stockUpdates: itemsWithDetails };
     });
+
+    // Emit stock updates via WebSocket
+    for (const item of transaction.stockUpdates) {
+      emitStockUpdated({
+        productVariantId: item.productVariantId,
+        cabangId,
+        quantity: item.currentStock - item.quantity,
+        previousQuantity: item.currentStock,
+        operation: 'subtract'
+      });
+    }
+
+    const newTransaction = transaction.newTransaction;
 
     res.status(201).json({
       message: 'Transaction created successfully',
-      transaction
+      transaction: newTransaction
     });
 
   } catch (error) {
@@ -631,6 +646,7 @@ router.put('/:id/cancel', authMiddleware, ownerOrManager, async (req, res) => {
       });
 
       // Restore stock for each item
+      const stockUpdates = [];
       for (const item of transaction.items) {
         const stock = await tx.stock.findUnique({
           where: {
@@ -642,21 +658,36 @@ router.put('/:id/cancel', authMiddleware, ownerOrManager, async (req, res) => {
         });
 
         if (stock) {
+          const newQuantity = stock.quantity + item.quantity;
           await tx.stock.update({
             where: { id: stock.id },
             data: {
-              quantity: stock.quantity + item.quantity
+              quantity: newQuantity
             }
+          });
+          stockUpdates.push({
+            productVariantId: item.productVariantId,
+            cabangId: transaction.cabangId,
+            quantity: newQuantity,
+            previousQuantity: stock.quantity
           });
         }
       }
 
-      return updatedTransaction;
+      return { updatedTransaction, stockUpdates };
     });
+
+    // Emit stock updates via WebSocket
+    for (const stockUpdate of updated.stockUpdates) {
+      emitStockUpdated({
+        ...stockUpdate,
+        operation: 'add'
+      });
+    }
 
     res.json({
       message: 'Transaction cancelled and stock restored',
-      transaction: updated
+      transaction: updated.updatedTransaction
     });
   } catch (error) {
     console.error('Cancel transaction error:', error);

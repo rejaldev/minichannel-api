@@ -16,8 +16,10 @@ const corsOptions = {
 
     const allowedOrigins = [
       'http://localhost:3000',
+      'http://localhost:3500',
       'http://localhost:4000',
       'http://127.0.0.1:3000',
+      'http://127.0.0.1:3500',
       'http://127.0.0.1:4000',
       process.env.CORS_ORIGIN, // From .env
     ].filter(Boolean);
@@ -36,7 +38,14 @@ const corsOptions = {
 // Initialize Socket.io
 const io = new Server(httpServer, {
   cors: {
-    origin: ['http://localhost:4000', 'http://localhost:3000', 'http://127.0.0.1:4000', 'http://127.0.0.1:3000'],
+    origin: [
+      'http://localhost:3000', 
+      'http://localhost:3500',
+      'http://localhost:4000', 
+      'http://127.0.0.1:3000', 
+      'http://127.0.0.1:3500',
+      'http://127.0.0.1:4000'
+    ],
     credentials: true
   }
 });

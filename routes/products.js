@@ -915,11 +915,11 @@ router.put('/stock/:variantId/:cabangId', authMiddleware, ownerOrManager, async 
 
     // Emit WebSocket event for stock update
     emitStockUpdated({
-      variantId,
+      productVariantId: variantId,
       cabangId,
       quantity: newQty,
-      previousQty,
-      productId: result.productVariant.productId
+      previousQuantity: previousQty,
+      operation: 'set'
     });
 
     res.json(result);
