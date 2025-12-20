@@ -317,4 +317,63 @@ router.put('/users/:id', authMiddleware, ownerOnly, async (req, res) => {
   }
 });
 
+// Delete user (Owner only)
+router.delete('/users/:id', authMiddleware, ownerOnly, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Check if user exists
+    const user = await prisma.user.findUnique({
+      where: { id },
+      include: {
+        _count: {
+          select: {
+            transactions: true,
+            processedReturns: true
+          }
+        }
+      }
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User tidak ditemukan' });
+    }
+
+    // Prevent deleting yourself
+    if (user.id === req.user.userId) {
+      return res.status(400).json({ error: 'Tidak bisa menghapus akun sendiri' });
+    }
+
+    // Check if user has transaction history
+    if (user._count.transactions > 0 || user._count.processedReturns > 0) {
+      // Soft delete - deactivate instead
+      await prisma.user.update({
+        where: { id },
+        data: { isActive: false }
+      });
+
+      return res.json({ 
+        message: 'User memiliki riwayat transaksi. User telah dinonaktifkan.',
+        action: 'deactivated'
+      });
+    }
+
+    // Safe to hard delete
+    await prisma.user.delete({
+      where: { id }
+    });
+
+    res.json({ 
+      message: 'User berhasil dihapus',
+      action: 'deleted'
+    });
+  } catch (error) {
+    console.error('Delete user error:', error);
+    if (error.code === 'P2025') {
+      return res.status(404).json({ error: 'User tidak ditemukan' });
+    }
+    res.status(500).json({ error: 'Terjadi kesalahan server' });
+  }
+});
+
 module.exports = router;

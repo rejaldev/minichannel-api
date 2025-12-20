@@ -99,4 +99,71 @@ router.put('/:id', authMiddleware, ownerOnly, async (req, res) => {
   }
 });
 
+// Delete cabang (Owner only)
+router.delete('/:id', authMiddleware, ownerOnly, async (req, res) => {
+  try {
+    // Check if cabang exists and has data
+    const cabang = await prisma.cabang.findUnique({
+      where: { id: req.params.id },
+      include: {
+        _count: {
+          select: {
+            users: true,
+            stocks: true,
+            transactions: true
+          }
+        }
+      }
+    });
+
+    if (!cabang) {
+      return res.status(404).json({ error: 'Cabang not found' });
+    }
+
+    // Check if cabang has users
+    if (cabang._count.users > 0) {
+      return res.status(400).json({ 
+        error: `Cannot delete cabang. It has ${cabang._count.users} user(s). Reassign or delete users first.` 
+      });
+    }
+
+    // Check if cabang has stocks
+    if (cabang._count.stocks > 0) {
+      return res.status(400).json({ 
+        error: `Cannot delete cabang. It has ${cabang._count.stocks} stock record(s). Transfer or delete stocks first.` 
+      });
+    }
+
+    // Check if cabang has transaction history
+    if (cabang._count.transactions > 0) {
+      // Soft delete - deactivate instead
+      await prisma.cabang.update({
+        where: { id: req.params.id },
+        data: { isActive: false }
+      });
+
+      return res.json({ 
+        message: 'Cabang has transaction history. Cabang has been deactivated.',
+        action: 'deactivated'
+      });
+    }
+
+    // Safe to hard delete
+    await prisma.cabang.delete({
+      where: { id: req.params.id }
+    });
+
+    res.json({ 
+      message: 'Cabang deleted successfully',
+      action: 'deleted'
+    });
+  } catch (error) {
+    console.error('Delete cabang error:', error);
+    if (error.code === 'P2025') {
+      return res.status(404).json({ error: 'Cabang not found' });
+    }
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 module.exports = router;

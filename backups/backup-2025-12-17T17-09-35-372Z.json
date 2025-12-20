@@ -1,0 +1,4346 @@
+{
+  "metadata": {
+    "timestamp": "2025-12-17T17:09:35.373Z",
+    "version": "1.0"
+  },
+  "data": {
+    "users": [
+      {
+        "id": "cmhop1v910004wgv8trwx7y8j",
+        "email": "kasir@toko.com",
+        "password": "$2b$10$Mgyn9T5wxMHxtidJ.3J/Hesb68b2fSSZB.hpasaUnUCkVXR2SnkYC",
+        "name": "Kasir 1",
+        "role": "KASIR",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "isActive": true,
+        "createdAt": "2025-11-07T10:09:35.606Z",
+        "updatedAt": "2025-11-26T02:53:38.037Z"
+      },
+      {
+        "id": "cmhop1v6q0002wgv8pwt6fvjp",
+        "email": "owner@toko.com",
+        "password": "$2b$10$WUICWHE0n5Iuh.7VnS3RaORurH/mleLbvzES9TJmREubGmQstN9VK",
+        "name": "Owner Toko",
+        "role": "OWNER",
+        "cabangId": null,
+        "isActive": true,
+        "createdAt": "2025-11-07T10:09:35.522Z",
+        "updatedAt": "2025-11-27T17:23:32.732Z"
+      }
+    ],
+    "categories": [
+      {
+        "id": "cmj4inqdy0000wgtoapo2qhz4",
+        "name": "Baju Sekolah",
+        "description": "Baju SD, SMP, SMA, Lengan Panjang, Penggalang Panjang, Penggalang Pendek, Siaga Panjang dan Siaga Pendek",
+        "createdAt": "2025-12-13T16:34:39.566Z",
+        "updatedAt": "2025-12-13T16:34:39.566Z"
+      },
+      {
+        "id": "cmj4jadnz0000wgks0qnlh5s3",
+        "name": "Celana Panjang",
+        "description": "Celana Panjang Karet semua warna, dan Celana Panjang Bobok semua warna",
+        "createdAt": "2025-12-13T16:52:16.175Z",
+        "updatedAt": "2025-12-13T16:52:16.175Z"
+      },
+      {
+        "id": "cmhop1vdm0007wgv8amcpwdmf",
+        "name": "Perlengkapan Sekolah",
+        "description": "Topi, Dasi, Badge SD, SMP, SMA, Kaos Kaki",
+        "createdAt": "2025-11-07T10:09:35.609Z",
+        "updatedAt": "2025-12-13T16:53:15.277Z"
+      },
+      {
+        "id": "cmj74v16y0000wgegkpegaut6",
+        "name": "Rok Sekolah",
+        "description": "",
+        "createdAt": "2025-12-15T12:31:44.057Z",
+        "updatedAt": "2025-12-15T12:31:44.057Z"
+      }
+    ],
+    "products": [
+      {
+        "id": "cmj8xkeum00hxwgv8jol7px53",
+        "name": "Celana Panjang Karet - Harapan Abah",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmj4jadnz0000wgks0qnlh5s3",
+        "productType": "VARIANT",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkewq00mqwgv8uavy6ymo",
+        "name": "Baju Sekolah - Harapan Abah",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmj4inqdy0000wgtoapo2qhz4",
+        "productType": "VARIANT",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkexx00oywgv8pjnbx7ew",
+        "name": "Rok Rempel - Harapan Abah",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmj74v16y0000wgegkpegaut6",
+        "productType": "VARIANT",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkezr00u6wgv8d261w36p",
+        "name": "Baju Pramuka Penggalang - Harapan Abah",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmj4inqdy0000wgtoapo2qhz4",
+        "productType": "VARIANT",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkf0h00vtwgv8ip06nn2z",
+        "name": "Baju Pramuka Siaga - Harapan Abah",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmj4inqdy0000wgtoapo2qhz4",
+        "productType": "VARIANT",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf1800wvwgv87buuuocp",
+        "name": "Bed Sekolah",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmhop1vdm0007wgv8amcpwdmf",
+        "productType": "VARIANT",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.833Z",
+        "updatedAt": "2025-12-16T18:43:03.833Z"
+      },
+      {
+        "id": "cmj8xkf1j00x6wgv8bdcupf1s",
+        "name": "Bed Merah Putih Bordir",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmhop1vdm0007wgv8amcpwdmf",
+        "productType": "SINGLE",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.847Z",
+        "updatedAt": "2025-12-16T18:43:03.847Z"
+      },
+      {
+        "id": "cmj8xkf2200xbwgv8d2hcmbf5",
+        "name": "Kaos Kaki Hitam Putih",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmhop1vdm0007wgv8amcpwdmf",
+        "productType": "VARIANT",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.866Z",
+        "updatedAt": "2025-12-16T18:43:03.866Z"
+      },
+      {
+        "id": "cmj8xkf2m00xmwgv8z0wn077y",
+        "name": "Kaos Kaki Pramuka",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmhop1vdm0007wgv8amcpwdmf",
+        "productType": "VARIANT",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.886Z",
+        "updatedAt": "2025-12-16T18:43:03.886Z"
+      },
+      {
+        "id": "cmj8xkf3000xxwgv8b75wqyxj",
+        "name": "Kaos Kaki Futsal",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmhop1vdm0007wgv8amcpwdmf",
+        "productType": "VARIANT",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.900Z",
+        "updatedAt": "2025-12-16T18:43:03.900Z"
+      },
+      {
+        "id": "cmj8xkf3d00y5wgv8lq29kr11",
+        "name": "Kaos Kaki Betis",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmhop1vdm0007wgv8amcpwdmf",
+        "productType": "VARIANT",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.913Z",
+        "updatedAt": "2025-12-16T18:43:03.913Z"
+      },
+      {
+        "id": "cmj8xkf3w00ydwgv8c8iarall",
+        "name": "Kaos Kaki Pendek",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmhop1vdm0007wgv8amcpwdmf",
+        "productType": "VARIANT",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.932Z",
+        "updatedAt": "2025-12-16T18:43:03.932Z"
+      },
+      {
+        "id": "cmj8xkf4600ylwgv8qpquo34h",
+        "name": "Kaos Kaki Jempol",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmhop1vdm0007wgv8amcpwdmf",
+        "productType": "SINGLE",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.943Z",
+        "updatedAt": "2025-12-16T18:43:03.943Z"
+      },
+      {
+        "id": "cmj8xkf4f00yqwgv86px0fskc",
+        "name": "Dasi Sekolah",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmhop1vdm0007wgv8amcpwdmf",
+        "productType": "VARIANT",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.951Z",
+        "updatedAt": "2025-12-16T18:43:03.951Z"
+      },
+      {
+        "id": "cmj8xkf4y00z7wgv83pfx7uqw",
+        "name": "Jilbab Sport",
+        "description": "Pakaian Seragam Sekolah",
+        "categoryId": "cmhop1vdm0007wgv8amcpwdmf",
+        "productType": "VARIANT",
+        "isActive": true,
+        "createdAt": "2025-12-16T18:43:03.970Z",
+        "updatedAt": "2025-12-16T18:43:03.970Z"
+      },
+      {
+        "id": "cmj9okt1s0001wg7s86jlthej",
+        "name": "tes",
+        "description": "tes",
+        "categoryId": "cmj4inqdy0000wgtoapo2qhz4",
+        "productType": "SINGLE",
+        "isActive": true,
+        "createdAt": "2025-12-17T07:19:11.621Z",
+        "updatedAt": "2025-12-17T07:19:11.621Z"
+      },
+      {
+        "id": "cmiepoqwh000dwg9g1xijdbya",
+        "name": "Celana Sekolah",
+        "description": "ini deskripsi",
+        "categoryId": "cmhop1vdm0007wgv8amcpwdmf",
+        "productType": "VARIANT",
+        "isActive": false,
+        "createdAt": "2025-11-25T15:09:23.634Z",
+        "updatedAt": "2025-12-13T16:27:59.917Z"
+      },
+      {
+        "id": "cmhp0x6qg0005wgbgtpfvtez1",
+        "name": "Tas sekolah",
+        "description": "ini tas",
+        "categoryId": "cmhop1vdm0007wgv8amcpwdmf",
+        "productType": "SINGLE",
+        "isActive": false,
+        "createdAt": "2025-11-07T15:41:52.573Z",
+        "updatedAt": "2025-11-25T08:14:44.634Z"
+      }
+    ],
+    "productVariants": [
+      {
+        "id": "cmj8xkeus00mmwgv8su611thh",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Abu | 36",
+        "sku": "CPKAHA36",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkewq00mrwgv8bvou5svb",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SD | 5",
+        "sku": "BJSDHA5",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00muwgv88rxjbnqp",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SD | 6",
+        "sku": "BJSDHA6",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00mxwgv8ffc2kfif",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SD | 7",
+        "sku": "BJSDHA7",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00n0wgv8x3ok11hg",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SD | 8",
+        "sku": "BJSDHA8",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00n3wgv86nualqtx",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SD | 9",
+        "sku": "BJSDHA9",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00n6wgv848nl8cxj",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SD | 10",
+        "sku": "BJSDHA10",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00n9wgv8139q6y5x",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SD | 11",
+        "sku": "BJSDHA11",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00ncwgv88mib2zik",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SD | 12",
+        "sku": "BJSDHA12",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00nfwgv81hqb2zws",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SD | 13",
+        "sku": "BJSDHA13",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00niwgv8nbsi4br2",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SD | 14",
+        "sku": "BJSDHA14",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00nlwgv8nmq83fpr",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SD | 15",
+        "sku": "BJSDHA15",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00nowgv82fp6brj2",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMP | 11",
+        "sku": "BJSMPHA11",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00nrwgv8njc8mxqi",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMP | 12",
+        "sku": "BJSMPHA12",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00nuwgv8h49oxxz4",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMP | 13",
+        "sku": "BJSMPHA13",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00nxwgv82f2h5fek",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMP | 14",
+        "sku": "BJSMPHA14",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00o0wgv8qz0ub31t",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMP | 15",
+        "sku": "BJSMPHA15",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00o3wgv8yx3cd3jz",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMP | 16",
+        "sku": "BJSMPHA16",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00o6wgv88ctjzfhl",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMP | 17",
+        "sku": "BJSMPHA17",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00o9wgv81x99cwgv",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMP | 18",
+        "sku": "BJSMPHA18",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00ocwgv81obq03d6",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMA | 12",
+        "sku": "BJSMAHA12",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewt00ofwgv8jx90x6og",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMA | 13",
+        "sku": "BJSMAHA13",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmhp0x6t70007wgbg5skx411p",
+        "productId": "cmhp0x6qg0005wgbgtpfvtez1",
+        "variantName": "Default",
+        "variantValue": "Standard",
+        "sku": "cmhp0x6qg0005wgbgtpfvtez1-DEFAULT",
+        "createdAt": "2025-11-07T15:41:52.699Z",
+        "updatedAt": "2025-11-07T16:16:44.455Z"
+      },
+      {
+        "id": "cmj8xkewt00oiwgv8xv0qzu16",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMA | 14",
+        "sku": "BJSMAHA14",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewt00olwgv8ojnwzqu7",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMA | 15",
+        "sku": "BJSMAHA15",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewt00oowgv8psb942wt",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMA | 16",
+        "sku": "BJSMAHA16",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewt00orwgv880ck09le",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMA | 17",
+        "sku": "BJSMAHA17",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewt00ouwgv8qd1z86m6",
+        "productId": "cmj8xkewq00mqwgv8uavy6ymo",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "SMA | 18",
+        "sku": "BJSMAHA18",
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkexz00ozwgv8lbp9c89j",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 25",
+        "sku": "ROKPHA25",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkexz00p2wgv8jdbq3t02",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 26",
+        "sku": "ROKPHA26",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkexz00p5wgv88ojk2uvu",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 27",
+        "sku": "ROKPHA27",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkexz00p8wgv84061tcup",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 28",
+        "sku": "ROKPHA28",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkexz00pbwgv845lxalzb",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 29",
+        "sku": "ROKPHA29",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkexz00pewgv82naji9r0",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 30",
+        "sku": "ROKPHA30",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkexz00phwgv8i6h68g2q",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 31",
+        "sku": "ROKPHA31",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkexz00pkwgv8o8ssvu9c",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 32",
+        "sku": "ROKPHA32",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000pnwgv88bloh1hg",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 33",
+        "sku": "ROKPHA33",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000pqwgv8lhtovy33",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 34",
+        "sku": "ROKPHA34",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000ptwgv8tylae48g",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 35",
+        "sku": "ROKPHA35",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000pwwgv899e4mcbv",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 36",
+        "sku": "ROKPHA36",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000pzwgv83t50ntkk",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 37",
+        "sku": "ROKPHA37",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000q2wgv8o4eiiyjp",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 25",
+        "sku": "ROKHHA25",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000q5wgv868uuap8i",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 26",
+        "sku": "ROKHHA26",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000q8wgv84idte4px",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 27",
+        "sku": "ROKHHA27",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000qbwgv84dp3golh",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 28",
+        "sku": "ROKHHA28",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000qewgv8u24vkhe9",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 29",
+        "sku": "ROKHHA29",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100qhwgv8yxwr4u2a",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 30",
+        "sku": "ROKHHA30",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100qkwgv84v86hx5c",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 31",
+        "sku": "ROKHHA31",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmiepoqwi000fwg9gff0948u9",
+        "productId": "cmiepoqwh000dwg9g1xijdbya",
+        "variantName": "Nomor",
+        "variantValue": "26",
+        "sku": "CLNPDK1",
+        "createdAt": "2025-11-25T15:09:23.635Z",
+        "updatedAt": "2025-11-26T08:22:10.326Z"
+      },
+      {
+        "id": "cmiepor6z000lwg9gejhe26gt",
+        "productId": "cmiepoqwh000dwg9g1xijdbya",
+        "variantName": "Nomor",
+        "variantValue": "27",
+        "sku": "CLNPDK2",
+        "createdAt": "2025-11-25T15:09:24.011Z",
+        "updatedAt": "2025-11-26T08:22:10.384Z"
+      },
+      {
+        "id": "cmiepor75000rwg9gk89f6kst",
+        "productId": "cmiepoqwh000dwg9g1xijdbya",
+        "variantName": "Nomor",
+        "variantValue": "28",
+        "sku": "CLNPDK3",
+        "createdAt": "2025-11-25T15:09:24.018Z",
+        "updatedAt": "2025-11-26T08:22:10.388Z"
+      },
+      {
+        "id": "cmiepor7b000xwg9gtrf3f9s3",
+        "productId": "cmiepoqwh000dwg9g1xijdbya",
+        "variantName": "Nomor",
+        "variantValue": "29",
+        "sku": "CLNPDK4",
+        "createdAt": "2025-11-25T15:09:24.023Z",
+        "updatedAt": "2025-11-26T08:22:10.394Z"
+      },
+      {
+        "id": "cmiepor7m0013wg9gxpdvqsr0",
+        "productId": "cmiepoqwh000dwg9g1xijdbya",
+        "variantName": "Nomor",
+        "variantValue": "30",
+        "sku": "CLNPDK5",
+        "createdAt": "2025-11-25T15:09:24.034Z",
+        "updatedAt": "2025-11-26T08:22:10.399Z"
+      },
+      {
+        "id": "cmiepor7s0019wg9g7ehakwwy",
+        "productId": "cmiepoqwh000dwg9g1xijdbya",
+        "variantName": "Nomor",
+        "variantValue": "31",
+        "sku": "CLNPDK6",
+        "createdAt": "2025-11-25T15:09:24.041Z",
+        "updatedAt": "2025-11-26T08:22:10.403Z"
+      },
+      {
+        "id": "cmiepor7z001fwg9guscdproc",
+        "productId": "cmiepoqwh000dwg9g1xijdbya",
+        "variantName": "Nomor",
+        "variantValue": "32",
+        "sku": "CLNPDK7",
+        "createdAt": "2025-11-25T15:09:24.047Z",
+        "updatedAt": "2025-11-26T08:22:10.407Z"
+      },
+      {
+        "id": "cmiepor88001lwg9gtmltigpc",
+        "productId": "cmiepoqwh000dwg9g1xijdbya",
+        "variantName": "Nomor",
+        "variantValue": "33",
+        "sku": "CLNPDK8",
+        "createdAt": "2025-11-25T15:09:24.056Z",
+        "updatedAt": "2025-11-26T08:22:10.410Z"
+      },
+      {
+        "id": "cmiepor8c001rwg9gsx7d07st",
+        "productId": "cmiepoqwh000dwg9g1xijdbya",
+        "variantName": "Nomor",
+        "variantValue": "34",
+        "sku": "CLNPDK9",
+        "createdAt": "2025-11-25T15:09:24.061Z",
+        "updatedAt": "2025-11-26T08:22:10.413Z"
+      },
+      {
+        "id": "cmj8xkey100qnwgv8fau3uw4h",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 32",
+        "sku": "ROKHHA32",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100qqwgv8usmzn1u1",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 33",
+        "sku": "ROKHHA33",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100qtwgv8mxoi97xw",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 34",
+        "sku": "ROKHHA34",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100qwwgv8g2jax05x",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 35",
+        "sku": "ROKHHA35",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100qzwgv8jrfm7bve",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 36",
+        "sku": "ROKHHA36",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100r2wgv89ny67300",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 37",
+        "sku": "ROKHHA37",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100r5wgv8gpeq4ah7",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Biru | 33",
+        "sku": "ROKBHA33",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100r8wgv8sda3kaxy",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Biru | 34",
+        "sku": "ROKBHA34",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rbwgv84pmbsx5u",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Biru | 35",
+        "sku": "ROKBHA35",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rewgv8k9rbzmfb",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Biru | 36",
+        "sku": "ROKBHA36",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rhwgv8g799uetx",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Biru | 37",
+        "sku": "ROKBHA37",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rkwgv8wvpm6lmp",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 25",
+        "sku": "ROKCHA25",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rnwgv85llivgo4",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 26",
+        "sku": "ROKCHA26",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rqwgv8mh346bqr",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 27",
+        "sku": "ROKCHA27",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rtwgv8gsb7rt3m",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 28",
+        "sku": "ROKCHA28",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rwwgv83pq58en0",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 29",
+        "sku": "ROKCHA29",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rzwgv8ed0jzvog",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 30",
+        "sku": "ROKCHA30",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200s2wgv8j8j6xmbs",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 31",
+        "sku": "ROKCHA31",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200s5wgv84rz5gzch",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 32",
+        "sku": "ROKCHA32",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300s8wgv88zs5cb2r",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 33",
+        "sku": "ROKCHA33",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300sbwgv8ap9sgm0d",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 34",
+        "sku": "ROKCHA34",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300sewgv8ehcntsky",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 35",
+        "sku": "ROKCHA35",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300shwgv89opmnyji",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 36",
+        "sku": "ROKCHA36",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300skwgv8potnxcs6",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 37",
+        "sku": "ROKCHA37",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300snwgv8cs326qa1",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 25",
+        "sku": "ROKMHA25",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300sqwgv8l9b2vhua",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 26",
+        "sku": "ROKMHA26",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300stwgv8txrzozrz",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 27",
+        "sku": "ROKMHA27",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300swwgv8oj62921t",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 28",
+        "sku": "ROKMHA28",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300szwgv8nya3z4wy",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 29",
+        "sku": "ROKMHA29",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400t2wgv8494w0jw5",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 30",
+        "sku": "ROKMHA30",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400t5wgv8fieexy8a",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 31",
+        "sku": "ROKMHA31",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400t8wgv8b6h8rh8v",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 32",
+        "sku": "ROKMHA32",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400tbwgv8zt2rcdym",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 33",
+        "sku": "ROKMHA33",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400tewgv8ebipenyq",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 34",
+        "sku": "ROKMHA34",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400thwgv8ceykgdi0",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 35",
+        "sku": "ROKMHA35",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400tkwgv8dfe8ntug",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 36",
+        "sku": "ROKMHA36",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400tnwgv8zd728mgw",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 37",
+        "sku": "ROKMHA37",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400tqwgv8xlj5tr3n",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Abu | 33",
+        "sku": "ROKAHA33",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400ttwgv85rvpqequ",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Abu | 34",
+        "sku": "ROKAHA34",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey500twwgv8dbmxsslb",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Abu | 35",
+        "sku": "ROKAHA35",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey500tzwgv8yb4qf268",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Abu | 36",
+        "sku": "ROKAHA36",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey500u2wgv8hdoj92li",
+        "productId": "cmj8xkexx00oywgv8pjnbx7ew",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Abu | 37",
+        "sku": "ROKAHA37",
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkezs00u7wgv8bhw2g5sr",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 9",
+        "sku": "BJPRKPGPJHA9",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00uawgv8cktx056a",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 10",
+        "sku": "BJPRKPGPJHA10",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00udwgv8nwnj6bwc",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 11",
+        "sku": "BJPRKPGPJHA11",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00ugwgv8yg757vuz",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 12",
+        "sku": "BJPRKPGPJHA12",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00ujwgv8qk9s1ew9",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 13",
+        "sku": "BJPRKPGPJHA13",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00umwgv8kct25nr4",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 14",
+        "sku": "BJPRKPGPJHA14",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00upwgv8dquk7zdt",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 15",
+        "sku": "BJPRKPGPJHA15",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00uswgv8ix6c4c5y",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 16",
+        "sku": "BJPRKPGPJHA16",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00uvwgv8odccjl1q",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 17",
+        "sku": "BJPRKPGPJHA17",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00uywgv8a0pzl8wh",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 9",
+        "sku": "BJPRKPGPDHA9",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00v1wgv84zowwa6u",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 10",
+        "sku": "BJPRKPGPDHA10",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00v4wgv8czaz1ohc",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 11",
+        "sku": "BJPRKPGPDHA11",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00v7wgv8arfnqzpx",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 12",
+        "sku": "BJPRKPGPDHA12",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00vawgv8qkuoahcq",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 13",
+        "sku": "BJPRKPGPDHA13",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00vdwgv8menpn2x0",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 14",
+        "sku": "BJPRKPGPDHA14",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00vgwgv8nfjqwuch",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 15",
+        "sku": "BJPRKPGPDHA15",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00vjwgv8obu2ochu",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 16",
+        "sku": "BJPRKPGPDHA16",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00vmwgv894zpsydw",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 17",
+        "sku": "BJPRKPGPDHA17",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00vpwgv85accxh8e",
+        "productId": "cmj8xkezr00u6wgv8d261w36p",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 18",
+        "sku": "BJPRKPGPDHA18",
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkf0h00vuwgv8fsqz2s64",
+        "productId": "cmj8xkf0h00vtwgv8ip06nn2z",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 7",
+        "sku": "BJPRKSPJHA7",
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00vxwgv8balrwr4l",
+        "productId": "cmj8xkf0h00vtwgv8ip06nn2z",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 8",
+        "sku": "BJPRKSPJHA8",
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00w0wgv8j95sndu2",
+        "productId": "cmj8xkf0h00vtwgv8ip06nn2z",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 9",
+        "sku": "BJPRKSPJHA9",
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00w3wgv8wa9p4u06",
+        "productId": "cmj8xkf0h00vtwgv8ip06nn2z",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 10",
+        "sku": "BJPRKSPJHA10",
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00w6wgv8gq7kd6hp",
+        "productId": "cmj8xkf0h00vtwgv8ip06nn2z",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 11",
+        "sku": "BJPRKSPJHA11",
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00w9wgv8h5yd7lpt",
+        "productId": "cmj8xkf0h00vtwgv8ip06nn2z",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Panjang | 12",
+        "sku": "BJPRKSPJHA12",
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00wcwgv835jr1ha9",
+        "productId": "cmj8xkf0h00vtwgv8ip06nn2z",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 7",
+        "sku": "BJPRKSPDHA7",
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00wfwgv89swrbcqs",
+        "productId": "cmj8xkf0h00vtwgv8ip06nn2z",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 8",
+        "sku": "BJPRKSPDHA8",
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00wiwgv87tsv4odh",
+        "productId": "cmj8xkf0h00vtwgv8ip06nn2z",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 9",
+        "sku": "BJPRKSPDHA9",
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00wlwgv8o85ebd1y",
+        "productId": "cmj8xkf0h00vtwgv8ip06nn2z",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 10",
+        "sku": "BJPRKSPDHA10",
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00wowgv8l4x27oq8",
+        "productId": "cmj8xkf0h00vtwgv8ip06nn2z",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 11",
+        "sku": "BJPRKSPDHA11",
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0j00wrwgv8a9j9ydpq",
+        "productId": "cmj8xkf0h00vtwgv8ip06nn2z",
+        "variantName": "Tipe | Ukuran",
+        "variantValue": "Pendek | 12",
+        "sku": "BJPRKSPDHA12",
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf1800wwwgv89et05k9d",
+        "productId": "cmj8xkf1800wvwgv87buuuocp",
+        "variantName": "Jenis",
+        "variantValue": "SD",
+        "sku": "BEDSDBORD",
+        "createdAt": "2025-12-16T18:43:03.833Z",
+        "updatedAt": "2025-12-16T18:43:03.833Z"
+      },
+      {
+        "id": "cmj8xkf1800wzwgv82uj6248v",
+        "productId": "cmj8xkf1800wvwgv87buuuocp",
+        "variantName": "Jenis",
+        "variantValue": "SMP",
+        "sku": "BEDSMPBORD",
+        "createdAt": "2025-12-16T18:43:03.833Z",
+        "updatedAt": "2025-12-16T18:43:03.833Z"
+      },
+      {
+        "id": "cmj8xkf1800x2wgv8b9o5ohi1",
+        "productId": "cmj8xkf1800wvwgv87buuuocp",
+        "variantName": "Jenis",
+        "variantValue": "SMA",
+        "sku": "BEDSMABORD",
+        "createdAt": "2025-12-16T18:43:03.833Z",
+        "updatedAt": "2025-12-16T18:43:03.833Z"
+      },
+      {
+        "id": "cmj8xkf2200xcwgv8m9ovpmww",
+        "productId": "cmj8xkf2200xbwgv8d2hcmbf5",
+        "variantName": "Jenis",
+        "variantValue": "SD",
+        "sku": "KAOSKAKISD",
+        "createdAt": "2025-12-16T18:43:03.866Z",
+        "updatedAt": "2025-12-16T18:43:03.866Z"
+      },
+      {
+        "id": "cmj8xkf2200xfwgv8htrnlbzb",
+        "productId": "cmj8xkf2200xbwgv8d2hcmbf5",
+        "variantName": "Jenis",
+        "variantValue": "SMP",
+        "sku": "KAOSKAKISMP",
+        "createdAt": "2025-12-16T18:43:03.866Z",
+        "updatedAt": "2025-12-16T18:43:03.866Z"
+      },
+      {
+        "id": "cmj8xkf2200xiwgv8zlgl5982",
+        "productId": "cmj8xkf2200xbwgv8d2hcmbf5",
+        "variantName": "Jenis",
+        "variantValue": "SMA",
+        "sku": "KAOSKAKISMA",
+        "createdAt": "2025-12-16T18:43:03.866Z",
+        "updatedAt": "2025-12-16T18:43:03.866Z"
+      },
+      {
+        "id": "cmj8xkf4700ymwgv81rmn0ak6",
+        "productId": "cmj8xkf4600ylwgv8qpquo34h",
+        "variantName": "Default",
+        "variantValue": "Default",
+        "sku": "KAOSKAKIJPL",
+        "createdAt": "2025-12-16T18:43:03.943Z",
+        "updatedAt": "2025-12-16T18:43:03.943Z"
+      },
+      {
+        "id": "cmj8xkf4f00yrwgv8tlf147mi",
+        "productId": "cmj8xkf4f00yqwgv86px0fskc",
+        "variantName": "Jenis | Gender",
+        "variantValue": "SD | Perempuan",
+        "sku": "DASISDPRBORD",
+        "createdAt": "2025-12-16T18:43:03.951Z",
+        "updatedAt": "2025-12-16T18:43:03.951Z"
+      },
+      {
+        "id": "cmj8xkf4g00yuwgv845tskn8n",
+        "productId": "cmj8xkf4f00yqwgv86px0fskc",
+        "variantName": "Jenis | Gender",
+        "variantValue": "SD | Laki - Laki",
+        "sku": "DASISDLKBORD",
+        "createdAt": "2025-12-16T18:43:03.951Z",
+        "updatedAt": "2025-12-16T18:43:03.951Z"
+      },
+      {
+        "id": "cmj8xkf4g00yxwgv87ljt74qn",
+        "productId": "cmj8xkf4f00yqwgv86px0fskc",
+        "variantName": "Jenis",
+        "variantValue": "SMP",
+        "sku": "DASISMPBORD",
+        "createdAt": "2025-12-16T18:43:03.951Z",
+        "updatedAt": "2025-12-16T18:43:03.951Z"
+      },
+      {
+        "id": "cmj8xkf4g00z0wgv860uwfsbj",
+        "productId": "cmj8xkf4f00yqwgv86px0fskc",
+        "variantName": "Jenis | Warna",
+        "variantValue": "SMA | Abu - Abu",
+        "sku": "DASISMABORD",
+        "createdAt": "2025-12-16T18:43:03.951Z",
+        "updatedAt": "2025-12-16T18:43:03.951Z"
+      },
+      {
+        "id": "cmj8xkf4g00z3wgv8sv59twnx",
+        "productId": "cmj8xkf4f00yqwgv86px0fskc",
+        "variantName": "Jenis | Warna",
+        "variantValue": "SMA | Hitam",
+        "sku": "DASIHITAMPOLOS",
+        "createdAt": "2025-12-16T18:43:03.951Z",
+        "updatedAt": "2025-12-16T18:43:03.951Z"
+      },
+      {
+        "id": "cmj8xkf4y00z8wgv866qj3gvz",
+        "productId": "cmj8xkf4y00z7wgv83pfx7uqw",
+        "variantName": "Warna",
+        "variantValue": "Hitam",
+        "sku": "JILBABSPORTHT",
+        "createdAt": "2025-12-16T18:43:03.970Z",
+        "updatedAt": "2025-12-16T18:43:03.970Z"
+      },
+      {
+        "id": "cmj8xkf4y00zbwgv8q9chw5gc",
+        "productId": "cmj8xkf4y00z7wgv83pfx7uqw",
+        "variantName": "Warna",
+        "variantValue": "Putih",
+        "sku": "JILBABSPORTPT",
+        "createdAt": "2025-12-16T18:43:03.970Z",
+        "updatedAt": "2025-12-16T18:43:03.970Z"
+      },
+      {
+        "id": "cmj8xkf4y00zewgv82wfwwbcc",
+        "productId": "cmj8xkf4y00z7wgv83pfx7uqw",
+        "variantName": "Warna",
+        "variantValue": "Cokelat",
+        "sku": "JILBABSPORTCK",
+        "createdAt": "2025-12-16T18:43:03.970Z",
+        "updatedAt": "2025-12-16T18:43:03.970Z"
+      },
+      {
+        "id": "cmj9okt6h0003wg7s40m3stmy",
+        "productId": "cmj9okt1s0001wg7s86jlthej",
+        "variantName": "Default",
+        "variantValue": "Standard",
+        "sku": "adasdad",
+        "createdAt": "2025-12-17T07:19:11.801Z",
+        "updatedAt": "2025-12-17T07:19:11.801Z"
+      },
+      {
+        "id": "cmj8xkeun00hywgv888g487qw",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 25",
+        "sku": "CPKMHA25",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00i1wgv8zjvu0zlj",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 26",
+        "sku": "CPKMHA26",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00i4wgv8829pqoxd",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 27",
+        "sku": "CPKMHA27",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00i7wgv87e273prm",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 28",
+        "sku": "CPKMHA28",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00iawgv8fd7wer5t",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 29",
+        "sku": "CPKMHA29",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00idwgv8pc64v8lq",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 30",
+        "sku": "CPKMHA30",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00igwgv8bu3qha8s",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 31",
+        "sku": "CPKMHA31",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00ijwgv82rqe760a",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 32",
+        "sku": "CPKMHA32",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00imwgv8u1im1oap",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 33",
+        "sku": "CPKMHA33",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00ipwgv881lz27wp",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 34",
+        "sku": "CPKMHA34",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00iswgv8y4gekgoi",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 35",
+        "sku": "CPKMHA35",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00ivwgv8wab2zjua",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Merah | 36",
+        "sku": "CPKMHA36",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00iywgv8nzbaoz0j",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 25",
+        "sku": "CPKCHA25",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00j1wgv81po3s2x3",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 26",
+        "sku": "CPKCHA26",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00j4wgv8schg9i62",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 27",
+        "sku": "CPKCHA27",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00j7wgv8gll21j63",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 28",
+        "sku": "CPKCHA28",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00jawgv82walo793",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 29",
+        "sku": "CPKCHA29",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jdwgv86c30jgm3",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 30",
+        "sku": "CPKCHA30",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jgwgv8m1fdii5f",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 31",
+        "sku": "CPKCHA31",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jjwgv80bxil85d",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 32",
+        "sku": "CPKCHA32",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jmwgv8or2ecztg",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 33",
+        "sku": "CPKCHA33",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jpwgv8k4bmpkqx",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 34",
+        "sku": "CPKCHA34",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jswgv80aybxu7a",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 35",
+        "sku": "CPKCHA35",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jvwgv8s7vjnbip",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Cokelat | 36",
+        "sku": "CPKCHA36",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jywgv8o4eognju",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 25",
+        "sku": "CPKHHA25",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00k1wgv8w9yd3wwr",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 26",
+        "sku": "CPKHHA26",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00k4wgv87qy5ix5r",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 27",
+        "sku": "CPKHHA27",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00k7wgv8yrcdq9ju",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 28",
+        "sku": "CPKHHA28",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00kawgv8t6kx7rvy",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 29",
+        "sku": "CPKHHA29",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00kdwgv8wyuoxeme",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 30",
+        "sku": "CPKHHA30",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00kgwgv8admgmqlo",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 31",
+        "sku": "CPKHHA31",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00kjwgv8wqlijkav",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 32",
+        "sku": "CPKHHA32",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00kmwgv8mg140hr8",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 33",
+        "sku": "CPKHHA33",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00kpwgv84w4vsi84",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 34",
+        "sku": "CPKHHA34",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00kswgv8a81nq581",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 35",
+        "sku": "CPKHHA35",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00kvwgv80kqvelmr",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Hitam | 36",
+        "sku": "CPKHHA36",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00kywgv8gwxsjf3t",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 25",
+        "sku": "CPKPHA25",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00l1wgv847nklwx3",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 26",
+        "sku": "CPKPHA26",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00l4wgv8o977vqa5",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 27",
+        "sku": "CPKPHA27",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00l7wgv8sj9jnmud",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 28",
+        "sku": "CPKPHA28",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00lawgv8q1huftly",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 29",
+        "sku": "CPKPHA29",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00ldwgv83uasovy5",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 30",
+        "sku": "CPKPHA30",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00lgwgv83telt3qc",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 31",
+        "sku": "CPKPHA31",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00ljwgv80s0l59az",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 32",
+        "sku": "CPKPHA32",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00lmwgv8z4zdqef6",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 33",
+        "sku": "CPKPHA33",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00lpwgv8ongdy3kn",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 34",
+        "sku": "CPKPHA34",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00lswgv8hiyc1pj4",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 35",
+        "sku": "CPKPHA35",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00lvwgv83a1whrdx",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Putih | 36",
+        "sku": "CPKPHA36",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00lywgv8e4rkqg8b",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Biru | 30",
+        "sku": "CPKBHA30",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00m1wgv8q8l9yx8m",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Biru | 31",
+        "sku": "CPKBHA31",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00m4wgv8dq7pvrkt",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Biru | 32",
+        "sku": "CPKBHA32",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00m7wgv8jisrcjx1",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Biru | 33",
+        "sku": "CPKBHA33",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00mawgv8lywbx6q8",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Biru | 34",
+        "sku": "CPKBHA34",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00mdwgv8920wvmim",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Biru | 35",
+        "sku": "CPKBHA35",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00mgwgv8hqa6jos3",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Biru | 36",
+        "sku": "CPKBHA36",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeus00mjwgv8vwp4ddmw",
+        "productId": "cmj8xkeum00hxwgv8jol7px53",
+        "variantName": "Warna | Ukuran",
+        "variantValue": "Abu | 35",
+        "sku": "CPKAHA35",
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkf1j00x7wgv81xnz4w3c",
+        "productId": "cmj8xkf1j00x6wgv8bdcupf1s",
+        "variantName": "Default",
+        "variantValue": "Default",
+        "sku": "BEDMERPUT",
+        "createdAt": "2025-12-16T18:43:03.847Z",
+        "updatedAt": "2025-12-16T18:43:03.847Z"
+      },
+      {
+        "id": "cmj8xkf2m00xnwgv8jwrts2rm",
+        "productId": "cmj8xkf2m00xmwgv8z0wn077y",
+        "variantName": "Jenis",
+        "variantValue": "SD",
+        "sku": "KAOSKAKIPRKSD",
+        "createdAt": "2025-12-16T18:43:03.886Z",
+        "updatedAt": "2025-12-16T18:43:03.886Z"
+      },
+      {
+        "id": "cmj8xkf2m00xqwgv8iwa9ctpt",
+        "productId": "cmj8xkf2m00xmwgv8z0wn077y",
+        "variantName": "Jenis",
+        "variantValue": "SMP",
+        "sku": "KAOSKAKIPRKSMP",
+        "createdAt": "2025-12-16T18:43:03.886Z",
+        "updatedAt": "2025-12-16T18:43:03.886Z"
+      },
+      {
+        "id": "cmj8xkf2m00xtwgv803uky2xf",
+        "productId": "cmj8xkf2m00xmwgv8z0wn077y",
+        "variantName": "Jenis",
+        "variantValue": "SMA",
+        "sku": "KAOSKAKIPRKSMA",
+        "createdAt": "2025-12-16T18:43:03.886Z",
+        "updatedAt": "2025-12-16T18:43:03.886Z"
+      },
+      {
+        "id": "cmj8xkf3000xywgv8zl5xw9gs",
+        "productId": "cmj8xkf3000xxwgv8b75wqyxj",
+        "variantName": "Jenis",
+        "variantValue": "Sedang",
+        "sku": "KAOSKAKIFUTSALSDG",
+        "createdAt": "2025-12-16T18:43:03.900Z",
+        "updatedAt": "2025-12-16T18:43:03.900Z"
+      },
+      {
+        "id": "cmj8xkf3000y1wgv8menoag77",
+        "productId": "cmj8xkf3000xxwgv8b75wqyxj",
+        "variantName": "Jenis",
+        "variantValue": "Panjang",
+        "sku": "KAOSKAKIFUTSALPJG",
+        "createdAt": "2025-12-16T18:43:03.900Z",
+        "updatedAt": "2025-12-16T18:43:03.900Z"
+      },
+      {
+        "id": "cmj8xkf3d00y6wgv82avggcbz",
+        "productId": "cmj8xkf3d00y5wgv8lq29kr11",
+        "variantName": "Warna",
+        "variantValue": "Putih",
+        "sku": "KAOSKAKIBETPTPL",
+        "createdAt": "2025-12-16T18:43:03.913Z",
+        "updatedAt": "2025-12-16T18:43:03.913Z"
+      },
+      {
+        "id": "cmj8xkf3d00y9wgv81q9f0xob",
+        "productId": "cmj8xkf3d00y5wgv8lq29kr11",
+        "variantName": "Warna",
+        "variantValue": "Hitam",
+        "sku": "KAOSKAKIBETHTPL",
+        "createdAt": "2025-12-16T18:43:03.913Z",
+        "updatedAt": "2025-12-16T18:43:03.913Z"
+      },
+      {
+        "id": "cmj8xkf3w00yewgv8spfzvo64",
+        "productId": "cmj8xkf3w00ydwgv8c8iarall",
+        "variantName": "Warna",
+        "variantValue": "Putih",
+        "sku": "KAOSKAKIPTHPLPDK",
+        "createdAt": "2025-12-16T18:43:03.932Z",
+        "updatedAt": "2025-12-16T18:43:03.932Z"
+      },
+      {
+        "id": "cmj8xkf3w00yhwgv8xedojbcz",
+        "productId": "cmj8xkf3w00ydwgv8c8iarall",
+        "variantName": "Warna",
+        "variantValue": "Hitam",
+        "sku": "KAOSKAKIHTMPPDK",
+        "createdAt": "2025-12-16T18:43:03.932Z",
+        "updatedAt": "2025-12-16T18:43:03.932Z"
+      }
+    ],
+    "variantTypes": [],
+    "variantOptions": [],
+    "cabangs": [
+      {
+        "id": "cmienjphe0000wg807jj0m5an",
+        "name": "Cabang Gondrong",
+        "address": "Jl. H. Mansyur No.126, RT./RW/RW.: 05, 05, Gondrong, Kec. Cipondoh, Kota Tangerang, Banten 15146",
+        "phone": "082112406540",
+        "isActive": true,
+        "createdAt": "2025-11-25T14:09:29.278Z",
+        "updatedAt": "2025-12-13T17:30:28.262Z"
+      },
+      {
+        "id": "cmhop1v3u0000wgv8iaarkggo",
+        "name": "Gudang Rumah",
+        "address": "Jl. Contoh No. 123",
+        "phone": "081234567890",
+        "isActive": false,
+        "createdAt": "2025-11-07T10:09:35.418Z",
+        "updatedAt": "2025-12-14T03:45:29.567Z"
+      }
+    ],
+    "stocks": [
+      {
+        "id": "cmiepor6g000hwg9gzzscae19",
+        "productVariantId": "cmiepoqwi000fwg9gff0948u9",
+        "cabangId": "cmhop1v3u0000wgv8iaarkggo",
+        "quantity": 20,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:23.992Z",
+        "updatedAt": "2025-11-26T08:22:10.331Z"
+      },
+      {
+        "id": "cmiepor71000nwg9g5kmxrjj2",
+        "productVariantId": "cmiepor6z000lwg9gejhe26gt",
+        "cabangId": "cmhop1v3u0000wgv8iaarkggo",
+        "quantity": 20,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.013Z",
+        "updatedAt": "2025-11-26T08:22:10.385Z"
+      },
+      {
+        "id": "cmiepor79000vwg9ghoduah55",
+        "productVariantId": "cmiepor75000rwg9gk89f6kst",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.021Z",
+        "updatedAt": "2025-12-05T17:52:40.225Z"
+      },
+      {
+        "id": "cmiepor73000pwg9gvpmdk1ub",
+        "productVariantId": "cmiepor6z000lwg9gejhe26gt",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.016Z",
+        "updatedAt": "2025-12-05T18:02:20.851Z"
+      },
+      {
+        "id": "cmj8xkeuo00i0wgv8prcfbuxb",
+        "productVariantId": "cmj8xkeun00hywgv888g487qw",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmiepor7d000zwg9g4whue219",
+        "productVariantId": "cmiepor7b000xwg9gtrf3f9s3",
+        "cabangId": "cmhop1v3u0000wgv8iaarkggo",
+        "quantity": 20,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.025Z",
+        "updatedAt": "2025-11-26T08:22:10.395Z"
+      },
+      {
+        "id": "cmj8xkeup00i3wgv8q8np492j",
+        "productVariantId": "cmj8xkeup00i1wgv8zjvu0zlj",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00i6wgv8omfrc1ny",
+        "productVariantId": "cmj8xkeup00i4wgv8829pqoxd",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00i9wgv8v64vw0ux",
+        "productVariantId": "cmj8xkeup00i7wgv87e273prm",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmiepor77000twg9gvmub9d6k",
+        "productVariantId": "cmiepor75000rwg9gk89f6kst",
+        "cabangId": "cmhop1v3u0000wgv8iaarkggo",
+        "quantity": 18,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.019Z",
+        "updatedAt": "2025-11-27T12:45:15.794Z"
+      },
+      {
+        "id": "cmj8xkeup00icwgv8gac7y3id",
+        "productVariantId": "cmj8xkeup00iawgv8fd7wer5t",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00ifwgv8r6qicgqu",
+        "productVariantId": "cmj8xkeup00idwgv8pc64v8lq",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00iiwgv8pw4a1eqa",
+        "productVariantId": "cmj8xkeup00igwgv8bu3qha8s",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00ilwgv8sjfwcj1m",
+        "productVariantId": "cmj8xkeup00ijwgv82rqe760a",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00iowgv8mup5g1iq",
+        "productVariantId": "cmj8xkeup00imwgv8u1im1oap",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 4,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00irwgv8pwgjf2fl",
+        "productVariantId": "cmj8xkeup00ipwgv881lz27wp",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00iuwgv8xnirupdc",
+        "productVariantId": "cmj8xkeup00iswgv8y4gekgoi",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmhp1cpqp000nwgbgri0derbo",
+        "productVariantId": "cmhp0x6t70007wgbg5skx411p",
+        "cabangId": "cmhop1v3u0000wgv8iaarkggo",
+        "quantity": 1303,
+        "price": 0,
+        "createdAt": "2025-11-07T15:53:56.951Z",
+        "updatedAt": "2025-11-25T04:46:54.072Z"
+      },
+      {
+        "id": "cmj8xkeup00ixwgv88tmz41xa",
+        "productVariantId": "cmj8xkeup00ivwgv8wab2zjua",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00j0wgv8d2v5m249",
+        "productVariantId": "cmj8xkeup00iywgv8nzbaoz0j",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00j3wgv8z4iafz4x",
+        "productVariantId": "cmj8xkeup00j1wgv81po3s2x3",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00j6wgv8k47czsmc",
+        "productVariantId": "cmj8xkeup00j4wgv8schg9i62",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeup00j9wgv8qvxrtqyp",
+        "productVariantId": "cmj8xkeup00j7wgv8gll21j63",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jcwgv8rdwv4vrz",
+        "productVariantId": "cmj8xkeup00jawgv82walo793",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jfwgv8qp7gnzcb",
+        "productVariantId": "cmj8xkeuq00jdwgv86c30jgm3",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jiwgv8n8oyy6u7",
+        "productVariantId": "cmj8xkeuq00jgwgv8m1fdii5f",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jlwgv8z7cumysc",
+        "productVariantId": "cmj8xkeuq00jjwgv80bxil85d",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jowgv822e6nqvr",
+        "productVariantId": "cmj8xkeuq00jmwgv8or2ecztg",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jrwgv82b07rect",
+        "productVariantId": "cmj8xkeuq00jpwgv8k4bmpkqx",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00juwgv8vjzg6tqw",
+        "productVariantId": "cmj8xkeuq00jswgv80aybxu7a",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00jxwgv8zbujd9l7",
+        "productVariantId": "cmj8xkeuq00jvwgv8s7vjnbip",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmiepor6x000jwg9g21n7lg2m",
+        "productVariantId": "cmiepoqwi000fwg9gff0948u9",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 8,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.009Z",
+        "updatedAt": "2025-12-02T18:57:11.178Z"
+      },
+      {
+        "id": "cmiepor7o0015wg9gmp50mx6g",
+        "productVariantId": "cmiepor7m0013wg9gxpdvqsr0",
+        "cabangId": "cmhop1v3u0000wgv8iaarkggo",
+        "quantity": 20,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.036Z",
+        "updatedAt": "2025-11-26T08:22:10.400Z"
+      },
+      {
+        "id": "cmj8xkeuq00k0wgv8ft1rll1r",
+        "productVariantId": "cmj8xkeuq00jywgv8o4eognju",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00k3wgv8mq0cu69h",
+        "productVariantId": "cmj8xkeuq00k1wgv8w9yd3wwr",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmiepor82001hwg9gkmnjd492",
+        "productVariantId": "cmiepor7z001fwg9guscdproc",
+        "cabangId": "cmhop1v3u0000wgv8iaarkggo",
+        "quantity": 20,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.050Z",
+        "updatedAt": "2025-11-26T08:22:10.408Z"
+      },
+      {
+        "id": "cmj8xkeuq00k6wgv84ittxdy0",
+        "productVariantId": "cmj8xkeuq00k4wgv87qy5ix5r",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmiepor89001nwg9grrop6tx7",
+        "productVariantId": "cmiepor88001lwg9gtmltigpc",
+        "cabangId": "cmhop1v3u0000wgv8iaarkggo",
+        "quantity": 20,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.058Z",
+        "updatedAt": "2025-11-26T08:22:10.411Z"
+      },
+      {
+        "id": "cmj8xkeuq00k9wgv8638riilv",
+        "productVariantId": "cmj8xkeuq00k7wgv8yrcdq9ju",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00kcwgv8odtwd506",
+        "productVariantId": "cmj8xkeuq00kawgv8t6kx7rvy",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmiepor8b001pwg9gjfy7qyy4",
+        "productVariantId": "cmiepor88001lwg9gtmltigpc",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.059Z",
+        "updatedAt": "2025-12-03T19:58:22.535Z"
+      },
+      {
+        "id": "cmj8xkeuq00kfwgv8odcbyndh",
+        "productVariantId": "cmj8xkeuq00kdwgv8wyuoxeme",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmiepor7u001bwg9gxrpgyjbl",
+        "productVariantId": "cmiepor7s0019wg9g7ehakwwy",
+        "cabangId": "cmhop1v3u0000wgv8iaarkggo",
+        "quantity": 18,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.042Z",
+        "updatedAt": "2025-11-26T21:25:27.550Z"
+      },
+      {
+        "id": "cmiepor8e001twg9gjbd4z454",
+        "productVariantId": "cmiepor8c001rwg9gsx7d07st",
+        "cabangId": "cmhop1v3u0000wgv8iaarkggo",
+        "quantity": 14,
+        "price": 80000,
+        "createdAt": "2025-11-25T15:09:24.062Z",
+        "updatedAt": "2025-11-27T15:21:11.372Z"
+      },
+      {
+        "id": "cmj8xkeuq00kiwgv84hg26o6c",
+        "productVariantId": "cmj8xkeuq00kgwgv8admgmqlo",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmiepor7q0017wg9graco57hd",
+        "productVariantId": "cmiepor7m0013wg9gxpdvqsr0",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.039Z",
+        "updatedAt": "2025-12-10T23:46:05.914Z"
+      },
+      {
+        "id": "cmj8xkeuq00klwgv8kfstv3co",
+        "productVariantId": "cmj8xkeuq00kjwgv8wqlijkav",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmiepor85001jwg9g0lk73onq",
+        "productVariantId": "cmiepor7z001fwg9guscdproc",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.053Z",
+        "updatedAt": "2025-12-04T07:41:24.449Z"
+      },
+      {
+        "id": "cmj8xkeuq00kowgv8zmltit7g",
+        "productVariantId": "cmj8xkeuq00kmwgv8mg140hr8",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00krwgv8ljm629o5",
+        "productVariantId": "cmj8xkeuq00kpwgv84w4vsi84",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeuq00kuwgv80cunxu2u",
+        "productVariantId": "cmj8xkeuq00kswgv8a81nq581",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00kxwgv8ofsqrc7p",
+        "productVariantId": "cmj8xkeur00kvwgv80kqvelmr",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 4,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00l0wgv85gn9d5i6",
+        "productVariantId": "cmj8xkeur00kywgv8gwxsjf3t",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 7,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00l3wgv8fhilfcfn",
+        "productVariantId": "cmj8xkeur00l1wgv847nklwx3",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00l6wgv8oyyeqt3z",
+        "productVariantId": "cmj8xkeur00l4wgv8o977vqa5",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00l9wgv87jx8o21k",
+        "productVariantId": "cmj8xkeur00l7wgv8sj9jnmud",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmiepor7e0011wg9gnwf89wby",
+        "productVariantId": "cmiepor7b000xwg9gtrf3f9s3",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.027Z",
+        "updatedAt": "2025-12-04T16:05:37.379Z"
+      },
+      {
+        "id": "cmj8xkeur00lcwgv80sdwnr86",
+        "productVariantId": "cmj8xkeur00lawgv8q1huftly",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00lfwgv8df525enq",
+        "productVariantId": "cmj8xkeur00ldwgv83uasovy5",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00liwgv89439s245",
+        "productVariantId": "cmj8xkeur00lgwgv83telt3qc",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmiepor8g001vwg9g9yvub5bo",
+        "productVariantId": "cmiepor8c001rwg9gsx7d07st",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 80000,
+        "createdAt": "2025-11-25T15:09:24.065Z",
+        "updatedAt": "2025-12-05T18:04:30.507Z"
+      },
+      {
+        "id": "cmj8xkeur00llwgv86q2c1q3c",
+        "productVariantId": "cmj8xkeur00ljwgv80s0l59az",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00lowgv8v3ssnxed",
+        "productVariantId": "cmj8xkeur00lmwgv8z4zdqef6",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00lrwgv87c689t8s",
+        "productVariantId": "cmj8xkeur00lpwgv8ongdy3kn",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmiepor7w001dwg9gdru57q57",
+        "productVariantId": "cmiepor7s0019wg9g7ehakwwy",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 50000,
+        "createdAt": "2025-11-25T15:09:24.044Z",
+        "updatedAt": "2025-12-06T04:07:34.290Z"
+      },
+      {
+        "id": "cmj8xkeur00luwgv8627ud689",
+        "productVariantId": "cmj8xkeur00lswgv8hiyc1pj4",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00lxwgv8sqewaero",
+        "productVariantId": "cmj8xkeur00lvwgv83a1whrdx",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00m0wgv8qfak05rd",
+        "productVariantId": "cmj8xkeur00lywgv8e4rkqg8b",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00m3wgv8ezyhbp0c",
+        "productVariantId": "cmj8xkeur00m1wgv8q8l9yx8m",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00m6wgv8rnelfqfz",
+        "productVariantId": "cmj8xkeur00m4wgv8dq7pvrkt",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00m9wgv8c58qm0px",
+        "productVariantId": "cmj8xkeur00m7wgv8jisrcjx1",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00mcwgv8k0zuwze5",
+        "productVariantId": "cmj8xkeur00mawgv8lywbx6q8",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeur00mfwgv8k3kcs42d",
+        "productVariantId": "cmj8xkeur00mdwgv8920wvmim",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeus00miwgv8cvy69tiw",
+        "productVariantId": "cmj8xkeur00mgwgv8hqa6jos3",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeus00mlwgv855f6yu61",
+        "productVariantId": "cmj8xkeus00mjwgv8vwp4ddmw",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkeus00mowgv8objmslww",
+        "productVariantId": "cmj8xkeus00mmwgv8su611thh",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.593Z",
+        "updatedAt": "2025-12-16T18:43:03.593Z"
+      },
+      {
+        "id": "cmj8xkewr00mtwgv8a1zp0vp6",
+        "productVariantId": "cmj8xkewq00mrwgv8bvou5svb",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00mwwgv85e86kfin",
+        "productVariantId": "cmj8xkewr00muwgv88rxjbnqp",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00mzwgv82u8i8w9e",
+        "productVariantId": "cmj8xkewr00mxwgv8ffc2kfif",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00n2wgv8jfy08v4j",
+        "productVariantId": "cmj8xkewr00n0wgv8x3ok11hg",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00n5wgv88zm474ni",
+        "productVariantId": "cmj8xkewr00n3wgv86nualqtx",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00n8wgv8f15gwwgx",
+        "productVariantId": "cmj8xkewr00n6wgv848nl8cxj",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00nbwgv8v33paefv",
+        "productVariantId": "cmj8xkewr00n9wgv8139q6y5x",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00newgv8o9t3725s",
+        "productVariantId": "cmj8xkewr00ncwgv88mib2zik",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00nhwgv8nck0yyw6",
+        "productVariantId": "cmj8xkewr00nfwgv81hqb2zws",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00nkwgv86651l2wk",
+        "productVariantId": "cmj8xkewr00niwgv8nbsi4br2",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewr00nnwgv8ekst2kxn",
+        "productVariantId": "cmj8xkewr00nlwgv8nmq83fpr",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00nqwgv8ajdzumk1",
+        "productVariantId": "cmj8xkewr00nowgv82fp6brj2",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00ntwgv8onrn65g6",
+        "productVariantId": "cmj8xkews00nrwgv8njc8mxqi",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00nwwgv84mnsmpxw",
+        "productVariantId": "cmj8xkews00nuwgv8h49oxxz4",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00nzwgv8tu1zrwxd",
+        "productVariantId": "cmj8xkews00nxwgv82f2h5fek",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00o2wgv82hj5wg42",
+        "productVariantId": "cmj8xkews00o0wgv8qz0ub31t",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00o5wgv8wj4nwvvp",
+        "productVariantId": "cmj8xkews00o3wgv8yx3cd3jz",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00o8wgv8x9hqyuyv",
+        "productVariantId": "cmj8xkews00o6wgv88ctjzfhl",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00obwgv8kqq3njr2",
+        "productVariantId": "cmj8xkews00o9wgv81x99cwgv",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkews00oewgv8yzds81gh",
+        "productVariantId": "cmj8xkews00ocwgv81obq03d6",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewt00ohwgv8gjyprbxc",
+        "productVariantId": "cmj8xkewt00ofwgv8jx90x6og",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewt00okwgv8287j1u2b",
+        "productVariantId": "cmj8xkewt00oiwgv8xv0qzu16",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewt00onwgv8nyg230so",
+        "productVariantId": "cmj8xkewt00olwgv8ojnwzqu7",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewt00oqwgv80jzupneu",
+        "productVariantId": "cmj8xkewt00oowgv8psb942wt",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewt00otwgv87mpk4qqp",
+        "productVariantId": "cmj8xkewt00orwgv880ck09le",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkewt00owwgv8wgapykjq",
+        "productVariantId": "cmj8xkewt00ouwgv8qd1z86m6",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.674Z",
+        "updatedAt": "2025-12-16T18:43:03.674Z"
+      },
+      {
+        "id": "cmj8xkexz00p1wgv87fr7wpym",
+        "productVariantId": "cmj8xkexz00ozwgv8lbp9c89j",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkexz00p4wgv8jeb7tm3p",
+        "productVariantId": "cmj8xkexz00p2wgv8jdbq3t02",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkexz00p7wgv8y3412jtu",
+        "productVariantId": "cmj8xkexz00p5wgv88ojk2uvu",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkexz00pawgv8r6r7n6qn",
+        "productVariantId": "cmj8xkexz00p8wgv84061tcup",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkexz00pdwgv8g12bhsij",
+        "productVariantId": "cmj8xkexz00pbwgv845lxalzb",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkexz00pgwgv8sz5junu2",
+        "productVariantId": "cmj8xkexz00pewgv82naji9r0",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkexz00pjwgv8t938erbr",
+        "productVariantId": "cmj8xkexz00phwgv8i6h68g2q",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000pmwgv8yujxvexz",
+        "productVariantId": "cmj8xkexz00pkwgv8o8ssvu9c",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000ppwgv8e6y1m6ne",
+        "productVariantId": "cmj8xkey000pnwgv88bloh1hg",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000pswgv86yutajuq",
+        "productVariantId": "cmj8xkey000pqwgv8lhtovy33",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000pvwgv8e2ebsimq",
+        "productVariantId": "cmj8xkey000ptwgv8tylae48g",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000pywgv8yqwe828r",
+        "productVariantId": "cmj8xkey000pwwgv899e4mcbv",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000q1wgv81g136avv",
+        "productVariantId": "cmj8xkey000pzwgv83t50ntkk",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000q4wgv82kn2p62y",
+        "productVariantId": "cmj8xkey000q2wgv8o4eiiyjp",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000q7wgv8g9rgms2x",
+        "productVariantId": "cmj8xkey000q5wgv868uuap8i",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000qawgv8llq1yj37",
+        "productVariantId": "cmj8xkey000q8wgv84idte4px",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey000qdwgv8l814ztsc",
+        "productVariantId": "cmj8xkey000qbwgv84dp3golh",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100qgwgv8251llr6x",
+        "productVariantId": "cmj8xkey000qewgv8u24vkhe9",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100qjwgv87s8g0jhj",
+        "productVariantId": "cmj8xkey100qhwgv8yxwr4u2a",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100qmwgv8dd40lsxt",
+        "productVariantId": "cmj8xkey100qkwgv84v86hx5c",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100qpwgv82xzw8ydy",
+        "productVariantId": "cmj8xkey100qnwgv8fau3uw4h",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100qswgv8176p787d",
+        "productVariantId": "cmj8xkey100qqwgv8usmzn1u1",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100qvwgv829f0tb2u",
+        "productVariantId": "cmj8xkey100qtwgv8mxoi97xw",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100qywgv8vf175cxo",
+        "productVariantId": "cmj8xkey100qwwgv8g2jax05x",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100r1wgv8a2tnqidk",
+        "productVariantId": "cmj8xkey100qzwgv8jrfm7bve",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 4,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100r4wgv8jotweafq",
+        "productVariantId": "cmj8xkey100r2wgv89ny67300",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey100r7wgv8xixjfxfg",
+        "productVariantId": "cmj8xkey100r5wgv8gpeq4ah7",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rawgv86jfsiffg",
+        "productVariantId": "cmj8xkey100r8wgv8sda3kaxy",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rdwgv8jwnmrq2j",
+        "productVariantId": "cmj8xkey200rbwgv84pmbsx5u",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rgwgv8cl92iwah",
+        "productVariantId": "cmj8xkey200rewgv8k9rbzmfb",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rjwgv85wi65491",
+        "productVariantId": "cmj8xkey200rhwgv8g799uetx",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rmwgv8zy12hzg6",
+        "productVariantId": "cmj8xkey200rkwgv8wvpm6lmp",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rpwgv8roh858jj",
+        "productVariantId": "cmj8xkey200rnwgv85llivgo4",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rswgv8a2pavlew",
+        "productVariantId": "cmj8xkey200rqwgv8mh346bqr",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rvwgv8ern6g8r8",
+        "productVariantId": "cmj8xkey200rtwgv8gsb7rt3m",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200rywgv82c1mgyxj",
+        "productVariantId": "cmj8xkey200rwwgv83pq58en0",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200s1wgv8t2hrjmra",
+        "productVariantId": "cmj8xkey200rzwgv8ed0jzvog",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey200s4wgv82zxhr83m",
+        "productVariantId": "cmj8xkey200s2wgv8j8j6xmbs",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300s7wgv8155k84m2",
+        "productVariantId": "cmj8xkey200s5wgv84rz5gzch",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300sawgv8fr36x4mq",
+        "productVariantId": "cmj8xkey300s8wgv88zs5cb2r",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300sdwgv8ce1p3dw3",
+        "productVariantId": "cmj8xkey300sbwgv8ap9sgm0d",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300sgwgv89r771799",
+        "productVariantId": "cmj8xkey300sewgv8ehcntsky",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300sjwgv8ebs5dco4",
+        "productVariantId": "cmj8xkey300shwgv89opmnyji",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300smwgv8f8kchgib",
+        "productVariantId": "cmj8xkey300skwgv8potnxcs6",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 2,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300spwgv8q4gyhwpn",
+        "productVariantId": "cmj8xkey300snwgv8cs326qa1",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300sswgv8x30s9ye3",
+        "productVariantId": "cmj8xkey300sqwgv8l9b2vhua",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300svwgv85ju4o1lh",
+        "productVariantId": "cmj8xkey300stwgv8txrzozrz",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300sywgv8vqu7xyo9",
+        "productVariantId": "cmj8xkey300swwgv8oj62921t",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey300t1wgv8ssws0lxr",
+        "productVariantId": "cmj8xkey300szwgv8nya3z4wy",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400t4wgv8smqjb2su",
+        "productVariantId": "cmj8xkey400t2wgv8494w0jw5",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400t7wgv81iefn4il",
+        "productVariantId": "cmj8xkey400t5wgv8fieexy8a",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 0,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400tawgv8g66u3wus",
+        "productVariantId": "cmj8xkey400t8wgv8b6h8rh8v",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400tdwgv8j1cmnxwt",
+        "productVariantId": "cmj8xkey400tbwgv8zt2rcdym",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400tgwgv8sxti7xqw",
+        "productVariantId": "cmj8xkey400tewgv8ebipenyq",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400tjwgv8eqvt1dro",
+        "productVariantId": "cmj8xkey400thwgv8ceykgdi0",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400tmwgv8uuv75avw",
+        "productVariantId": "cmj8xkey400tkwgv8dfe8ntug",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400tpwgv8zt9pc0m5",
+        "productVariantId": "cmj8xkey400tnwgv8zd728mgw",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400tswgv84cofhv93",
+        "productVariantId": "cmj8xkey400tqwgv8xlj5tr3n",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey400tvwgv8ytm582l4",
+        "productVariantId": "cmj8xkey400ttwgv85rvpqequ",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey500tywgv8z1zo8ho3",
+        "productVariantId": "cmj8xkey500twwgv8dbmxsslb",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey500u1wgv8nf8knuqq",
+        "productVariantId": "cmj8xkey500tzwgv8yb4qf268",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkey500u4wgv8gtfd47qp",
+        "productVariantId": "cmj8xkey500u2wgv8hdoj92li",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.717Z",
+        "updatedAt": "2025-12-16T18:43:03.717Z"
+      },
+      {
+        "id": "cmj8xkezs00u9wgv8ocgnu39q",
+        "productVariantId": "cmj8xkezs00u7wgv8bhw2g5sr",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00ucwgv81r9bk7fy",
+        "productVariantId": "cmj8xkezs00uawgv8cktx056a",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00ufwgv8qv5nba76",
+        "productVariantId": "cmj8xkezs00udwgv8nwnj6bwc",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00uiwgv8axpdhjsi",
+        "productVariantId": "cmj8xkezs00ugwgv8yg757vuz",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00ulwgv8zzcfm4cm",
+        "productVariantId": "cmj8xkezs00ujwgv8qk9s1ew9",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00uowgv8q8turb5j",
+        "productVariantId": "cmj8xkezs00umwgv8kct25nr4",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00urwgv8ielks4ae",
+        "productVariantId": "cmj8xkezs00upwgv8dquk7zdt",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00uuwgv8ntbd7el3",
+        "productVariantId": "cmj8xkezs00uswgv8ix6c4c5y",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezs00uxwgv86trvl34u",
+        "productVariantId": "cmj8xkezs00uvwgv8odccjl1q",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00v0wgv8oohflk3s",
+        "productVariantId": "cmj8xkezs00uywgv8a0pzl8wh",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00v3wgv894ew6avf",
+        "productVariantId": "cmj8xkezt00v1wgv84zowwa6u",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00v6wgv8n5oq8nvb",
+        "productVariantId": "cmj8xkezt00v4wgv8czaz1ohc",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 4,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00v9wgv8n1l82gxz",
+        "productVariantId": "cmj8xkezt00v7wgv8arfnqzpx",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00vcwgv87jagh1gl",
+        "productVariantId": "cmj8xkezt00vawgv8qkuoahcq",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00vfwgv89y122fj6",
+        "productVariantId": "cmj8xkezt00vdwgv8menpn2x0",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00viwgv8oxfukhcg",
+        "productVariantId": "cmj8xkezt00vgwgv8nfjqwuch",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00vlwgv8422i20nd",
+        "productVariantId": "cmj8xkezt00vjwgv8obu2ochu",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00vowgv8h8qokxn6",
+        "productVariantId": "cmj8xkezt00vmwgv894zpsydw",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkezt00vrwgv8sgsa5ua0",
+        "productVariantId": "cmj8xkezt00vpwgv85accxh8e",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.783Z",
+        "updatedAt": "2025-12-16T18:43:03.783Z"
+      },
+      {
+        "id": "cmj8xkf0h00vwwgv8ymhatvxi",
+        "productVariantId": "cmj8xkf0h00vuwgv8fsqz2s64",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00vzwgv8r8ul801s",
+        "productVariantId": "cmj8xkf0i00vxwgv8balrwr4l",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 4,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00w2wgv8v7bhyzb0",
+        "productVariantId": "cmj8xkf0i00w0wgv8j95sndu2",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00w5wgv8wnswyujd",
+        "productVariantId": "cmj8xkf0i00w3wgv8wa9p4u06",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00w8wgv8iucuavas",
+        "productVariantId": "cmj8xkf0i00w6wgv8gq7kd6hp",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00wbwgv8lj22thgx",
+        "productVariantId": "cmj8xkf0i00w9wgv8h5yd7lpt",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00wewgv80l8jpg1h",
+        "productVariantId": "cmj8xkf0i00wcwgv835jr1ha9",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj9okt760005wg7svsmjn6ej",
+        "productVariantId": "cmj9okt6h0003wg7s40m3stmy",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 103,
+        "price": 166666,
+        "createdAt": "2025-12-17T07:19:11.813Z",
+        "updatedAt": "2025-12-17T15:02:08.335Z"
+      },
+      {
+        "id": "cmj8xkf0i00whwgv8pwhoryp8",
+        "productVariantId": "cmj8xkf0i00wfwgv89swrbcqs",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00wkwgv89m4f69s4",
+        "productVariantId": "cmj8xkf0i00wiwgv87tsv4odh",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0i00wnwgv8p2in5nc7",
+        "productVariantId": "cmj8xkf0i00wlwgv8o85ebd1y",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0j00wqwgv8c6jpstae",
+        "productVariantId": "cmj8xkf0i00wowgv8l4x27oq8",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf0j00wtwgv8w4nakm8x",
+        "productVariantId": "cmj8xkf0j00wrwgv8a9j9ydpq",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 5,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.809Z",
+        "updatedAt": "2025-12-16T18:43:03.809Z"
+      },
+      {
+        "id": "cmj8xkf1800wywgv821s9jwkz",
+        "productVariantId": "cmj8xkf1800wwwgv89et05k9d",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 20,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.833Z",
+        "updatedAt": "2025-12-16T18:43:03.833Z"
+      },
+      {
+        "id": "cmj8xkf1800x1wgv8q7verbdo",
+        "productVariantId": "cmj8xkf1800wzwgv82uj6248v",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 20,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.833Z",
+        "updatedAt": "2025-12-16T18:43:03.833Z"
+      },
+      {
+        "id": "cmj8xkf1800x4wgv87np06z44",
+        "productVariantId": "cmj8xkf1800x2wgv8b9o5ohi1",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 20,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.833Z",
+        "updatedAt": "2025-12-16T18:43:03.833Z"
+      },
+      {
+        "id": "cmj8xkf2200xewgv8seaofb7b",
+        "productVariantId": "cmj8xkf2200xcwgv8m9ovpmww",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.866Z",
+        "updatedAt": "2025-12-16T18:43:03.866Z"
+      },
+      {
+        "id": "cmj8xkf2200xhwgv8t8bxkcjr",
+        "productVariantId": "cmj8xkf2200xfwgv8htrnlbzb",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.866Z",
+        "updatedAt": "2025-12-16T18:43:03.866Z"
+      },
+      {
+        "id": "cmj8xkf2200xkwgv85553qejv",
+        "productVariantId": "cmj8xkf2200xiwgv8zlgl5982",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.866Z",
+        "updatedAt": "2025-12-16T18:43:03.866Z"
+      },
+      {
+        "id": "cmj8xkf4700yowgv80i7qlier",
+        "productVariantId": "cmj8xkf4700ymwgv81rmn0ak6",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.943Z",
+        "updatedAt": "2025-12-16T18:43:03.943Z"
+      },
+      {
+        "id": "cmj8xkf4f00ytwgv85mvml9mw",
+        "productVariantId": "cmj8xkf4f00yrwgv8tlf147mi",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 20,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.951Z",
+        "updatedAt": "2025-12-16T18:43:03.951Z"
+      },
+      {
+        "id": "cmj8xkf4g00ywwgv8rl0wvx64",
+        "productVariantId": "cmj8xkf4g00yuwgv845tskn8n",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 20,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.951Z",
+        "updatedAt": "2025-12-16T18:43:03.951Z"
+      },
+      {
+        "id": "cmj8xkf4g00yzwgv8z26azad1",
+        "productVariantId": "cmj8xkf4g00yxwgv87ljt74qn",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 20,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.951Z",
+        "updatedAt": "2025-12-16T18:43:03.951Z"
+      },
+      {
+        "id": "cmj8xkf4g00z2wgv8swljdxgz",
+        "productVariantId": "cmj8xkf4g00z0wgv860uwfsbj",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 20,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.951Z",
+        "updatedAt": "2025-12-16T18:43:03.951Z"
+      },
+      {
+        "id": "cmj8xkf4g00z5wgv8mcrw3sha",
+        "productVariantId": "cmj8xkf4g00z3wgv8sv59twnx",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 20,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.951Z",
+        "updatedAt": "2025-12-16T18:43:03.951Z"
+      },
+      {
+        "id": "cmj8xkf4y00zawgv8peafq4tk",
+        "productVariantId": "cmj8xkf4y00z8wgv866qj3gvz",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 10,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.970Z",
+        "updatedAt": "2025-12-16T18:43:03.970Z"
+      },
+      {
+        "id": "cmj8xkf4y00zdwgv8qgnpcm40",
+        "productVariantId": "cmj8xkf4y00zbwgv8q9chw5gc",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 10,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.970Z",
+        "updatedAt": "2025-12-16T18:43:03.970Z"
+      },
+      {
+        "id": "cmj8xkf4z00zgwgv8racu2kie",
+        "productVariantId": "cmj8xkf4y00zewgv82wfwwbcc",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 10,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.970Z",
+        "updatedAt": "2025-12-16T18:43:03.970Z"
+      },
+      {
+        "id": "cmj8xkf1j00x9wgv8chy8xl9t",
+        "productVariantId": "cmj8xkf1j00x7wgv81xnz4w3c",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 20,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.847Z",
+        "updatedAt": "2025-12-16T18:43:03.847Z"
+      },
+      {
+        "id": "cmj8xkf2m00xpwgv89ykfh2mc",
+        "productVariantId": "cmj8xkf2m00xnwgv8jwrts2rm",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.886Z",
+        "updatedAt": "2025-12-16T18:43:03.886Z"
+      },
+      {
+        "id": "cmj8xkf2m00xswgv8tlsvkkfz",
+        "productVariantId": "cmj8xkf2m00xqwgv8iwa9ctpt",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.886Z",
+        "updatedAt": "2025-12-16T18:43:03.886Z"
+      },
+      {
+        "id": "cmj8xkf2m00xvwgv84sjz3uk5",
+        "productVariantId": "cmj8xkf2m00xtwgv803uky2xf",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.886Z",
+        "updatedAt": "2025-12-16T18:43:03.886Z"
+      },
+      {
+        "id": "cmj8xkf3000y0wgv8ctbvchdg",
+        "productVariantId": "cmj8xkf3000xywgv8zl5xw9gs",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.900Z",
+        "updatedAt": "2025-12-16T18:43:03.900Z"
+      },
+      {
+        "id": "cmj8xkf3000y3wgv841mszncc",
+        "productVariantId": "cmj8xkf3000y1wgv8menoag77",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.900Z",
+        "updatedAt": "2025-12-16T18:43:03.900Z"
+      },
+      {
+        "id": "cmj8xkf3d00y8wgv8pnb14bis",
+        "productVariantId": "cmj8xkf3d00y6wgv82avggcbz",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.913Z",
+        "updatedAt": "2025-12-16T18:43:03.913Z"
+      },
+      {
+        "id": "cmj8xkf3d00ybwgv86e37wf0g",
+        "productVariantId": "cmj8xkf3d00y9wgv81q9f0xob",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.913Z",
+        "updatedAt": "2025-12-16T18:43:03.913Z"
+      },
+      {
+        "id": "cmj8xkf3w00ygwgv8np9ndy2p",
+        "productVariantId": "cmj8xkf3w00yewgv8spfzvo64",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.932Z",
+        "updatedAt": "2025-12-16T18:43:03.932Z"
+      },
+      {
+        "id": "cmj8xkf3x00yjwgv8xf6v61nk",
+        "productVariantId": "cmj8xkf3w00yhwgv8xedojbcz",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "quantity": 12,
+        "price": 20000,
+        "createdAt": "2025-12-16T18:43:03.932Z",
+        "updatedAt": "2025-12-16T18:43:03.932Z"
+      }
+    ],
+    "stockAdjustments": [],
+    "transactions": [
+      {
+        "id": "cmj9ol98t0007wg7sm96ifqlm",
+        "transactionNo": "INV-20251217-2710",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "kasirId": "cmhop1v6q0002wgv8pwt6fvjp",
+        "customerName": null,
+        "customerPhone": null,
+        "subtotal": 166666,
+        "discount": 0,
+        "tax": 0,
+        "total": 166666,
+        "paymentMethod": "CASH",
+        "paymentStatus": "COMPLETED",
+        "bankName": null,
+        "referenceNo": null,
+        "cardLastDigits": null,
+        "isSplitPayment": false,
+        "paymentAmount1": null,
+        "paymentMethod2": null,
+        "paymentAmount2": null,
+        "bankName2": null,
+        "referenceNo2": null,
+        "notes": null,
+        "createdAt": "2025-12-17T07:19:32.621Z",
+        "updatedAt": "2025-12-17T07:19:32.621Z"
+      },
+      {
+        "id": "cmja53ett0001wg8se09rmkbg",
+        "transactionNo": "INV-20251217-5190",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "kasirId": "cmhop1v6q0002wgv8pwt6fvjp",
+        "customerName": null,
+        "customerPhone": null,
+        "subtotal": 999996,
+        "discount": 0,
+        "tax": 0,
+        "total": 999996,
+        "paymentMethod": "CASH",
+        "paymentStatus": "COMPLETED",
+        "bankName": null,
+        "referenceNo": null,
+        "cardLastDigits": null,
+        "isSplitPayment": false,
+        "paymentAmount1": null,
+        "paymentMethod2": null,
+        "paymentAmount2": null,
+        "bankName2": null,
+        "referenceNo2": null,
+        "notes": null,
+        "createdAt": "2025-12-17T15:01:33.514Z",
+        "updatedAt": "2025-12-17T15:01:33.514Z"
+      },
+      {
+        "id": "cmja545or0005wg8stmgmn0j9",
+        "transactionNo": "INV-20251217-7123",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "kasirId": "cmhop1v6q0002wgv8pwt6fvjp",
+        "customerName": null,
+        "customerPhone": null,
+        "subtotal": 166666,
+        "discount": 0,
+        "tax": 0,
+        "total": 166666,
+        "paymentMethod": "CASH",
+        "paymentStatus": "COMPLETED",
+        "bankName": null,
+        "referenceNo": null,
+        "cardLastDigits": null,
+        "isSplitPayment": false,
+        "paymentAmount1": null,
+        "paymentMethod2": null,
+        "paymentAmount2": null,
+        "bankName2": null,
+        "referenceNo2": null,
+        "notes": null,
+        "createdAt": "2025-12-17T15:02:08.331Z",
+        "updatedAt": "2025-12-17T15:02:08.331Z"
+      }
+    ],
+    "transactionItems": [
+      {
+        "id": "cmj9ol98u0009wg7s0avmxhht",
+        "transactionId": "cmj9ol98t0007wg7sm96ifqlm",
+        "productVariantId": "cmj9okt6h0003wg7s40m3stmy",
+        "productName": "tes",
+        "variantInfo": "Default: Standard",
+        "sku": null,
+        "quantity": 1,
+        "price": 166666,
+        "subtotal": 166666,
+        "createdAt": "2025-12-17T07:19:32.621Z"
+      },
+      {
+        "id": "cmja53eu30003wg8s457rjx9k",
+        "transactionId": "cmja53ett0001wg8se09rmkbg",
+        "productVariantId": "cmj9okt6h0003wg7s40m3stmy",
+        "productName": "tes",
+        "variantInfo": "Default: Standard",
+        "sku": null,
+        "quantity": 6,
+        "price": 166666,
+        "subtotal": 999996,
+        "createdAt": "2025-12-17T15:01:33.514Z"
+      },
+      {
+        "id": "cmja545or0007wg8sfytq5sq9",
+        "transactionId": "cmja545or0005wg8stmgmn0j9",
+        "productVariantId": "cmj9okt6h0003wg7s40m3stmy",
+        "productName": "tes",
+        "variantInfo": "Default: Standard",
+        "sku": null,
+        "quantity": 1,
+        "price": 166666,
+        "subtotal": 166666,
+        "createdAt": "2025-12-17T15:02:08.331Z"
+      }
+    ],
+    "priceDiscrepancies": [],
+    "stockTransfers": [],
+    "returns": [],
+    "returnItems": [],
+    "orders": [],
+    "settings": [
+      {
+        "id": "cmieh0lgt0008wg9g27u9250m",
+        "key": "minStock",
+        "value": "5",
+        "createdAt": "2025-11-25T11:06:39.918Z",
+        "updatedAt": "2025-11-25T11:06:39.918Z"
+      },
+      {
+        "id": "cmja9i7260000wgp42l41rma1",
+        "key": "auto_backup_enabled",
+        "value": "false",
+        "createdAt": "2025-12-17T17:05:01.743Z",
+        "updatedAt": "2025-12-17T17:05:36.061Z"
+      },
+      {
+        "id": "cmja9ndov0000wg0cvql4c6ni",
+        "key": "last_backup",
+        "value": "{\"timestamp\":\"2025-12-17T17:09:03.630Z\",\"filename\":\"backup-2025-12-17T17-09-03-484Z.json\",\"size\":149504,\"type\":\"manual\"}",
+        "createdAt": "2025-12-17T17:09:03.632Z",
+        "updatedAt": "2025-12-17T17:09:03.632Z"
+      }
+    ],
+    "printerSettings": [
+      {
+        "id": "cmihpgc7t0003wgewwqesl69o",
+        "cabangId": "cmienjphe0000wg807jj0m5an",
+        "autoPrintEnabled": true,
+        "printerName": "POS-58",
+        "paperWidth": 58,
+        "storeName": "ANEKABUANA STORE",
+        "branchName": "Cabang Gondrong",
+        "address": "JL H. Mansyur RT/RW : 05/05 No. 126",
+        "phone": "082112406540",
+        "footerText1": "Terima Kasih.",
+        "footerText2": "Simpan struk baik-baik untuk penukaran barang. Jika struk hilang, barang dicuci, atau label dicopot, garansi tukar tidak berlaku.",
+        "createdAt": "2025-11-27T17:26:09.881Z",
+        "updatedAt": "2025-12-11T20:29:49.760Z"
+      },
+      {
+        "id": "cmihpg7k40001wgewaxxa3ivf",
+        "cabangId": "cmhop1v3u0000wgv8iaarkggo",
+        "autoPrintEnabled": false,
+        "printerName": "",
+        "paperWidth": 58,
+        "storeName": "ANEKABUANA STORE",
+        "branchName": "Cabang Pusat",
+        "address": "Jl. Contoh No. 123",
+        "phone": "021-12345678",
+        "footerText1": "Terima Kasih.",
+        "footerText2": "Simpan struk baik-baik untuk penukaran barang. Jika struk hilang, barang dicuci, atau label dicopot, garansi tukar tidak berlaku.",
+        "createdAt": "2025-11-27T17:26:03.800Z",
+        "updatedAt": "2025-12-05T17:57:57.775Z"
+      }
+    ]
+  }
+}

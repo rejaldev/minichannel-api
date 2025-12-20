@@ -23,7 +23,11 @@ router.get('/categories', authMiddleware, async (req, res) => {
     const categories = await prisma.category.findMany({
       include: {
         _count: {
-          select: { products: true }
+          select: { 
+            products: {
+              where: { isActive: true } // Only count active products
+            }
+          }
         }
       }
     });
@@ -60,6 +64,89 @@ router.post('/categories', authMiddleware, ownerOrManager, async (req, res) => {
   }
 });
 
+// Update category (Owner/Manager only)
+router.put('/categories/:id', authMiddleware, ownerOrManager, async (req, res) => {
+  try {
+    const { name, description } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ error: 'Category name is required' });
+    }
+
+    const category = await prisma.category.update({
+      where: { id: req.params.id },
+      data: { name, description }
+    });
+
+    // Emit WebSocket event
+    emitCategoryUpdated(category);
+
+    res.json(category);
+  } catch (error) {
+    console.error('Update category error:', error);
+    if (error.code === 'P2002') {
+      return res.status(400).json({ error: 'Category name already exists' });
+    }
+    if (error.code === 'P2025') {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Delete category (Owner/Manager only)
+router.delete('/categories/:id', authMiddleware, ownerOrManager, async (req, res) => {
+  try {
+    // Get all products in this category with their variants
+    const products = await prisma.product.findMany({
+      where: { categoryId: req.params.id },
+      include: { variants: true }
+    });
+
+    if (products.length > 0) {
+      // Get all variant IDs
+      const variantIds = products.flatMap(p => p.variants.map(v => v.id));
+
+      // Delete cascade: StockAdjustments -> Variants -> Products -> Category
+      if (variantIds.length > 0) {
+        // 1. Delete stock adjustments first
+        await prisma.stockAdjustment.deleteMany({
+          where: { productVariantId: { in: variantIds } }
+        });
+
+        // 2. Delete variants (will cascade delete stocks, transaction items, etc)
+        await prisma.productVariant.deleteMany({
+          where: { id: { in: variantIds } }
+        });
+      }
+
+      // 3. Delete products
+      await prisma.product.deleteMany({
+        where: { categoryId: req.params.id }
+      });
+    }
+
+    // 4. Now safe to delete category
+    await prisma.category.delete({
+      where: { id: req.params.id }
+    });
+
+    res.json({ 
+      message: 'Category deleted successfully',
+      productsDeleted: products.length
+    });
+  } catch (error) {
+    console.error('Delete category error:', error);
+    if (error.code === 'P2025') {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+    if (error.code === 'P2003') {
+      return res.status(400).json({ error: 'Cannot delete category. It still has products.' });
+    }
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Get all products with filters
 router.get('/', authMiddleware, async (req, res) => {
   try {
@@ -67,22 +154,78 @@ router.get('/', authMiddleware, async (req, res) => {
 
     const where = {};
     if (categoryId) where.categoryId = categoryId;
+    
+    // Enhanced search with multiple keywords support
     if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
-        { 
-          variants: {
-            some: {
-              sku: { contains: search, mode: 'insensitive' }
-            }
+      const searchTerm = search.trim();
+      
+      // Split by spaces for multi-keyword search
+      const keywords = searchTerm.split(/\s+/).filter(k => k.length > 0);
+      
+      // Build OR conditions for each search field
+      const searchConditions = [];
+      
+      // 1. Search by product name (full term and individual keywords)
+      searchConditions.push({ name: { contains: searchTerm, mode: 'insensitive' } });
+      keywords.forEach(keyword => {
+        searchConditions.push({ name: { contains: keyword, mode: 'insensitive' } });
+      });
+      
+      // 2. Search by product description (full term and individual keywords)
+      searchConditions.push({ description: { contains: searchTerm, mode: 'insensitive' } });
+      keywords.forEach(keyword => {
+        searchConditions.push({ description: { contains: keyword, mode: 'insensitive' } });
+      });
+      
+      // 3. Search by category name
+      searchConditions.push({ 
+        category: {
+          name: { contains: searchTerm, mode: 'insensitive' }
+        }
+      });
+      
+      // 4. Search by variant SKU (exact and partial)
+      searchConditions.push({ 
+        variants: {
+          some: {
+            sku: { contains: searchTerm, mode: 'insensitive' }
           }
         }
-      ];
+      });
+      
+      // 5. Search by variant value (e.g., "Merah", "25", "XL")
+      searchConditions.push({ 
+        variants: {
+          some: {
+            variantValue: { contains: searchTerm, mode: 'insensitive' }
+          }
+        }
+      });
+      keywords.forEach(keyword => {
+        searchConditions.push({ 
+          variants: {
+            some: {
+              variantValue: { contains: keyword, mode: 'insensitive' }
+            }
+          }
+        });
+      });
+      
+      // 6. Search by variant name (e.g., "Warna", "Ukuran")
+      searchConditions.push({ 
+        variants: {
+          some: {
+            variantName: { contains: searchTerm, mode: 'insensitive' }
+          }
+        }
+      });
+      
+      where.OR = searchConditions;
     }
+    
     if (isActive !== undefined) where.isActive = isActive === 'true';
 
-    const products = await prisma.product.findMany({
+    let products = await prisma.product.findMany({
       where,
       include: {
         category: true,
@@ -95,9 +238,268 @@ router.get('/', authMiddleware, async (req, res) => {
             }
           }
         }
-      },
-      orderBy: { createdAt: 'desc' }
+      }
     });
+
+    // Enhanced relevance scoring for better search results
+    if (search && products.length > 0) {
+      const searchLower = search.toLowerCase().trim();
+      const keywords = searchLower.split(/\s+/).filter(k => k.length > 0);
+      
+      // Extract numbers from search for better variant matching
+      const numberKeywords = keywords.filter(k => /^\d+$/.test(k));
+      const textKeywords = keywords.filter(k => !/^\d+$/.test(k));
+      
+      products = products.map(product => {
+        let score = 0;
+        const nameLower = product.name.toLowerCase();
+        const descLower = (product.description || '').toLowerCase();
+        const categoryLower = product.category.name.toLowerCase();
+        
+        // Exact match gets highest score
+        if (nameLower === searchLower) score += 1000;
+        if (descLower === searchLower) score += 500;
+        
+        // Starts with gets high score
+        if (nameLower.startsWith(searchLower)) score += 500;
+        if (descLower.startsWith(searchLower)) score += 250;
+        
+        // Contains full search term
+        if (nameLower.includes(searchLower)) score += 100;
+        if (descLower.includes(searchLower)) score += 50;
+        if (categoryLower.includes(searchLower)) score += 30;
+        
+        // Text keyword matches (non-numbers)
+        textKeywords.forEach(keyword => {
+          if (nameLower.includes(keyword)) score += 20;
+          if (descLower.includes(keyword)) score += 10;
+        });
+        
+        // Check if product has variants matching the search
+        let hasExactVariantMatch = false;
+        let bestVariantScore = 0;
+        
+        product.variants?.forEach(variant => {
+          let variantScore = 0;
+          const skuLower = (variant.sku || '').toLowerCase();
+          const variantValueLower = (variant.variantValue || '').toLowerCase();
+          const variantNameLower = (variant.variantName || '').toLowerCase();
+          
+          // SKU exact match is very important
+          if (skuLower === searchLower) {
+            variantScore += 800;
+            hasExactVariantMatch = true;
+          }
+          if (skuLower.startsWith(searchLower)) variantScore += 400;
+          if (skuLower.includes(searchLower)) variantScore += 80;
+          
+          // Variant value exact match (very important for sizes/numbers)
+          if (variantValueLower === searchLower) {
+            variantScore += 600;
+            hasExactVariantMatch = true;
+          }
+          
+          // Number matching (e.g., "10", "8", "12" for sizes)
+          numberKeywords.forEach(numKeyword => {
+            // Exact number match in variant value (highest priority)
+            if (variantValueLower === numKeyword) {
+              variantScore += 500;
+              hasExactVariantMatch = true;
+            }
+            // Number appears in variant value (e.g., "10-12 Tahun" contains "10")
+            else if (variantValueLower.includes(numKeyword)) {
+              variantScore += 200;
+            }
+            
+            // Number in SKU
+            if (skuLower.includes(numKeyword)) variantScore += 50;
+          });
+          
+          // Text matching in variant value
+          if (variantValueLower.includes(searchLower)) variantScore += 40;
+          
+          // Variant name match
+          if (variantNameLower.includes(searchLower)) variantScore += 20;
+          
+          // Text keyword matches in variants
+          textKeywords.forEach(keyword => {
+            if (variantValueLower.includes(keyword)) variantScore += 15;
+            if (skuLower.includes(keyword)) variantScore += 10;
+            if (variantNameLower.includes(keyword)) variantScore += 8;
+          });
+          
+          // Track best variant score
+          if (variantScore > bestVariantScore) {
+            bestVariantScore = variantScore;
+          }
+        });
+        
+        // Add best variant score to product score
+        score += bestVariantScore;
+        
+        // Bonus: If searching with number + text (e.g., "Baju 10")
+        // and product matches text keywords + has exact number variant
+        if (numberKeywords.length > 0 && textKeywords.length > 0 && hasExactVariantMatch) {
+          const textMatches = textKeywords.every(keyword => 
+            nameLower.includes(keyword) || descLower.includes(keyword) || categoryLower.includes(keyword)
+          );
+          if (textMatches) {
+            score += 300; // Bonus for combined text+number match
+          }
+        }
+        
+        return { ...product, _searchScore: score };
+      });
+      
+      // Sort by relevance score (highest first), then by name
+      products.sort((a, b) => {
+        if (b._searchScore !== a._searchScore) {
+          return b._searchScore - a._searchScore;
+        }
+        return a.name.localeCompare(b.name);
+      });
+      
+      // Filter out low-relevance products (threshold-based filtering)
+      // Only show products that have meaningful matches
+      const maxScore = products.length > 0 ? products[0]._searchScore : 0;
+      const minThreshold = 20; // Minimum score to be considered relevant (raised from 15)
+      
+      // Dynamic threshold: if top result has high score, be more selective
+      let scoreThreshold = minThreshold;
+      if (maxScore >= 500) {
+        // Very strong match (exact or near-exact): only show products with at least 40% of top score
+        scoreThreshold = Math.max(minThreshold, maxScore * 0.4);
+      } else if (maxScore >= 200) {
+        // Strong match: only show products with at least 30% of top score
+        scoreThreshold = Math.max(minThreshold, maxScore * 0.3);
+      } else if (maxScore >= 100) {
+        // Medium matches: show products with at least 25% of top score
+        scoreThreshold = Math.max(minThreshold, maxScore * 0.25);
+      }
+      
+      products = products.filter(p => p._searchScore >= scoreThreshold);
+      
+      // Filter variants to show only relevant ones when searching
+      // CRITICAL: If search has both text + number keywords (e.g., "Baju SD 7")
+      // Product MUST match ALL text keywords AND have variants with the number
+      const hasTextAndNumber = textKeywords.length > 0 && numberKeywords.length > 0;
+      
+      products = products.map(product => {
+        const { _searchScore, ...productData } = product;
+        
+        // PRE-CHECK: If search has text keywords, check if product + variants match ALL keywords
+        if (textKeywords.length > 0) {
+          const productNameLower = productData.name.toLowerCase();
+          const productDescLower = (productData.description || '').toLowerCase();
+          const categoryNameLower = productData.category.name.toLowerCase();
+          
+          // Collect all variant texts
+          const variantTexts = productData.variants?.map(v => 
+            `${(v.variantName || '').toLowerCase()} ${(v.variantValue || '').toLowerCase()} ${(v.sku || '').toLowerCase()}`
+          ).join(' ') || '';
+          
+          const combinedText = `${productNameLower} ${productDescLower} ${categoryNameLower} ${variantTexts}`;
+          
+          // Check if ALL text keywords are present in combined product + variant info
+          const allTextMatch = textKeywords.every(keyword => 
+            combinedText.includes(keyword)
+          );
+          
+          // If not all text keywords match, skip this product entirely
+          if (!allTextMatch) {
+            productData.variants = []; // Mark for removal
+            return productData;
+          }
+        }
+        
+        // If product has variants, filter to show only matching ones
+        if (productData.variants && productData.variants.length > 0) {
+          const scoredVariants = productData.variants.map(variant => {
+            let variantScore = 0;
+            const skuLower = (variant.sku || '').toLowerCase();
+            const variantValueLower = (variant.variantValue || '').toLowerCase();
+            const variantNameLower = (variant.variantName || '').toLowerCase();
+            const variantCombined = `${variantValueLower} ${variantNameLower} ${skuLower}`;
+            
+            // Number matching - STRICT for specific numbers with word boundaries
+            let hasNumberMatch = false;
+            if (numberKeywords.length > 0) {
+              numberKeywords.forEach(numKeyword => {
+                const regex = new RegExp(`\\b${numKeyword}\\b`, 'i');
+                if (regex.test(variantValueLower)) {
+                  variantScore += 800;
+                  hasNumberMatch = true;
+                }
+                if (regex.test(skuLower)) {
+                  variantScore += 500;
+                  hasNumberMatch = true;
+                }
+              });
+            }
+            
+            // Text matching - check if text keywords match
+            let hasTextMatch = false;
+            if (textKeywords.length > 0) {
+              let textMatchCount = 0;
+              textKeywords.forEach(keyword => {
+                if (variantValueLower.includes(keyword) || 
+                    variantNameLower.includes(keyword) ||
+                    skuLower.includes(keyword)) {
+                  variantScore += 30;
+                  textMatchCount++;
+                }
+              });
+              hasTextMatch = textMatchCount > 0;
+            }
+            
+            // CRITICAL: If search has BOTH text and number keywords
+            // Variant MUST match BOTH, otherwise set score to 0
+            if (hasTextAndNumber) {
+              if (!hasNumberMatch) {
+                variantScore = 0; // No number match = invalid
+              }
+              // Text match is optional for variants since product name might have the text
+            }
+            
+            // If only numbers searched, must have number match
+            if (numberKeywords.length > 0 && textKeywords.length === 0 && !hasNumberMatch) {
+              variantScore = 0;
+            }
+            
+            return { ...variant, _variantScore: variantScore, _hasNumberMatch: hasNumberMatch };
+          });
+          
+          // STRICT FILTERING: Only show variants with score > 0
+          let matchingVariants = scoredVariants.filter(v => v._variantScore > 0);
+          
+          // If we have number keywords, ONLY show variants that have the exact number
+          if (numberKeywords.length > 0) {
+            matchingVariants = matchingVariants.filter(v => v._hasNumberMatch);
+          }
+          
+          // Apply filtered variants
+          if (matchingVariants.length > 0) {
+            productData.variants = matchingVariants
+              .sort((a, b) => b._variantScore - a._variantScore)
+              .map(({ _variantScore, _hasNumberMatch, ...v }) => v);
+          } else {
+            // No matching variants = empty array (will be filtered out later)
+            productData.variants = [];
+          }
+        }
+        
+        return productData;
+      });
+      
+      // FINAL FILTER: Remove products that have NO matching variants
+      // This is CRITICAL - "Baju SD 7" should ONLY show products with SD 7 variant
+      products = products.filter(product => {
+        return product.variants && product.variants.length > 0;
+      });
+    } else {
+      // Default sort by name if no search
+      products.sort((a, b) => a.name.localeCompare(b.name));
+    }
 
     res.json(products);
   } catch (error) {
@@ -123,169 +525,174 @@ router.get('/template', authMiddleware, async (req, res) => {
     const workbook = XLSX.utils.book_new();
 
     // ========================================
-    // SHEET 1: REFERENSI & INFO
+    // SHEET 1: DATA REFERENSI (Hidden)
     // ========================================
-    const sheet1Data = [];
+    const refData = [];
     
-    // Title & Instructions
-    sheet1Data.push(['REFERENSI & INFO IMPORT PRODUK']);
-    sheet1Data.push([]);
-    sheet1Data.push(['PANDUAN PENGGUNAAN:']);
-    sheet1Data.push(['1. Lihat contoh pengisian produk di bawah']);
-    sheet1Data.push(['2. Lihat tabel referensi ID Kategori dan ID Cabang']);
-    sheet1Data.push(['3. Pindah ke Sheet "Template Import" untuk isi data']);
-    sheet1Data.push(['4. Gunakan ID dari tabel referensi saat mengisi template']);
-    sheet1Data.push(['5. Simpan file dan upload']);
-    sheet1Data.push([]);
+    // Header row with all columns
+    refData.push(['KATEGORI', 'CABANG', 'TIPE_PRODUK']);
     
-    // Example section
-    sheet1Data.push(['CONTOH PENGISIAN PRODUK:']);
-    sheet1Data.push([]);
-    sheet1Data.push(['SKU', 'Nama Produk', 'Deskripsi', 'ID Kategori', 'Tipe Produk', 'Nama Varian', 'Nilai Varian', 'Harga', 'Stok', 'ID Cabang']);
-    sheet1Data.push([
-      'CONTOH-001',
+    // Find max rows needed
+    const maxRows = Math.max(categories.length, cabangs.length, 2);
+    
+    // Fill data row by row (all columns together)
+    for (let i = 0; i < maxRows; i++) {
+      refData.push([
+        categories[i]?.name || '',
+        cabangs[i]?.name || '',
+        i === 0 ? 'SINGLE' : (i === 1 ? 'VARIANT' : '')
+      ]);
+    }
+
+    const refSheet = XLSX.utils.aoa_to_sheet(refData);
+    refSheet['!cols'] = [{ wch: 30 }, { wch: 30 }, { wch: 20 }];
+    XLSX.utils.book_append_sheet(workbook, refSheet, 'Data');
+
+    // ========================================
+    // SHEET 2: PANDUAN & INFO
+    // ========================================
+    const infoData = [];
+    
+    infoData.push(['📋 PANDUAN IMPORT PRODUK']);
+    infoData.push([]);
+    infoData.push(['LANGKAH-LANGKAH:']);
+    infoData.push(['1. Pindah ke Sheet "Template Import"']);
+    infoData.push(['2. Gunakan DROPDOWN untuk pilih Kategori, Cabang, dan Tipe Produk']);
+    infoData.push(['3. Isi data produk sesuai contoh di bawah']);
+    infoData.push(['4. Simpan file dan upload ke sistem']);
+    infoData.push([]);
+    infoData.push(['CONTOH PENGISIAN:']);
+    infoData.push([]);
+    infoData.push(['SKU', 'Nama Produk', 'Deskripsi', 'Kategori', 'Tipe Produk', 'Type 1', 'Value 1', 'Type 2', 'Value 2', 'Harga', 'Stok', 'Cabang']);
+    infoData.push([
+      'KAOS-001',
       'Kaos Polos Basic',
-      'Kaos cotton combed premium',
-      categories[0]?.id || '',
+      'Kaos cotton combed',
+      categories[0]?.name || '',
       'SINGLE',
+      '',
+      '',
       '',
       '',
       50000,
       20,
-      cabangs[0]?.id || ''
+      cabangs[0]?.name || ''
     ]);
-    sheet1Data.push([
-      'CONTOH-002-42',
+    infoData.push([
+      'SEPATU-42-BLK',
       'Sepatu Sport Pro',
-      'Sepatu running profesional',
-      categories[0]?.id || '',
+      'Sepatu running',
+      categories[0]?.name || '',
       'VARIANT',
-      'Warna|Ukuran',
-      'Hitam|42',
+      'Warna',
+      'Hitam',
+      'Ukuran',
+      '42',
       450000,
       5,
-      cabangs[0]?.id || ''
+      cabangs[0]?.name || ''
     ]);
-    sheet1Data.push([
-      'CONTOH-002-43',
-      'Sepatu Sport Pro',
-      'Sepatu running profesional',
-      categories[0]?.id || '',
+    infoData.push([
+      'CELANA-25-MRH',
+      'Celana Karet',
+      'Celana panjang karet',
+      categories[0]?.name || '',
       'VARIANT',
-      'Warna|Ukuran',
-      'Hitam|43',
-      450000,
+      'Warna',
+      'Merah',
+      'Ukuran',
+      '25',
+      150000,
       3,
-      cabangs[0]?.id || ''
+      cabangs[0]?.name || ''
     ]);
-    sheet1Data.push([
-      'CONTOH-002-W42',
-      'Sepatu Sport Pro',
-      'Sepatu running profesional',
-      categories[0]?.id || '',
-      'VARIANT',
-      'Warna|Ukuran',
-      'Putih|42',
-      450000,
-      4,
-      cabangs[0]?.id || ''
-    ]);
-    sheet1Data.push([]);
-    
-    // Explanation
-    sheet1Data.push(['PENJELASAN:']);
-    sheet1Data.push(['• Baris 1: Produk SINGLE (tanpa varian), kolom Nama Varian & Nilai Varian kosong']);
-    sheet1Data.push(['• Baris 2-4: Produk VARIANT (3 varian), Nama Produk sama, SKU berbeda']);
-    sheet1Data.push(['• Format multi varian: gunakan pipe (|) sebagai pemisah, contoh "Warna|Ukuran"']);
-    sheet1Data.push([]);
-    sheet1Data.push([]);
-    
-    // Categories table
-    sheet1Data.push(['REFERENSI ID KATEGORI:']);
-    sheet1Data.push([]);
-    sheet1Data.push(['ID Kategori', 'Nama Kategori', 'Deskripsi']);
+    infoData.push([]);
+    infoData.push(['PENJELASAN:']);
+    infoData.push(['• SINGLE: Produk tanpa varian (Type & Value kosong semua)']);
+    infoData.push(['• VARIANT: Produk dengan varian (SKU harus unik per varian)']);
+    infoData.push(['• Type 1 & Value 1: Atribut pertama (contoh: Type=Warna, Value=Merah)']);
+    infoData.push(['• Type 2 & Value 2: Atribut kedua (contoh: Type=Ukuran, Value=25)']);
+    infoData.push(['• Kosongkan yang tidak digunakan (max 2 atribut per produk)']);
+    infoData.push([]);
+    infoData.push([]);
+    infoData.push(['REFERENSI KATEGORI:']);
+    infoData.push(['Nama Kategori', 'Deskripsi']);
     categories.forEach(cat => {
-      sheet1Data.push([cat.id, cat.name, cat.description || '-']);
+      infoData.push([cat.name, cat.description || '-']);
     });
-    sheet1Data.push([]);
-    sheet1Data.push([]);
-    
-    // Cabangs table
-    sheet1Data.push(['REFERENSI ID CABANG:']);
-    sheet1Data.push([]);
-    sheet1Data.push(['ID Cabang', 'Nama Cabang', 'Alamat', 'Status']);
+    infoData.push([]);
+    infoData.push(['REFERENSI CABANG:']);
+    infoData.push(['Nama Cabang', 'Alamat']);
     cabangs.forEach(cabang => {
-      sheet1Data.push([
-        cabang.id,
-        cabang.name,
-        cabang.address || '-',
-        cabang.isActive ? 'Aktif' : 'Nonaktif'
-      ]);
+      infoData.push([cabang.name, cabang.address || '-']);
     });
 
-    const worksheet1 = XLSX.utils.aoa_to_sheet(sheet1Data);
-    
-    // Set column widths for sheet 1
-    worksheet1['!cols'] = [
-      { wch: 15 }, // SKU
-      { wch: 25 }, // Nama Produk
-      { wch: 30 }, // Deskripsi
-      { wch: 12 }, // ID Kategori
-      { wch: 15 }, // Tipe Produk
-      { wch: 15 }, // Nama Varian
-      { wch: 15 }, // Nilai Varian
-      { wch: 12 }, // Harga
-      { wch: 8 },  // Stok
-      { wch: 12 }  // ID Cabang
+    const infoSheet = XLSX.utils.aoa_to_sheet(infoData);
+    infoSheet['!cols'] = [
+      { wch: 15 }, { wch: 25 }, { wch: 30 }, { wch: 15 }, 
+      { wch: 12 }, { wch: 15 }, { wch: 15 }, { wch: 12 }, 
+      { wch: 8 }, { wch: 15 }
     ];
-    
-    XLSX.utils.book_append_sheet(workbook, worksheet1, 'Referensi & Info');
+    XLSX.utils.book_append_sheet(workbook, infoSheet, 'Panduan');
 
     // ========================================
-    // SHEET 2: TEMPLATE IMPORT
+    // SHEET 3: TEMPLATE IMPORT (With Dropdowns)
     // ========================================
-    const sheet2Data = [];
-    
-    // Instructions
-    sheet2Data.push(['TEMPLATE IMPORT PRODUK']);
-    sheet2Data.push([]);
-    sheet2Data.push(['INSTRUKSI:']);
-    sheet2Data.push(['1. Hapus baris instruksi ini (baris 1-13)']);
-    sheet2Data.push(['2. Lihat Sheet "Referensi & Info" untuk contoh dan tabel ID']);
-    sheet2Data.push(['3. Isi data produk mulai dari baris 2 (setelah header)']);
-    sheet2Data.push(['4. Gunakan ID dari Sheet "Referensi & Info"']);
-    sheet2Data.push([]);
-    sheet2Data.push(['ATURAN PENTING:']);
-    sheet2Data.push(['• SKU harus unique untuk produk SINGLE']);
-    sheet2Data.push(['• SKU harus berbeda untuk tiap varian dari 1 produk VARIANT']);
-    sheet2Data.push(['• Nama Produk harus sama untuk semua varian dari 1 produk']);
-    sheet2Data.push(['• Tipe Produk: SINGLE atau VARIANT']);
-    sheet2Data.push(['• Nama Varian & Nilai Varian: kosong untuk SINGLE, wajib isi untuk VARIANT']);
-    sheet2Data.push([]);
+    const templateData = [];
     
     // Header row
-    sheet2Data.push(['SKU', 'Nama Produk', 'Deskripsi', 'ID Kategori', 'Tipe Produk', 'Nama Varian', 'Nilai Varian', 'Harga', 'Stok', 'ID Cabang']);
+    templateData.push(['SKU', 'Nama Produk', 'Deskripsi', 'Kategori', 'Tipe Produk', 'Type 1', 'Value 1', 'Type 2', 'Value 2', 'Harga', 'Stok', 'Cabang']);
     
-    // Empty rows for user to fill
-    sheet2Data.push(['', '', '', '', '', '', '', '', '', '']);
+    // Add 100 empty rows for user input
+    for (let i = 0; i < 100; i++) {
+      templateData.push(['', '', '', '', '', '', '', '', '', '', '', '']);
+    }
 
-    const worksheet2 = XLSX.utils.aoa_to_sheet(sheet2Data);
+    const templateSheet = XLSX.utils.aoa_to_sheet(templateData);
     
-    // Set column widths for sheet 2
-    worksheet2['!cols'] = [
-      { wch: 15 }, // SKU
-      { wch: 25 }, // Nama Produk
-      { wch: 30 }, // Deskripsi
-      { wch: 12 }, // ID Kategori
+    // Set column widths
+    templateSheet['!cols'] = [
+      { wch: 18 }, // SKU
+      { wch: 28 }, // Nama Produk
+      { wch: 35 }, // Deskripsi
+      { wch: 18 }, // Kategori
       { wch: 15 }, // Tipe Produk
-      { wch: 15 }, // Nama Varian
-      { wch: 15 }, // Nilai Varian
+      { wch: 12 }, // Type 1
+      { wch: 15 }, // Value 1
+      { wch: 12 }, // Type 2
+      { wch: 15 }, // Value 2
       { wch: 12 }, // Harga
-      { wch: 8 },  // Stok
-      { wch: 12 }  // ID Cabang
+      { wch: 10 }, // Stok
+      { wch: 18 }  // Cabang
     ];
+
+    // Add data validation (dropdowns)
+    if (!templateSheet['!dataValidation']) templateSheet['!dataValidation'] = [];
     
-    XLSX.utils.book_append_sheet(workbook, worksheet2, 'Template Import');
+    // Dropdown for Kategori (Column D, rows 2-101)
+    const categoryNames = categories.map(c => c.name).join(',');
+    templateSheet['!dataValidation'].push({
+      type: 'list',
+      sqref: 'D2:D101',
+      formulas: [categoryNames]
+    });
+    
+    // Dropdown for Tipe Produk (Column E, rows 2-101)
+    templateSheet['!dataValidation'].push({
+      type: 'list',
+      sqref: 'E2:E101',
+      formulas: ['SINGLE,VARIANT']
+    });
+    
+    // Dropdown for Cabang (Column L, rows 2-101)
+    const cabangNames = cabangs.map(c => c.name).join(',');
+    templateSheet['!dataValidation'].push({
+      type: 'list',
+      sqref: 'L2:L101',
+      formulas: [cabangNames]
+    });
+    
+    XLSX.utils.book_append_sheet(workbook, templateSheet, 'Template Import');
 
     // Generate Excel file
     const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
@@ -1204,24 +1611,23 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
     // Parse Excel - read "Template Import" sheet
     const workbook = XLSX.readFile(filePath);
     
-    // Try to find the template sheet (could be named differently)
+    // Try to find the template sheet
     let sheetName = 'Template Import';
     if (!workbook.SheetNames.includes(sheetName)) {
-      // Fallback to second sheet or first sheet
-      sheetName = workbook.SheetNames[1] || workbook.SheetNames[0];
+      // Fallback to any sheet that might be the template
+      sheetName = workbook.SheetNames.find(s => s.toLowerCase().includes('template')) || workbook.SheetNames[0];
     }
     
     const worksheet = workbook.Sheets[sheetName];
     
-    // Parse with header row at index 15 (row 16 in Excel, after instructions)
-    // This skips the instruction rows (1-15) and uses row 16 as header
+    // Parse with header row at index 0 (row 1 in Excel)
     const products = XLSX.utils.sheet_to_json(worksheet, { 
-      range: 15, // Start from row 16 (0-indexed = 15)
+      range: 0, // Start from row 1 (header)
       defval: '' // Default empty string for empty cells
     });
 
     if (products.length === 0) {
-      return res.status(400).json({ error: 'File kosong atau format tidak valid. Pastikan Sheet "Template Import" berisi data mulai dari baris 17 (setelah header di baris 16).' });
+      return res.status(400).json({ error: 'File kosong atau format tidak valid. Pastikan Sheet "Template Import" berisi data dengan header di baris 1.' });
     }
 
     // Get all categories and cabangs
@@ -1238,17 +1644,23 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
       const rowNum = i + 2; // Excel row number (1 = header)
 
       try {
+        // Skip empty rows (all fields empty)
+        const hasData = Object.values(row).some(val => val !== '' && val !== null && val !== undefined);
+        if (!hasData) {
+          continue; // Skip silently
+        }
+
         // Validate required fields
         const sku = row['SKU']?.toString().trim();
         const productName = row['Nama Produk']?.toString().trim();
-        const categoryId = row['ID Kategori']?.toString().trim();
+        const categoryName = row['Kategori']?.toString().trim();
         const productType = row['Tipe Produk']?.toString().toUpperCase().trim();
         const price = parseInt(row['Harga']);
         const stock = parseInt(row['Stok']);
-        const cabangId = row['ID Cabang']?.toString().trim();
+        const cabangName = row['Cabang']?.toString().trim();
 
-        if (!sku || !productName || !categoryId || !productType || isNaN(price) || isNaN(stock) || !cabangId) {
-          errors.push({ row: rowNum, error: 'Data tidak lengkap. Pastikan SKU, Nama Produk, ID Kategori, Tipe Produk, Harga, Stok, dan ID Cabang diisi' });
+        if (!sku || !productName || !categoryName || !productType || isNaN(price) || isNaN(stock) || !cabangName) {
+          errors.push({ row: rowNum, error: 'Data tidak lengkap. Pastikan SKU, Nama Produk, Kategori, Tipe Produk, Harga, Stok, dan Cabang diisi' });
           continue;
         }
 
@@ -1257,17 +1669,17 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
           continue;
         }
 
-        // Check if category exists by ID
-        const category = categories.find(c => c.id === categoryId);
+        // Check if category exists by NAME
+        const category = categories.find(c => c.name.toLowerCase() === categoryName.toLowerCase());
         if (!category) {
-          errors.push({ row: rowNum, error: `ID Kategori "${categoryId}" tidak ditemukan. Gunakan ID dari sheet Kategori` });
+          errors.push({ row: rowNum, error: `Kategori "${categoryName}" tidak ditemukan. Pilih dari dropdown atau lihat sheet Panduan` });
           continue;
         }
 
-        // Check if cabang exists by ID
-        const cabang = cabangs.find(c => c.id === cabangId);
+        // Check if cabang exists by NAME
+        const cabang = cabangs.find(c => c.name.toLowerCase() === cabangName.toLowerCase());
         if (!cabang) {
-          errors.push({ row: rowNum, error: `ID Cabang "${cabangId}" tidak ditemukan. Gunakan ID dari sheet Cabang` });
+          errors.push({ row: rowNum, error: `Cabang "${cabangName}" tidak ditemukan. Pilih dari dropdown atau lihat sheet Panduan` });
           continue;
         }
 
@@ -1301,11 +1713,63 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
           continue;
         }
 
+        // Parse Type/Value pairs and generate variant name
+        let variantName = 'Default';
+        let variantValue = 'Default';
+        
+        if (productType === 'VARIANT') {
+          const type1 = row['Type 1']?.toString().trim();
+          const value1 = row['Value 1']?.toString().trim();
+          const type2 = row['Type 2']?.toString().trim();
+          const value2 = row['Value 2']?.toString().trim();
+          
+          // Collect non-empty types and values
+          const types = [];
+          const values = [];
+          
+          if (type1 && value1) {
+            types.push(type1);
+            values.push(value1);
+          } else if (type1 || value1) {
+            errors.push({ row: rowNum, error: 'Type 1 dan Value 1 harus diisi bersama-sama' });
+            continue;
+          }
+          
+          if (type2 && value2) {
+            types.push(type2);
+            values.push(value2);
+          } else if (type2 || value2) {
+            errors.push({ row: rowNum, error: 'Type 2 dan Value 2 harus diisi bersama-sama' });
+            continue;
+          }
+          
+          // Validate: VARIANT must have at least 1 type-value pair
+          if (types.length === 0) {
+            errors.push({ row: rowNum, error: 'Produk VARIANT harus memiliki minimal 1 pasang Type dan Value' });
+            continue;
+          }
+          
+          // Generate variant name (types) and value (values) with | separator
+          variantName = types.join(' | ');
+          variantValue = values.join(' | ');
+        } else {
+          // For SINGLE products, validate that all type/value fields are empty
+          const type1 = row['Type 1']?.toString().trim();
+          const value1 = row['Value 1']?.toString().trim();
+          const type2 = row['Type 2']?.toString().trim();
+          const value2 = row['Value 2']?.toString().trim();
+          
+          if (type1 || value1 || type2 || value2) {
+            errors.push({ row: rowNum, error: 'Produk SINGLE tidak boleh memiliki Type dan Value. Kosongkan semua kolom atribut' });
+            continue;
+          }
+        }
+
         // Add variant
         const variantData = {
           sku,
-          variantName: productType === 'VARIANT' ? (row['Nama Varian']?.toString().trim() || 'Default') : 'Default',
-          variantValue: productType === 'VARIANT' ? (row['Nilai Varian']?.toString().trim() || 'Default') : 'Default',
+          variantName,
+          variantValue,
           stocks: [
             {
               cabangId: cabang.id,
@@ -1325,6 +1789,18 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
     // Create products in database
     for (const [productKey, productData] of productsToCreate) {
       try {
+        // Check for duplicate variants before creating
+        const variantValues = productData.variants.map(v => v.variantValue);
+        const duplicates = variantValues.filter((val, idx) => variantValues.indexOf(val) !== idx);
+        
+        if (duplicates.length > 0) {
+          errors.push({ 
+            product: productData.name, 
+            error: `Variant duplikat ditemukan: "${duplicates[0]}". Pastikan setiap variant berbeda (periksa Value 1 dan Value 2).` 
+          });
+          continue;
+        }
+
         const product = await prisma.product.create({
           data: {
             name: productData.name,
@@ -1362,9 +1838,28 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
         emitProductCreated(product);
 
       } catch (error) {
+        // User-friendly error messages
+        let errorMsg = 'Gagal membuat produk';
+        
+        if (error.code === 'P2002') {
+          // Unique constraint violation
+          if (error.meta?.target?.includes('sku')) {
+            errorMsg = `SKU sudah terdaftar. Periksa SKU yang duplikat.`;
+          } else if (error.meta?.target?.includes('variantName') || error.meta?.target?.includes('variantValue')) {
+            errorMsg = `Variant duplikat. Setiap produk harus punya variant yang unik.`;
+          } else {
+            errorMsg = `Data duplikat terdeteksi: ${error.meta?.target?.join(', ') || 'unknown'}`;
+          }
+        } else if (error.code === 'P2003') {
+          // Foreign key constraint
+          errorMsg = `Referensi data tidak valid (kategori atau cabang tidak ditemukan)`;
+        } else if (error.message) {
+          errorMsg = error.message;
+        }
+        
         errors.push({ 
           product: productData.name, 
-          error: error.message || 'Gagal membuat produk' 
+          error: errorMsg
         });
       }
     }

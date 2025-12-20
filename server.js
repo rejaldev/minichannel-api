@@ -3,6 +3,7 @@ const cors = require('cors');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 require('dotenv').config();
+const { initBackupScheduler } = require('./lib/backup-scheduler');
 
 const app = express();
 const httpServer = createServer(app);
@@ -16,9 +17,11 @@ const corsOptions = {
 
     const allowedOrigins = [
       'http://localhost:3000',
+      'http://localhost:3100',
       'http://localhost:3500',
       'http://localhost:4000',
       'http://127.0.0.1:3000',
+      'http://127.0.0.1:3100',
       'http://127.0.0.1:3500',
       'http://127.0.0.1:4000',
       process.env.CORS_ORIGIN, // From .env
@@ -80,6 +83,7 @@ const syncRoutes = require('./routes/sync');
 const returnRoutes = require('./routes/returns');
 const orderRoutes = require('./routes/orders');
 const stockTransferRoutes = require('./routes/stock-transfers');
+const backupRoutes = require('./routes/backup');
 
 app.get('/', (req, res) => {
   res.json({ message: 'AnekaBuana Store API - Toko Inventory System' });
@@ -100,6 +104,7 @@ app.use('/api/sync', syncRoutes);
 app.use('/api/returns', returnRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/stock-transfers', stockTransferRoutes);
+app.use('/api/backup', backupRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -107,8 +112,11 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message || 'Internal server error' });
 });
 
+// Initialize backup scheduler
+initBackupScheduler();
+
 // Start server - localhost only
 httpServer.listen(PORT, 'localhost', () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`🔌 WebSocket server ready on ws://localhost:${PORT}`);
+  console.log(`🔌 WebSocket server ready`);
 });
