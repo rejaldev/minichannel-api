@@ -563,7 +563,7 @@ router.get('/template', authMiddleware, async (req, res) => {
     infoData.push([]);
     infoData.push(['CONTOH PENGISIAN:']);
     infoData.push([]);
-    infoData.push(['SKU', 'Nama Produk', 'Deskripsi', 'Kategori', 'Tipe Produk', 'Type 1', 'Value 1', 'Type 2', 'Value 2', 'Harga', 'Stok', 'Cabang']);
+    infoData.push(['SKU', 'Nama Produk', 'Deskripsi', 'Kategori', 'Tipe Produk', 'Type 1', 'Value 1', 'Type 2', 'Value 2', 'Type 3', 'Value 3', 'Harga', 'Stok', 'Cabang', 'Weight (g)', 'Length (cm)', 'Width (cm)', 'Height (cm)', 'Image URL']);
     infoData.push([
       'KAOS-001',
       'Kaos Polos Basic',
@@ -574,9 +574,16 @@ router.get('/template', authMiddleware, async (req, res) => {
       '',
       '',
       '',
+      '',
+      '',
       50000,
       20,
-      cabangs[0]?.name || ''
+      cabangs[0]?.name || '',
+      200,
+      30,
+      20,
+      2,
+      ''
     ]);
     infoData.push([
       'SEPATU-42-BLK',
@@ -588,9 +595,16 @@ router.get('/template', authMiddleware, async (req, res) => {
       'Hitam',
       'Ukuran',
       '42',
+      '',
+      '',
       450000,
       5,
-      cabangs[0]?.name || ''
+      cabangs[0]?.name || '',
+      800,
+      30,
+      20,
+      12,
+      'https://example.com/sepatu-hitam.jpg'
     ]);
     infoData.push([
       'CELANA-25-MRH',
@@ -602,9 +616,16 @@ router.get('/template', authMiddleware, async (req, res) => {
       'Merah',
       'Ukuran',
       '25',
+      'Bahan',
+      'Polyester',
       150000,
       3,
-      cabangs[0]?.name || ''
+      cabangs[0]?.name || '',
+      300,
+      40,
+      30,
+      3,
+      ''
     ]);
     infoData.push([]);
     infoData.push(['PENJELASAN:']);
@@ -612,7 +633,11 @@ router.get('/template', authMiddleware, async (req, res) => {
     infoData.push(['• VARIANT: Produk dengan varian (SKU harus unik per varian)']);
     infoData.push(['• Type 1 & Value 1: Atribut pertama (contoh: Type=Warna, Value=Merah)']);
     infoData.push(['• Type 2 & Value 2: Atribut kedua (contoh: Type=Ukuran, Value=25)']);
-    infoData.push(['• Kosongkan yang tidak digunakan (max 2 atribut per produk)']);
+    infoData.push(['• Type 3 & Value 3: Atribut ketiga (opsional, contoh: Type=Bahan, Value=Cotton)']);
+    infoData.push(['• Weight: Berat dalam gram (untuk marketplace)']);
+    infoData.push(['• Length/Width/Height: Dimensi dalam cm (untuk marketplace)']);
+    infoData.push(['• Image URL: Link gambar produk (opsional, contoh: https://imgur.com/abc.jpg)']);
+    infoData.push(['• Kosongkan yang tidak digunakan (max 3 atribut per produk)']);
     infoData.push([]);
     infoData.push([]);
     infoData.push(['REFERENSI KATEGORI:']);
@@ -641,11 +666,11 @@ router.get('/template', authMiddleware, async (req, res) => {
     const templateData = [];
     
     // Header row
-    templateData.push(['SKU', 'Nama Produk', 'Deskripsi', 'Kategori', 'Tipe Produk', 'Type 1', 'Value 1', 'Type 2', 'Value 2', 'Harga', 'Stok', 'Cabang']);
+    templateData.push(['SKU', 'Nama Produk', 'Deskripsi', 'Kategori', 'Tipe Produk', 'Type 1', 'Value 1', 'Type 2', 'Value 2', 'Type 3', 'Value 3', 'Harga', 'Stok', 'Cabang', 'Weight (g)', 'Length (cm)', 'Width (cm)', 'Height (cm)', 'Image URL']);
     
     // Add 100 empty rows for user input
     for (let i = 0; i < 100; i++) {
-      templateData.push(['', '', '', '', '', '', '', '', '', '', '', '']);
+      templateData.push(['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']);
     }
 
     const templateSheet = XLSX.utils.aoa_to_sheet(templateData);
@@ -661,9 +686,16 @@ router.get('/template', authMiddleware, async (req, res) => {
       { wch: 15 }, // Value 1
       { wch: 12 }, // Type 2
       { wch: 15 }, // Value 2
+      { wch: 12 }, // Type 3
+      { wch: 15 }, // Value 3
       { wch: 12 }, // Harga
       { wch: 10 }, // Stok
-      { wch: 18 }  // Cabang
+      { wch: 18 }, // Cabang
+      { wch: 12 }, // Weight
+      { wch: 12 }, // Length
+      { wch: 12 }, // Width
+      { wch: 12 }, // Height
+      { wch: 40 }  // Image URL
     ];
 
     // Add data validation (dropdowns)
@@ -726,25 +758,35 @@ router.get('/export', authMiddleware, async (req, res) => {
       orderBy: { name: 'asc' }
     });
 
-    // Flatten data for export
+    // ===== FORMAT FIX: Export in import-compatible format =====
     const exportData = [];
     products.forEach(product => {
       product.variants.forEach(variant => {
         variant.stocks.forEach(stock => {
+          // Parse variant name/value back to Type/Value pairs (supports up to 3 attributes)
+          const variantNames = variant.variantName?.split(' | ') || [];
+          const variantValues = variant.variantValue?.split(' | ') || [];
+          
           exportData.push([
             variant.sku || '',
             product.name,
             product.description || '',
-            product.categoryId || '',
             product.category?.name || '',
             product.productType,
-            variant.variantName || '',
-            variant.variantValue || '',
+            variantNames[0] || '', // Type 1
+            variantValues[0] || '', // Value 1
+            variantNames[1] || '', // Type 2
+            variantValues[1] || '', // Value 2
+            variantNames[2] || '', // Type 3
+            variantValues[2] || '', // Value 3
             stock.price || 0,
             stock.quantity || 0,
-            stock.cabangId,
             stock.cabang.name,
-            product.isActive ? 'Aktif' : 'Nonaktif'
+            variant.weight || '', // Weight in grams
+            variant.length || '', // Length in cm
+            variant.width || '',  // Width in cm
+            variant.height || '', // Height in cm
+            variant.imageUrl || '' // Image URL
           ]);
         });
       });
@@ -757,44 +799,56 @@ router.get('/export', authMiddleware, async (req, res) => {
     // Create workbook
     const workbook = XLSX.utils.book_new();
     
-    // Add header
+    // Header matches import template format
     const header = [
       'SKU',
       'Nama Produk',
       'Deskripsi',
-      'ID Kategori',
-      'Nama Kategori',
+      'Kategori',
       'Tipe Produk',
-      'Nama Varian',
-      'Nilai Varian',
+      'Type 1',
+      'Value 1',
+      'Type 2',
+      'Value 2',
+      'Type 3',
+      'Value 3',
       'Harga',
       'Stok',
-      'ID Cabang',
-      'Nama Cabang',
-      'Status'
+      'Cabang',
+      'Weight (g)',
+      'Length (cm)',
+      'Width (cm)',
+      'Height (cm)',
+      'Image URL'
     ];
     
     const worksheetData = [header, ...exportData];
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
     
-    // Set column widths
+    // Set column widths (same as template)
     worksheet['!cols'] = [
-      { wch: 15 }, // SKU
-      { wch: 25 }, // Nama Produk
-      { wch: 30 }, // Deskripsi
-      { wch: 12 }, // ID Kategori
-      { wch: 20 }, // Nama Kategori
+      { wch: 18 }, // SKU
+      { wch: 28 }, // Nama Produk
+      { wch: 35 }, // Deskripsi
+      { wch: 18 }, // Kategori
       { wch: 15 }, // Tipe Produk
-      { wch: 15 }, // Nama Varian
-      { wch: 15 }, // Nilai Varian
+      { wch: 12 }, // Type 1
+      { wch: 15 }, // Value 1
+      { wch: 12 }, // Type 2
+      { wch: 15 }, // Value 2
+      { wch: 12 }, // Type 3
+      { wch: 15 }, // Value 3
       { wch: 12 }, // Harga
-      { wch: 8 },  // Stok
-      { wch: 12 }, // ID Cabang
-      { wch: 20 }, // Nama Cabang
-      { wch: 10 }  // Status
+      { wch: 10 }, // Stok
+      { wch: 18 }, // Cabang
+      { wch: 12 }, // Weight
+      { wch: 12 }, // Length
+      { wch: 12 }, // Width
+      { wch: 12 }, // Height
+      { wch: 40 }  // Image URL
     ];
     
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data Produk');
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Template Import');
     
     // Generate Excel file
     const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
@@ -886,7 +940,12 @@ router.post('/', authMiddleware, ownerOrManager, async (req, res) => {
               productId: newProduct.id,
               variantName: variant.variantName,
               variantValue: variant.variantValue,
-              sku: variant.sku || `${newProduct.id}-${variant.variantValue}`
+              sku: variant.sku || `${newProduct.id}-${variant.variantValue}`,
+              weight: variant.weight || null,
+              length: variant.length || null,
+              width: variant.width || null,
+              height: variant.height || null,
+              imageUrl: variant.imageUrl || null
             }
           });
 
@@ -921,7 +980,12 @@ router.post('/', authMiddleware, ownerOrManager, async (req, res) => {
             productId: newProduct.id,
             variantName: 'Default',
             variantValue: 'Standard',
-            sku: sku || `${newProduct.id}-DEFAULT`
+            sku: sku || `${newProduct.id}-DEFAULT`,
+            weight: req.body.weight || null,
+            length: req.body.length || null,
+            width: req.body.width || null,
+            height: req.body.height || null,
+            imageUrl: req.body.imageUrl || null
           }
         });
 
@@ -1002,7 +1066,12 @@ router.put('/:id', authMiddleware, ownerOrManager, async (req, res) => {
             data: {
               variantName: variant.variantName || 'Default',
               variantValue: variant.variantValue || 'Standard',
-              sku: variant.sku
+              sku: variant.sku,
+              weight: variant.weight || null,
+              length: variant.length || null,
+              width: variant.width || null,
+              height: variant.height || null,
+              imageUrl: variant.imageUrl || null
             }
           });
 
@@ -1056,7 +1125,12 @@ router.put('/:id', authMiddleware, ownerOrManager, async (req, res) => {
               data: {
                 variantName: variant.variantName,
                 variantValue: variant.variantValue,
-                sku: variant.sku
+                sku: variant.sku,
+                weight: variant.weight || null,
+                length: variant.length || null,
+                width: variant.width || null,
+                height: variant.height || null,
+                imageUrl: variant.imageUrl || null
               }
             });
 
@@ -1090,7 +1164,12 @@ router.put('/:id', authMiddleware, ownerOrManager, async (req, res) => {
                 productId: updatedProduct.id,
                 variantName: variant.variantName,
                 variantValue: variant.variantValue,
-                sku: variant.sku || `${updatedProduct.id}-${variant.variantValue}`
+                sku: variant.sku || `${updatedProduct.id}-${variant.variantValue}`,
+                weight: variant.weight || null,
+                length: variant.length || null,
+                width: variant.width || null,
+                height: variant.height || null,
+                imageUrl: variant.imageUrl || null
               }
             });
 
@@ -1638,152 +1717,316 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
     const success = [];
     const productsToCreate = new Map(); // Group by product name
 
-    // Group products by name (for variants)
-    for (let i = 0; i < products.length; i++) {
-      const row = products[i];
-      const rowNum = i + 2; // Excel row number (1 = header)
+  // ===== UPSERT MODE: Batch fetch existing SKUs with full data =====
+  // Collect all SKUs from Excel first
+  const allSkus = products
+    .map(row => row['SKU']?.toString().trim())
+    .filter(Boolean); // Remove empty values
 
-      try {
-        // Skip empty rows (all fields empty)
-        const hasData = Object.values(row).some(val => val !== '' && val !== null && val !== undefined);
-        if (!hasData) {
-          continue; // Skip silently
+  // Fetch existing SKUs with product and stock data for upsert
+  const existingVariants = await prisma.productVariant.findMany({
+    where: { sku: { in: allSkus } },
+    include: {
+      product: {
+        include: {
+          category: true
         }
+      },
+      stocks: {
+        include: {
+          cabang: true
+        }
+      }
+    }
+  });
+  
+  // Map SKU to variant data for quick lookup
+  const existingVariantsMap = new Map(
+    existingVariants.map(v => [v.sku, v])
+  );
 
-        // Validate required fields
-        const sku = row['SKU']?.toString().trim();
-        const productName = row['Nama Produk']?.toString().trim();
-        const categoryName = row['Kategori']?.toString().trim();
-        const productType = row['Tipe Produk']?.toString().toUpperCase().trim();
-        const price = parseInt(row['Harga']);
-        const stock = parseInt(row['Stok']);
-        const cabangName = row['Cabang']?.toString().trim();
+  // Group products by name (for variants)
+  for (let i = 0; i < products.length; i++) {
+    const row = products[i];
+    const rowNum = i + 2; // Excel row number (1 = header)
 
-        if (!sku || !productName || !categoryName || !productType || isNaN(price) || isNaN(stock) || !cabangName) {
-          errors.push({ row: rowNum, error: 'Data tidak lengkap. Pastikan SKU, Nama Produk, Kategori, Tipe Produk, Harga, Stok, dan Cabang diisi' });
+    try {
+      // Skip empty rows (all fields empty)
+      const hasData = Object.values(row).some(val => val !== '' && val !== null && val !== undefined);
+      if (!hasData) {
+        continue; // Skip silently
+      }
+
+      // Validate required fields
+      const sku = row['SKU']?.toString().trim();
+      const productName = row['Nama Produk']?.toString().trim();
+      const categoryName = row['Kategori']?.toString().trim();
+      const productType = row['Tipe Produk']?.toString().toUpperCase().trim();
+      const price = parseInt(row['Harga']);
+      const stock = parseInt(row['Stok']);
+      const cabangName = row['Cabang']?.toString().trim();
+
+      if (!sku || !productName || !categoryName || !productType || isNaN(price) || isNaN(stock) || !cabangName) {
+        errors.push({ row: rowNum, error: 'Data tidak lengkap. Pastikan SKU, Nama Produk, Kategori, Tipe Produk, Harga, Stok, dan Cabang diisi' });
+        continue;
+      }
+
+      if (!['SINGLE', 'VARIANT'].includes(productType)) {
+        errors.push({ row: rowNum, error: 'Tipe Produk harus SINGLE atau VARIANT' });
+        continue;
+      }
+
+      // Check if category exists by NAME
+      const category = categories.find(c => c.name.toLowerCase() === categoryName.toLowerCase());
+      if (!category) {
+        errors.push({ row: rowNum, error: `Kategori "${categoryName}" tidak ditemukan. Pilih dari dropdown atau lihat sheet Panduan` });
+        continue;
+      }
+
+      // Check if cabang exists by NAME
+      const cabang = cabangs.find(c => c.name.toLowerCase() === cabangName.toLowerCase());
+      if (!cabang) {
+        errors.push({ row: rowNum, error: `Cabang "${cabangName}" tidak ditemukan. Pilih dari dropdown atau lihat sheet Panduan` });
+        continue;
+      }
+
+      // ===== UPSERT LOGIC: Check if SKU exists =====
+      const existingVariant = existingVariantsMap.get(sku);
+      
+      if (existingVariant) {
+        // SKU exists - UPSERT mode
+        const existingProduct = existingVariant.product;
+        
+        // Validate critical fields yang tidak boleh berubah
+        if (existingProduct.productType !== productType) {
+          errors.push({ 
+            row: rowNum, 
+            error: `SKU "${sku}" sudah terdaftar dengan tipe ${existingProduct.productType}. Tidak bisa diubah ke ${productType}` 
+          });
           continue;
         }
-
-        if (!['SINGLE', 'VARIANT'].includes(productType)) {
-          errors.push({ row: rowNum, error: 'Tipe Produk harus SINGLE atau VARIANT' });
-          continue;
-        }
-
-        // Check if category exists by NAME
-        const category = categories.find(c => c.name.toLowerCase() === categoryName.toLowerCase());
-        if (!category) {
-          errors.push({ row: rowNum, error: `Kategori "${categoryName}" tidak ditemukan. Pilih dari dropdown atau lihat sheet Panduan` });
-          continue;
-        }
-
-        // Check if cabang exists by NAME
-        const cabang = cabangs.find(c => c.name.toLowerCase() === cabangName.toLowerCase());
-        if (!cabang) {
-          errors.push({ row: rowNum, error: `Cabang "${cabangName}" tidak ditemukan. Pilih dari dropdown atau lihat sheet Panduan` });
-          continue;
-        }
-
-        // Check if SKU already exists
-        const existingSku = await prisma.productVariant.findUnique({
-          where: { sku }
-        });
-        if (existingSku) {
-          errors.push({ row: rowNum, error: `SKU "${sku}" sudah terdaftar` });
-          continue;
-        }
-
-        // Prepare product data
-        const productKey = productName.toLowerCase();
-        if (!productsToCreate.has(productKey)) {
-          productsToCreate.set(productKey, {
-            name: productName,
-            description: row['Deskripsi']?.toString().trim() || '',
-            categoryId: category.id,
-            productType,
-            isActive: true,
-            variants: []
+        
+        // Warning jika category berbeda (tapi tetap lanjut update)
+        if (existingProduct.category.name.toLowerCase() !== categoryName.toLowerCase()) {
+          errors.push({ 
+            row: rowNum, 
+            error: `Warning: SKU "${sku}" kategori berubah dari "${existingProduct.category.name}" ke "${categoryName}". Kategori tidak diupdate.`,
+            type: 'warning'
           });
         }
-
-        const productData = productsToCreate.get(productKey);
-
-        // Validate product type consistency
-        if (productData.productType !== productType) {
-          errors.push({ row: rowNum, error: `Produk "${productName}" memiliki tipe yang berbeda dalam file` });
-          continue;
-        }
-
-        // Parse Type/Value pairs and generate variant name
-        let variantName = 'Default';
-        let variantValue = 'Default';
         
-        if (productType === 'VARIANT') {
-          const type1 = row['Type 1']?.toString().trim();
-          const value1 = row['Value 1']?.toString().trim();
-          const type2 = row['Type 2']?.toString().trim();
-          const value2 = row['Value 2']?.toString().trim();
-          
-          // Collect non-empty types and values
-          const types = [];
-          const values = [];
-          
-          if (type1 && value1) {
-            types.push(type1);
-            values.push(value1);
-          } else if (type1 || value1) {
-            errors.push({ row: rowNum, error: 'Type 1 dan Value 1 harus diisi bersama-sama' });
-            continue;
-          }
-          
-          if (type2 && value2) {
-            types.push(type2);
-            values.push(value2);
-          } else if (type2 || value2) {
-            errors.push({ row: rowNum, error: 'Type 2 dan Value 2 harus diisi bersama-sama' });
-            continue;
-          }
-          
-          // Validate: VARIANT must have at least 1 type-value pair
-          if (types.length === 0) {
-            errors.push({ row: rowNum, error: 'Produk VARIANT harus memiliki minimal 1 pasang Type dan Value' });
-            continue;
-          }
-          
-          // Generate variant name (types) and value (values) with | separator
-          variantName = types.join(' | ');
-          variantValue = values.join(' | ');
-        } else {
-          // For SINGLE products, validate that all type/value fields are empty
-          const type1 = row['Type 1']?.toString().trim();
-          const value1 = row['Value 1']?.toString().trim();
-          const type2 = row['Type 2']?.toString().trim();
-          const value2 = row['Value 2']?.toString().trim();
-          
-          if (type1 || value1 || type2 || value2) {
-            errors.push({ row: rowNum, error: 'Produk SINGLE tidak boleh memiliki Type dan Value. Kosongkan semua kolom atribut' });
-            continue;
-          }
-        }
-
-        // Add variant
-        const variantData = {
-          sku,
-          variantName,
-          variantValue,
-          stocks: [
-            {
+        // Check if stock exists for this cabang
+        const existingStock = existingVariant.stocks.find(s => s.cabangId === cabang.id);
+        
+        if (existingStock) {
+          // Update existing stock
+          try {
+            await prisma.stock.update({
+              where: { id: existingStock.id },
+              data: {
+                quantity: stock,
+                price: price
+              }
+            });
+            
+            success.push({
+              row: rowNum,
+              sku,
+              product: productName,
+              action: 'updated',
+              message: `Stock di ${cabangName} diupdate: ${stock} pcs @ Rp ${price.toLocaleString('id-ID')}`
+            });
+            
+            // Emit stock update event
+            emitStockUpdated({
+              productId: existingProduct.id,
+              variantId: existingVariant.id,
               cabangId: cabang.id,
               quantity: stock,
               price: price
-            }
-          ]
-        };
-
-        productData.variants.push(variantData);
-
-      } catch (error) {
-        errors.push({ row: rowNum, error: error.message });
+            });
+          } catch (error) {
+            errors.push({ row: rowNum, error: `Gagal update stock: ${error.message}` });
+          }
+        } else {
+          // Create new stock for different cabang
+          try {
+            await prisma.stock.create({
+              data: {
+                variantId: existingVariant.id,
+                cabangId: cabang.id,
+                quantity: stock,
+                price: price
+              }
+            });
+            
+            success.push({
+              row: rowNum,
+              sku,
+              product: productName,
+              action: 'stock_added',
+              message: `Stock baru ditambahkan di ${cabangName}: ${stock} pcs @ Rp ${price.toLocaleString('id-ID')}`
+            });
+            
+            // Emit stock update event
+            emitStockUpdated({
+              productId: existingProduct.id,
+              variantId: existingVariant.id,
+              cabangId: cabang.id,
+              quantity: stock,
+              price: price
+            });
+          } catch (error) {
+            errors.push({ row: rowNum, error: `Gagal tambah stock: ${error.message}` });
+          }
+        }
+        
+        continue; // Skip to next row
       }
+      
+      // SKU baru - CREATE mode (existing logic)
+      // Get or create product in Map
+      const productKey = productName.toLowerCase();
+      
+      if (!productsToCreate.has(productKey)) {
+        productsToCreate.set(productKey, {
+          name: productName,
+          description: row['Deskripsi']?.toString().trim() || '',
+          categoryId: category.id,
+          productType,
+          isActive: true,
+          variants: []
+        });
+      }
+
+      const productData = productsToCreate.get(productKey);
+
+      // Validate product type consistency
+      if (productData.productType !== productType) {
+        errors.push({ row: rowNum, error: `Produk "${productName}" memiliki tipe yang berbeda dalam file` });
+        continue;
+      }
+
+      // Parse Type/Value pairs and generate variant name (supports up to 3 attributes)
+      let variantName = 'Default';
+      let variantValue = 'Default';
+      
+      if (productType === 'VARIANT') {
+        const type1 = row['Type 1']?.toString().trim();
+        const value1 = row['Value 1']?.toString().trim();
+        const type2 = row['Type 2']?.toString().trim();
+        const value2 = row['Value 2']?.toString().trim();
+        const type3 = row['Type 3']?.toString().trim();
+        const value3 = row['Value 3']?.toString().trim();
+        
+        // Collect non-empty types and values
+        const types = [];
+        const values = [];
+        
+        if (type1 && value1) {
+          types.push(type1);
+          values.push(value1);
+        } else if (type1 || value1) {
+          errors.push({ row: rowNum, error: 'Type 1 dan Value 1 harus diisi bersama-sama' });
+          continue;
+        }
+        
+        if (type2 && value2) {
+          types.push(type2);
+          values.push(value2);
+        } else if (type2 || value2) {
+          errors.push({ row: rowNum, error: 'Type 2 dan Value 2 harus diisi bersama-sama' });
+          continue;
+        }
+        
+        if (type3 && value3) {
+          types.push(type3);
+          values.push(value3);
+        } else if (type3 || value3) {
+          errors.push({ row: rowNum, error: 'Type 3 dan Value 3 harus diisi bersama-sama' });
+          continue;
+        }
+        
+        // Validate: VARIANT must have at least 1 type-value pair
+        if (types.length === 0) {
+          errors.push({ row: rowNum, error: 'Produk VARIANT harus memiliki minimal 1 pasang Type dan Value' });
+          continue;
+        }
+        
+        // Generate variant name (types) and value (values) with | separator
+        variantName = types.join(' | ');
+        variantValue = values.join(' | ');
+      } else {
+        // For SINGLE products, validate that all type/value fields are empty
+        const type1 = row['Type 1']?.toString().trim();
+        const value1 = row['Value 1']?.toString().trim();
+        const type2 = row['Type 2']?.toString().trim();
+        const value2 = row['Value 2']?.toString().trim();
+        const type3 = row['Type 3']?.toString().trim();
+        const value3 = row['Value 3']?.toString().trim();
+        
+        if (type1 || value1 || type2 || value2 || type3 || value3) {
+          errors.push({ row: rowNum, error: 'Produk SINGLE tidak boleh memiliki Type dan Value. Kosongkan semua kolom atribut' });
+          continue;
+        }
+      }
+
+      // Parse marketplace fields (optional)
+      const weight = row['Weight (g)'] ? parseInt(row['Weight (g)']) : null;
+      const length = row['Length (cm)'] ? parseInt(row['Length (cm)']) : null;
+      const width = row['Width (cm)'] ? parseInt(row['Width (cm)']) : null;
+      const height = row['Height (cm)'] ? parseInt(row['Height (cm)']) : null;
+      const imageUrl = row['Image URL']?.toString().trim() || null;
+
+      // Add variant
+      const variantData = {
+        sku,
+        variantName,
+        variantValue,
+        weight,
+        length,
+        width,
+        height,
+        imageUrl,
+        stocks: [
+          {
+            cabangId: cabang.id,
+            quantity: stock,
+            price: price
+          }
+        ]
+      };
+
+      productData.variants.push(variantData);
+
+    } catch (error) {
+      errors.push({ row: rowNum, error: error.message });
+    }
+  }
+
+  // ===== PREVIEW MODE: Return validation results without creating =====
+  const isPreview = req.query.preview === 'true';
+    
+    if (isPreview) {
+      // Clean up uploaded file
+      if (filePath && fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+      
+      return res.json({
+        preview: true,
+        success: errors.length === 0,
+        totalRows: products.length,
+        validRows: productsToCreate.size,
+        invalidRows: errors.length,
+        productsToCreate: Array.from(productsToCreate.values()).map(p => ({
+          name: p.name,
+          type: p.productType,
+          variants: p.variants.length,
+          category: categories.find(c => c.id === p.categoryId)?.name
+        })),
+        errors
+      });
     }
 
     // Create products in database
@@ -1796,7 +2039,7 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
         if (duplicates.length > 0) {
           errors.push({ 
             product: productData.name, 
-            error: `Variant duplikat ditemukan: "${duplicates[0]}". Pastikan setiap variant berbeda (periksa Value 1 dan Value 2).` 
+            error: `Variant duplikat ditemukan: "${duplicates[0]}". Pastikan setiap variant berbeda (periksa Value 1, Value 2, dan Value 3).` 
           });
           continue;
         }
@@ -1813,6 +2056,11 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
                 sku: v.sku,
                 variantName: v.variantName,
                 variantValue: v.variantValue,
+                weight: v.weight,
+                length: v.length,
+                width: v.width,
+                height: v.height,
+                imageUrl: v.imageUrl,
                 stocks: {
                   create: v.stocks
                 }
@@ -1831,7 +2079,8 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
         success.push({
           product: product.name,
           variants: product.variants.length,
-          message: `Berhasil import produk dengan ${product.variants.length} varian`
+          action: 'created',
+          message: `Berhasil import produk baru dengan ${product.variants.length} varian`
         });
 
         // Emit WebSocket event
@@ -1869,13 +2118,19 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
       fs.unlinkSync(filePath);
     }
 
+    // Separate warnings from actual errors
+    const warnings = errors.filter(e => e.type === 'warning');
+    const actualErrors = errors.filter(e => e.type !== 'warning');
+
     res.json({
       success: success.length > 0,
       imported: success.length,
-      failed: errors.length,
+      failed: actualErrors.length,
+      warnings: warnings.length,
       details: {
         success,
-        errors
+        errors: actualErrors,
+        warnings
       }
     });
 

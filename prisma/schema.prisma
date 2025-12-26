@@ -189,9 +189,17 @@ model ProductVariant {
   id           String   @id @default(cuid())
   product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId    String
-  variantName  String // "Size", "Nomor", "Ukuran"
-  variantValue String // "6", "8", "10", "S", "M", "L"
+  variantName  String // "Size | Color | Material" (pipe-separated, supports up to 3 attributes)
+  variantValue String // "M | Red | Cotton" (pipe-separated values)
   sku          String   @unique // SKU/Barcode
+  
+  // Marketplace fields (optional)
+  weight       Int?     // Weight in grams (for shipping calculation by marketplace)
+  length       Int?     // Length in cm
+  width        Int?     // Width in cm
+  height       Int?     // Height in cm
+  imageUrl     String?  // External image URL (for marketplace sync)
+  
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
