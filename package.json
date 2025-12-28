@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "start:legacy": "node server.js",
+    "start:legacy": "node server.legacy.cjs",
     "dev": "tsx watch src/index.ts",
-    "dev:legacy": "nodemon server.js",
+    "dev:legacy": "nodemon server.legacy.cjs",
     "build": "npx prisma generate && tsc",
     "postinstall": "npm run build",
     "typecheck": "tsc --noEmit",
