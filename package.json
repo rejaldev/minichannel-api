@@ -1,5 +1,5 @@
 {
-  "name": "anekabuana-store-backend",
+  "name": "minichannel-api",
   "version": "2.0.0",
   "type": "module",
   "main": "dist/index.js",
@@ -8,7 +8,8 @@
     "start:legacy": "node server.js",
     "dev": "tsx watch src/index.ts",
     "dev:legacy": "nodemon server.js",
-    "build": "tsc",
+    "build": "npx prisma generate && tsc",
+    "postinstall": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:run": "vitest run",
@@ -19,6 +20,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@hono/node-server": "^1.19.7",
     "@prisma/client": "^6.19.0",
     "@types/ws": "^8.18.1",
     "bcryptjs": "^3.0.3",
@@ -26,6 +28,7 @@
     "csv-parser": "^3.2.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "hono": "^4.11.3",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
     "node-cron": "^4.2.1",
@@ -34,11 +37,9 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@hono/node-server": "^1.19.7",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.0.3",
-    "hono": "^4.11.3",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
