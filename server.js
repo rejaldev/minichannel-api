@@ -84,6 +84,7 @@ const returnRoutes = require('./routes/returns');
 const orderRoutes = require('./routes/orders');
 const stockTransferRoutes = require('./routes/stock-transfers');
 const backupRoutes = require('./routes/backup');
+const stockRoutes = require('./routes/stock');
 
 app.get('/', (req, res) => {
   res.json({ message: 'AnekaBuana Store API - Toko Inventory System' });
@@ -105,6 +106,7 @@ app.use('/api/returns', returnRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/stock-transfers', stockTransferRoutes);
 app.use('/api/backup', backupRoutes);
+app.use('/api/stock', stockRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

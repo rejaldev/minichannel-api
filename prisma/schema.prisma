@@ -118,6 +118,7 @@ model Cabang {
   transfersFrom      StockTransfer[]  @relation("TransfersFrom")
   transfersTo        StockTransfer[]  @relation("TransfersTo")
   stockAdjustments   StockAdjustment[]
+  stockAlerts        StockAlert[]
 
   @@map("cabang")
 }
@@ -210,6 +211,7 @@ model ProductVariant {
   orders             Order[]
   stockTransfers     StockTransfer[]
   stockAdjustments   StockAdjustment[]
+  stockAlerts        StockAlert[]
 
   @@unique([productId, variantName, variantValue])
   @@map("product_variants")
@@ -442,4 +444,20 @@ enum TransferStatus {
   PENDING // Menunggu approval
   COMPLETED // Selesai
   CANCELLED // Dibatalkan
+}
+
+// Stock Alert (Low Stock Notification)
+model StockAlert {
+  id               String         @id @default(cuid())
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
+  productVariantId String
+  cabang           Cabang         @relation(fields: [cabangId], references: [id])
+  cabangId         String
+  minStock         Int // Minimum stock threshold
+  isActive         Boolean        @default(true)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@unique([productVariantId, cabangId])
+  @@map("stock_alerts")
 }

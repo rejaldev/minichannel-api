@@ -661,12 +661,25 @@ router.get('/template', authMiddleware, async (req, res) => {
     XLSX.utils.book_append_sheet(workbook, infoSheet, 'Panduan');
 
     // ========================================
-    // SHEET 3: TEMPLATE IMPORT (With Dropdowns)
+    // SHEET 3: TEMPLATE IMPORT (With Merged Headers)
     // ========================================
     const templateData = [];
     
-    // Header row
-    templateData.push(['SKU', 'Nama Produk', 'Deskripsi', 'Kategori', 'Tipe Produk', 'Type 1', 'Value 1', 'Type 2', 'Value 2', 'Type 3', 'Value 3', 'Harga', 'Stok', 'Cabang', 'Weight (g)', 'Length (cm)', 'Width (cm)', 'Height (cm)', 'Image URL']);
+    // Merged header row (grouping labels)
+    templateData.push([
+      'INFO PRODUK', '', '', '', '',  // 5 cols
+      'VARIANT ATTRIBUTES', '', '', '', '', '',  // 6 cols
+      'PRICING & STOCK', '', '',  // 3 cols
+      'SPESIFIKASI MARKETPLACE', '', '', '', ''  // 5 cols
+    ]);
+    
+    // Actual header row with field names
+    templateData.push([
+      'SKU*', 'Nama Produk*', 'Deskripsi', 'Kategori*', 'Tipe Produk*',
+      'Type 1', 'Value 1', 'Type 2', 'Value 2', 'Type 3', 'Value 3',
+      'Harga*', 'Stok*', 'Cabang*',
+      'Berat (g)', 'Panjang (cm)', 'Lebar (cm)', 'Tinggi (cm)', 'Link Gambar'
+    ]);
     
     // Add 100 empty rows for user input
     for (let i = 0; i < 100; i++) {
@@ -675,52 +688,60 @@ router.get('/template', authMiddleware, async (req, res) => {
 
     const templateSheet = XLSX.utils.aoa_to_sheet(templateData);
     
+    // Merge cells for grouped headers (row 1)
+    templateSheet['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 4 } },   // INFO PRODUK (A1:E1)
+      { s: { r: 0, c: 5 }, e: { r: 0, c: 10 } },  // VARIANT ATTRIBUTES (F1:K1)
+      { s: { r: 0, c: 11 }, e: { r: 0, c: 13 } }, // PRICING & STOCK (L1:N1)
+      { s: { r: 0, c: 14 }, e: { r: 0, c: 18 } }  // SPESIFIKASI MARKETPLACE (O1:S1)
+    ];
+    
     // Set column widths
     templateSheet['!cols'] = [
-      { wch: 18 }, // SKU
-      { wch: 28 }, // Nama Produk
-      { wch: 35 }, // Deskripsi
-      { wch: 18 }, // Kategori
-      { wch: 15 }, // Tipe Produk
+      { wch: 15 }, // SKU
+      { wch: 25 }, // Nama Produk
+      { wch: 30 }, // Deskripsi
+      { wch: 15 }, // Kategori
+      { wch: 12 }, // Tipe Produk
       { wch: 12 }, // Type 1
-      { wch: 15 }, // Value 1
+      { wch: 12 }, // Value 1
       { wch: 12 }, // Type 2
-      { wch: 15 }, // Value 2
+      { wch: 12 }, // Value 2
       { wch: 12 }, // Type 3
-      { wch: 15 }, // Value 3
+      { wch: 12 }, // Value 3
       { wch: 12 }, // Harga
       { wch: 10 }, // Stok
-      { wch: 18 }, // Cabang
-      { wch: 12 }, // Weight
-      { wch: 12 }, // Length
-      { wch: 12 }, // Width
-      { wch: 12 }, // Height
-      { wch: 40 }  // Image URL
+      { wch: 15 }, // Cabang
+      { wch: 10 }, // Berat
+      { wch: 12 }, // Panjang
+      { wch: 10 }, // Lebar
+      { wch: 10 }, // Tinggi
+      { wch: 35 }  // Link Gambar
     ];
 
     // Add data validation (dropdowns)
     if (!templateSheet['!dataValidation']) templateSheet['!dataValidation'] = [];
     
-    // Dropdown for Kategori (Column D, rows 2-101)
+    // Dropdown for Kategori (Column D, rows 3-102 - skip merged header row)
     const categoryNames = categories.map(c => c.name).join(',');
     templateSheet['!dataValidation'].push({
       type: 'list',
-      sqref: 'D2:D101',
+      sqref: 'D3:D102',
       formulas: [categoryNames]
     });
     
-    // Dropdown for Tipe Produk (Column E, rows 2-101)
+    // Dropdown for Tipe Produk (Column E, rows 3-102)
     templateSheet['!dataValidation'].push({
       type: 'list',
-      sqref: 'E2:E101',
+      sqref: 'E3:E102',
       formulas: ['SINGLE,VARIANT']
     });
     
-    // Dropdown for Cabang (Column L, rows 2-101)
+    // Dropdown for Cabang (Column N, rows 3-102)
     const cabangNames = cabangs.map(c => c.name).join(',');
     templateSheet['!dataValidation'].push({
       type: 'list',
-      sqref: 'L2:L101',
+      sqref: 'N3:N102',
       formulas: [cabangNames]
     });
     
@@ -768,25 +789,25 @@ router.get('/export', authMiddleware, async (req, res) => {
           const variantValues = variant.variantValue?.split(' | ') || [];
           
           exportData.push([
-            variant.sku || '',
-            product.name,
-            product.description || '',
-            product.category?.name || '',
-            product.productType,
-            variantNames[0] || '', // Type 1
-            variantValues[0] || '', // Value 1
-            variantNames[1] || '', // Type 2
-            variantValues[1] || '', // Value 2
-            variantNames[2] || '', // Type 3
-            variantValues[2] || '', // Value 3
-            stock.price || 0,
-            stock.quantity || 0,
-            stock.cabang.name,
-            variant.weight || '', // Weight in grams
-            variant.length || '', // Length in cm
-            variant.width || '',  // Width in cm
-            variant.height || '', // Height in cm
-            variant.imageUrl || '' // Image URL
+            variant.sku || '',              // SKU
+            product.name,                   // Nama Produk
+            product.description || '',      // Deskripsi
+            product.category?.name || '',   // Kategori
+            product.productType,            // Tipe Produk
+            variantNames[0] || '',          // Type 1
+            variantValues[0] || '',         // Value 1
+            variantNames[1] || '',          // Type 2
+            variantValues[1] || '',         // Value 2
+            variantNames[2] || '',          // Type 3
+            variantValues[2] || '',         // Value 3
+            stock.price || 0,               // Harga
+            stock.quantity || 0,            // Stok
+            stock.cabang.name,              // Cabang
+            variant.weight || '',           // Berat (g)
+            variant.length || '',           // Panjang (cm)
+            variant.width || '',            // Lebar (cm)
+            variant.height || '',           // Tinggi (cm)
+            variant.imageUrl || ''          // Link Gambar
           ]);
         });
       });
@@ -799,53 +820,69 @@ router.get('/export', authMiddleware, async (req, res) => {
     // Create workbook
     const workbook = XLSX.utils.book_new();
     
+    // Merged header row (grouping labels)
+    const mergedHeaderRow = [
+      'INFO PRODUK', '', '', '', '',
+      'VARIANT ATTRIBUTES', '', '', '', '', '',
+      'PRICING & STOCK', '', '',
+      'SPESIFIKASI MARKETPLACE', '', '', '', ''
+    ];
+    
     // Header matches import template format
     const header = [
-      'SKU',
-      'Nama Produk',
+      'SKU*',
+      'Nama Produk*',
       'Deskripsi',
-      'Kategori',
-      'Tipe Produk',
+      'Kategori*',
+      'Tipe Produk*',
       'Type 1',
       'Value 1',
       'Type 2',
       'Value 2',
       'Type 3',
       'Value 3',
-      'Harga',
-      'Stok',
-      'Cabang',
-      'Weight (g)',
-      'Length (cm)',
-      'Width (cm)',
-      'Height (cm)',
-      'Image URL'
+      'Harga*',
+      'Stok*',
+      'Cabang*',
+      'Berat (g)',
+      'Panjang (cm)',
+      'Lebar (cm)',
+      'Tinggi (cm)',
+      'Link Gambar'
     ];
     
-    const worksheetData = [header, ...exportData];
+    const worksheetData = [mergedHeaderRow, header, ...exportData];
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+    
+    // Merge cells for grouped headers (row 1)
+    worksheet['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 4 } },   // INFO PRODUK
+      { s: { r: 0, c: 5 }, e: { r: 0, c: 10 } },  // VARIANT ATTRIBUTES
+      { s: { r: 0, c: 11 }, e: { r: 0, c: 13 } }, // PRICING & STOCK
+      { s: { r: 0, c: 14 }, e: { r: 0, c: 18 } }  // SPESIFIKASI MARKETPLACE
+    ];
     
     // Set column widths (same as template)
     worksheet['!cols'] = [
-      { wch: 18 }, // SKU
-      { wch: 28 }, // Nama Produk
-      { wch: 35 }, // Deskripsi
-      { wch: 18 }, // Kategori
-      { wch: 15 }, // Tipe Produk
+      { wch: 15 }, // SKU
+      { wch: 25 }, // Nama Produk
+      { wch: 30 }, // Deskripsi
+      { wch: 15 }, // Kategori
+      { wch: 12 }, // Tipe Produk
       { wch: 12 }, // Type 1
-      { wch: 15 }, // Value 1
+      { wch: 12 }, // Value 1
       { wch: 12 }, // Type 2
-      { wch: 15 }, // Value 2
+      { wch: 12 }, // Value 2
       { wch: 12 }, // Type 3
-      { wch: 15 }, // Value 3
+      { wch: 12 }, // Value 3
       { wch: 12 }, // Harga
       { wch: 10 }, // Stok
-      { wch: 18 }, // Cabang
-      { wch: 12 }, // Weight
-      { wch: 12 }, // Length
-      { wch: 12 }, // Width
-      { wch: 12 }, // Height
-      { wch: 40 }  // Image URL
+      { wch: 15 }, // Cabang
+      { wch: 10 }, // Berat
+      { wch: 12 }, // Panjang
+      { wch: 10 }, // Lebar
+      { wch: 10 }, // Tinggi
+      { wch: 35 }  // Link Gambar
     ];
     
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Template Import');
@@ -1699,14 +1736,14 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
     
     const worksheet = workbook.Sheets[sheetName];
     
-    // Parse with header row at index 0 (row 1 in Excel)
+    // Parse with header row at index 1 (row 2 in Excel) - skip merged header row
     const products = XLSX.utils.sheet_to_json(worksheet, { 
-      range: 0, // Start from row 1 (header)
+      range: 1, // Start from row 2 (actual headers, skip merged header row 1)
       defval: '' // Default empty string for empty cells
     });
 
     if (products.length === 0) {
-      return res.status(400).json({ error: 'File kosong atau format tidak valid. Pastikan Sheet "Template Import" berisi data dengan header di baris 1.' });
+      return res.status(400).json({ error: 'File kosong atau format tidak valid. Pastikan Sheet "Template Import" berisi data dengan header di baris 2.' });
     }
 
     // Get all categories and cabangs
@@ -1757,14 +1794,14 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
         continue; // Skip silently
       }
 
-      // Validate required fields
-      const sku = row['SKU']?.toString().trim();
-      const productName = row['Nama Produk']?.toString().trim();
-      const categoryName = row['Kategori']?.toString().trim();
-      const productType = row['Tipe Produk']?.toString().toUpperCase().trim();
-      const price = parseInt(row['Harga']);
-      const stock = parseInt(row['Stok']);
-      const cabangName = row['Cabang']?.toString().trim();
+      // Validate required fields with new column names (with asterisks)
+      const sku = row['SKU*']?.toString().trim();
+      const productName = row['Nama Produk*']?.toString().trim();
+      const categoryName = row['Kategori*']?.toString().trim();
+      const productType = row['Tipe Produk*']?.toString().toUpperCase().trim();
+      const price = parseInt(row['Harga*']);
+      const stock = parseInt(row['Stok*']);
+      const cabangName = row['Cabang*']?.toString().trim();
 
       if (!sku || !productName || !categoryName || !productType || isNaN(price) || isNaN(stock) || !cabangName) {
         errors.push({ row: rowNum, error: 'Data tidak lengkap. Pastikan SKU, Nama Produk, Kategori, Tipe Produk, Harga, Stok, dan Cabang diisi' });
@@ -1971,12 +2008,12 @@ router.post('/import', authMiddleware, ownerOrManager, upload.single('file'), as
         }
       }
 
-      // Parse marketplace fields (optional)
-      const weight = row['Weight (g)'] ? parseInt(row['Weight (g)']) : null;
-      const length = row['Length (cm)'] ? parseInt(row['Length (cm)']) : null;
-      const width = row['Width (cm)'] ? parseInt(row['Width (cm)']) : null;
-      const height = row['Height (cm)'] ? parseInt(row['Height (cm)']) : null;
-      const imageUrl = row['Image URL']?.toString().trim() || null;
+      // Parse marketplace fields (optional) - updated column names
+      const weight = row['Berat (g)'] ? parseInt(row['Berat (g)']) : null;
+      const length = row['Panjang (cm)'] ? parseInt(row['Panjang (cm)']) : null;
+      const width = row['Lebar (cm)'] ? parseInt(row['Lebar (cm)']) : null;
+      const height = row['Tinggi (cm)'] ? parseInt(row['Tinggi (cm)']) : null;
+      const imageUrl = row['Link Gambar']?.toString().trim() || null;
 
       // Add variant
       const variantData = {
