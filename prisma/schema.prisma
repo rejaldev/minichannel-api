@@ -11,6 +11,74 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ==================== SALES CHANNELS ====================
+
+// Channel Type enum
+enum ChannelType {
+  POS         // Point of Sale (built-in)
+  MARKETPLACE // Tokopedia, Shopee, Lazada, etc
+  WEBSITE     // E-commerce website sendiri
+  SOCIAL      // WhatsApp, Instagram, etc
+  OTHER       // Manual input, etc
+}
+
+// Unified Transaction Status
+enum TransactionStatus {
+  PENDING     // Menunggu pembayaran/konfirmasi
+  ONPROCESS   // Sedang diproses/dikemas
+  SHIPPED     // Dalam pengiriman
+  COMPLETED   // Selesai
+  CANCELLED   // Dibatalkan
+}
+
+// Sales Channel - configurable marketplace/channel
+model SalesChannel {
+  id           String      @id @default(cuid())
+  code         String      @unique  // "POS", "TOKOPEDIA", "SHOPEE", etc
+  name         String               // Display name
+  type         ChannelType @default(MARKETPLACE)
+  icon         String?              // Icon name atau URL
+  color        String?              // Brand color hex
+  isActive     Boolean     @default(true)
+  isBuiltIn    Boolean     @default(false) // POS = true
+  
+  // Integration config (encrypted in production)
+  apiConfig    Json?       // { apiKey, secretKey, shopId, refreshToken, etc }
+  
+  // Field mapping for data transformation
+  fieldMapping Json?       // { "orderId": "order_sn", "status": "order_status" }
+  
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  transactions  Transaction[]
+  channelStocks ChannelStock[]
+
+  @@map("sales_channels")
+}
+
+// Channel Stock - stock allocation per channel
+model ChannelStock {
+  id               String         @id @default(cuid())
+  channel          SalesChannel   @relation(fields: [channelId], references: [id])
+  channelId        String
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
+  productVariantId String
+  
+  allocatedQty     Int            @default(0)  // Stock dialokasikan ke channel ini
+  reservedQty      Int            @default(0)  // Stock di-reserve (checkout tapi belum bayar)
+  soldQty          Int            @default(0)  // Total terjual via channel ini
+  
+  isActive         Boolean        @default(true)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@unique([channelId, productVariantId])
+  @@map("channel_stocks")
+}
+
+// ==================== USER MANAGEMENT ====================
+
 // User Management
 model User {
   id        String   @id @default(cuid())
@@ -205,6 +273,7 @@ model ProductVariant {
   updatedAt    DateTime @updatedAt
 
   stocks             Stock[]
+  channelStocks      ChannelStock[]
   transactionItems   TransactionItem[]
   returnItems        ReturnItem[]
   priceDiscrepancies PriceDiscrepancy[]
@@ -265,41 +334,67 @@ enum AdjustmentReason {
   OTHER // Lainnya
 }
 
-// Transaksi Penjualan
+// Transaksi Penjualan (POS + Marketplace)
 model Transaction {
-  id             String        @id @default(cuid())
-  transactionNo  String        @unique // INV-20251107-0001
-  cabang         Cabang        @relation(fields: [cabangId], references: [id])
+  id             String            @id @default(cuid())
+  transactionNo  String            @unique // INV-20251107-0001
+  
+  // Channel & Status
+  channel        SalesChannel?     @relation(fields: [channelId], references: [id])
+  channelId      String?           // FK to SalesChannel (null = legacy POS)
+  status         TransactionStatus @default(COMPLETED) // Unified status
+  
+  // Branch & Staff
+  cabang         Cabang            @relation(fields: [cabangId], references: [id])
   cabangId       String
-  kasir          User          @relation(fields: [kasirId], references: [id])
-  kasirId        String
+  kasir          User?             @relation(fields: [kasirId], references: [id])
+  kasirId        String?           // Optional - marketplace tidak perlu kasir
+  
+  // Customer Info
   customerName   String?
   customerPhone  String?
+  buyerUsername  String?           // Username pembeli di marketplace
+  
+  // Amounts
   subtotal       Float
-  discount       Float         @default(0)
-  tax            Float         @default(0)
+  discount       Float             @default(0)
+  tax            Float             @default(0)
+  shippingCost   Float             @default(0) // Ongkir
+  platformFee    Float             @default(0) // Fee marketplace
   total          Float
-  paymentMethod  PaymentMethod
-  paymentStatus  PaymentStatus @default(COMPLETED)
-  // Payment Details
-  bankName       String? // Nama bank untuk DEBIT/TRANSFER
-  referenceNo    String? // Nomor referensi/approval
-  cardLastDigits String? // 4 digit terakhir kartu (DEBIT)
-  // Split Payment
-  isSplitPayment Boolean       @default(false)
-  paymentAmount1 Float? // Jumlah pembayaran metode 1
-  paymentMethod2 PaymentMethod? // Metode pembayaran kedua
-  paymentAmount2 Float? // Jumlah pembayaran metode 2
-  bankName2      String? // Nama bank untuk metode 2
-  referenceNo2   String? // Nomor referensi metode 2
+  
+  // Payment (for POS)
+  paymentMethod  PaymentMethod?
+  paymentStatus  PaymentStatus     @default(COMPLETED)
+  bankName       String?           // Nama bank untuk DEBIT/TRANSFER
+  referenceNo    String?           // Nomor referensi/approval
+  cardLastDigits String?           // 4 digit terakhir kartu (DEBIT)
+  
+  // Split Payment (POS only)
+  isSplitPayment Boolean           @default(false)
+  paymentAmount1 Float?
+  paymentMethod2 PaymentMethod?
+  paymentAmount2 Float?
+  bankName2      String?
+  referenceNo2   String?
+  
+  // External Marketplace Data
+  externalOrderId  String?         // Order ID dari marketplace
+  externalInvoice  String?         // Invoice/AWB number
+  externalStatus   String?         // Status asli dari marketplace
+  externalData     Json?           // Data tambahan (shipping, courier, etc)
+  
   notes          String?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
 
   items              TransactionItem[]
   priceDiscrepancies PriceDiscrepancy[]
   returns            Return[]
 
+  @@index([channelId])
+  @@index([status])
+  @@index([externalOrderId])
   @@map("transactions")
 }
 

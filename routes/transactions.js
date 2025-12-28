@@ -149,12 +149,19 @@ router.post('/', authMiddleware, async (req, res) => {
       }
     }
 
+    // Get default POS channel
+    const posChannel = await prisma.salesChannel.findFirst({
+      where: { code: 'POS', isBuiltIn: true }
+    });
+
     // Create transaction with items and update stock in a transaction
     const transaction = await prisma.$transaction(async (tx) => {
       // Create transaction
       const newTransaction = await tx.transaction.create({
         data: {
           transactionNo: generateTransactionNo(),
+          channelId: posChannel?.id || null, // Link to POS channel
+          status: 'COMPLETED', // POS transactions are immediately completed
           cabangId,
           kasirId: req.user.userId,
           customerName: customerName || null,
@@ -249,7 +256,7 @@ router.post('/', authMiddleware, async (req, res) => {
 // Get all transactions with filters
 router.get('/', authMiddleware, async (req, res) => {
   try {
-    const { cabangId, startDate, endDate, paymentMethod } = req.query;
+    const { cabangId, startDate, endDate, paymentMethod, channelId, status, search } = req.query;
 
     const where = {};
     
@@ -271,6 +278,26 @@ router.get('/', authMiddleware, async (req, res) => {
       where.paymentMethod = paymentMethod;
     }
 
+    // Channel filter
+    if (channelId) {
+      where.channelId = channelId;
+    }
+
+    // Status filter
+    if (status) {
+      where.status = status;
+    }
+
+    // Search by transaction number or external order ID
+    if (search) {
+      where.OR = [
+        { transactionNo: { contains: search, mode: 'insensitive' } },
+        { externalOrderId: { contains: search, mode: 'insensitive' } },
+        { customerName: { contains: search, mode: 'insensitive' } },
+        { buyerUsername: { contains: search, mode: 'insensitive' } }
+      ];
+    }
+
     const transactions = await prisma.transaction.findMany({
       where,
       include: {
@@ -290,7 +317,8 @@ router.get('/', authMiddleware, async (req, res) => {
             name: true,
             email: true
           }
-        }
+        },
+        channel: true
       },
       orderBy: { createdAt: 'desc' },
       take: 100 // Limit results

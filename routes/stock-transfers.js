@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../lib/prisma');
 const { authMiddleware } = require('../middleware/auth');
+const { emitStockUpdated } = require('../lib/socket');
 
 // Generate transfer number
 function generateTransferNo() {
@@ -11,12 +12,14 @@ function generateTransferNo() {
   return `TRF-${dateStr}-${random}`;
 }
 
-// Create stock transfer (ADMIN only)
+// Create stock transfer request
+// ADMIN: Creates with PENDING status (needs approval)
+// MANAGER/OWNER: Creates with COMPLETED status (auto-approved)
 router.post('/', authMiddleware, async (req, res) => {
   try {
-    // Only ADMIN and OWNER can create transfers
-    if (req.user.role !== 'ADMIN' && req.user.role !== 'OWNER') {
-      return res.status(403).json({ error: 'Only ADMIN can transfer stock' });
+    // Only ADMIN, MANAGER, OWNER can create transfers
+    if (req.user.role === 'KASIR') {
+      return res.status(403).json({ error: 'Access denied' });
     }
 
     const { variantId, fromCabangId, toCabangId, quantity, notes } = req.body;
@@ -43,6 +46,13 @@ router.post('/', authMiddleware, async (req, res) => {
           productVariantId: variantId,
           cabangId: fromCabangId
         }
+      },
+      include: {
+        productVariant: {
+          include: {
+            product: { select: { id: true, name: true } }
+          }
+        }
       }
     });
 
@@ -56,41 +66,13 @@ router.post('/', authMiddleware, async (req, res) => {
       });
     }
 
-    // Start transaction
+    // Determine if auto-approve (MANAGER/OWNER) or needs approval (ADMIN)
+    const isAutoApprove = req.user.role === 'MANAGER' || req.user.role === 'OWNER';
+    const status = isAutoApprove ? 'COMPLETED' : 'PENDING';
+
+    // Create transfer record
     const result = await prisma.$transaction(async (tx) => {
-      // Deduct from source
-      await tx.stock.update({
-        where: {
-          productVariantId_cabangId: {
-            productVariantId: variantId,
-            cabangId: fromCabangId
-          }
-        },
-        data: {
-          quantity: { decrement: quantity }
-        }
-      });
-
-      // Add to destination (upsert in case doesn't exist)
-      await tx.stock.upsert({
-        where: {
-          productVariantId_cabangId: {
-            productVariantId: variantId,
-            cabangId: toCabangId
-          }
-        },
-        update: {
-          quantity: { increment: quantity }
-        },
-        create: {
-          productVariantId: variantId,
-          cabangId: toCabangId,
-          quantity: quantity,
-          price: sourceStock.price // Copy price from source
-        }
-      });
-
-      // Create transfer record
+      // Create transfer record first
       const transfer = await tx.stockTransfer.create({
         data: {
           transferNo: generateTransferNo(),
@@ -100,35 +82,228 @@ router.post('/', authMiddleware, async (req, res) => {
           quantity,
           transferredById: req.user.userId,
           notes: notes || null,
-          status: 'COMPLETED'
+          status
         },
         include: {
           productVariant: {
             include: {
-              product: {
-                select: { id: true, name: true }
-              }
+              product: { select: { id: true, name: true } }
             }
           },
-          fromCabang: {
-            select: { id: true, name: true }
-          },
-          toCabang: {
-            select: { id: true, name: true }
-          },
-          transferredBy: {
-            select: { id: true, name: true, email: true }
-          }
+          fromCabang: { select: { id: true, name: true } },
+          toCabang: { select: { id: true, name: true } },
+          transferredBy: { select: { id: true, name: true, email: true, role: true } }
         }
       });
 
+      // If auto-approved, update stock immediately
+      if (isAutoApprove) {
+        // Deduct from source
+        await tx.stock.update({
+          where: {
+            productVariantId_cabangId: {
+              productVariantId: variantId,
+              cabangId: fromCabangId
+            }
+          },
+          data: { quantity: { decrement: quantity } }
+        });
+
+        // Add to destination (upsert in case doesn't exist)
+        await tx.stock.upsert({
+          where: {
+            productVariantId_cabangId: {
+              productVariantId: variantId,
+              cabangId: toCabangId
+            }
+          },
+          update: { quantity: { increment: quantity } },
+          create: {
+            productVariantId: variantId,
+            cabangId: toCabangId,
+            quantity: quantity,
+            price: sourceStock.price
+          }
+        });
+      }
+
       return transfer;
     });
+
+    // Emit socket event if completed
+    if (isAutoApprove) {
+      emitStockUpdated({
+        type: 'transfer',
+        transferId: result.id,
+        fromCabangId,
+        toCabangId,
+        variantId,
+        quantity
+      });
+    }
 
     res.status(201).json(result);
   } catch (error) {
     console.error('Create stock transfer error:', error);
     res.status(500).json({ error: 'Failed to create stock transfer' });
+  }
+});
+
+// Approve transfer (MANAGER/OWNER only)
+router.patch('/:id/approve', authMiddleware, async (req, res) => {
+  try {
+    // Only MANAGER/OWNER can approve
+    if (req.user.role !== 'MANAGER' && req.user.role !== 'OWNER') {
+      return res.status(403).json({ error: 'Only Manager/Owner can approve transfers' });
+    }
+
+    const { id } = req.params;
+
+    const transfer = await prisma.stockTransfer.findUnique({
+      where: { id },
+      include: {
+        productVariant: {
+          include: {
+            product: { select: { id: true, name: true } }
+          }
+        }
+      }
+    });
+
+    if (!transfer) {
+      return res.status(404).json({ error: 'Transfer not found' });
+    }
+
+    if (transfer.status !== 'PENDING') {
+      return res.status(400).json({ error: 'Transfer already processed' });
+    }
+
+    // Check stock availability
+    const sourceStock = await prisma.stock.findUnique({
+      where: {
+        productVariantId_cabangId: {
+          productVariantId: transfer.variantId,
+          cabangId: transfer.fromCabangId
+        }
+      }
+    });
+
+    if (!sourceStock || sourceStock.quantity < transfer.quantity) {
+      return res.status(400).json({ 
+        error: `Insufficient stock. Available: ${sourceStock?.quantity || 0}` 
+      });
+    }
+
+    // Approve and update stock
+    const result = await prisma.$transaction(async (tx) => {
+      // Deduct from source
+      await tx.stock.update({
+        where: {
+          productVariantId_cabangId: {
+            productVariantId: transfer.variantId,
+            cabangId: transfer.fromCabangId
+          }
+        },
+        data: { quantity: { decrement: transfer.quantity } }
+      });
+
+      // Add to destination
+      await tx.stock.upsert({
+        where: {
+          productVariantId_cabangId: {
+            productVariantId: transfer.variantId,
+            cabangId: transfer.toCabangId
+          }
+        },
+        update: { quantity: { increment: transfer.quantity } },
+        create: {
+          productVariantId: transfer.variantId,
+          cabangId: transfer.toCabangId,
+          quantity: transfer.quantity,
+          price: sourceStock.price
+        }
+      });
+
+      // Update transfer status
+      return await tx.stockTransfer.update({
+        where: { id },
+        data: { status: 'COMPLETED' },
+        include: {
+          productVariant: {
+            include: {
+              product: { select: { id: true, name: true } }
+            }
+          },
+          fromCabang: { select: { id: true, name: true } },
+          toCabang: { select: { id: true, name: true } },
+          transferredBy: { select: { id: true, name: true, email: true, role: true } }
+        }
+      });
+    });
+
+    // Emit socket event
+    emitStockUpdated({
+      type: 'transfer',
+      transferId: result.id,
+      fromCabangId: transfer.fromCabangId,
+      toCabangId: transfer.toCabangId,
+      variantId: transfer.variantId,
+      quantity: transfer.quantity
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error('Approve transfer error:', error);
+    res.status(500).json({ error: 'Failed to approve transfer' });
+  }
+});
+
+// Reject/Cancel transfer (MANAGER/OWNER only, or ADMIN for their own pending)
+router.patch('/:id/reject', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reason } = req.body;
+
+    const transfer = await prisma.stockTransfer.findUnique({
+      where: { id }
+    });
+
+    if (!transfer) {
+      return res.status(404).json({ error: 'Transfer not found' });
+    }
+
+    if (transfer.status !== 'PENDING') {
+      return res.status(400).json({ error: 'Transfer already processed' });
+    }
+
+    // ADMIN can only cancel their own transfers
+    // MANAGER/OWNER can cancel any
+    if (req.user.role === 'ADMIN' && transfer.transferredById !== req.user.userId) {
+      return res.status(403).json({ error: 'You can only cancel your own transfer requests' });
+    }
+
+    const result = await prisma.stockTransfer.update({
+      where: { id },
+      data: { 
+        status: 'CANCELLED',
+        notes: reason ? `${transfer.notes || ''} [CANCELLED: ${reason}]`.trim() : transfer.notes
+      },
+      include: {
+        productVariant: {
+          include: {
+            product: { select: { id: true, name: true } }
+          }
+        },
+        fromCabang: { select: { id: true, name: true } },
+        toCabang: { select: { id: true, name: true } },
+        transferredBy: { select: { id: true, name: true, email: true, role: true } }
+      }
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error('Reject transfer error:', error);
+    res.status(500).json({ error: 'Failed to reject transfer' });
   }
 });
 
