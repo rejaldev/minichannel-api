@@ -87,7 +87,7 @@ const stockRoutes = require('./routes/stock');
 const channelRoutes = require('./routes/channels');
 
 app.get('/', (req, res) => {
-  res.json({ message: 'AnekaBuana Store API - Toko Inventory System' });
+  res.json({ message: 'MiniChannel API - Toko Inventory System' });
 });
 
 // Health check

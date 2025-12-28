@@ -466,7 +466,7 @@ model PrinterSettings {
   autoPrintEnabled Boolean  @default(true)
   printerName      String?
   paperWidth       Int      @default(80)
-  storeName        String   @default("ANEKABUANA STORE")
+  storeName        String   @default("MINICHANNEL")
   branchName       String?
   address          String?
   phone            String?

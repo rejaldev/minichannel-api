@@ -1,4 +1,4 @@
-// PM2 Ecosystem Configuration for AnekaBuana Store Backend
+// PM2 Ecosystem Configuration for MiniChannel Backend
 // Usage: pm2 start ecosystem.config.js
 
 module.exports = {

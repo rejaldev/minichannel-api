@@ -7,7 +7,7 @@ CREATE TABLE "printer_settings" (
     "paperWidth" INTEGER NOT NULL DEFAULT 80,
     "showPreview" BOOLEAN NOT NULL DEFAULT false,
     "printCopies" INTEGER NOT NULL DEFAULT 1,
-    "storeName" TEXT NOT NULL DEFAULT 'ANEKABUANA STORE',
+    "storeName" TEXT NOT NULL DEFAULT 'MINICHANNEL',
     "branchName" TEXT,
     "address" TEXT,
     "phone" TEXT,
