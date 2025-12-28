@@ -56,11 +56,16 @@ auth.post('/register', async (c) => {
 // Login
 auth.post('/login', async (c) => {
   try {
+    // Debug: log raw body
+    const rawBody = await c.req.text();
+    console.log('Login raw body:', rawBody);
+    console.log('Content-Type:', c.req.header('content-type'));
+    
     let body;
     try {
-      body = await c.req.json();
+      body = JSON.parse(rawBody);
     } catch {
-      return c.json({ error: 'Request body harus berupa JSON valid' }, 400);
+      return c.json({ error: 'Request body harus berupa JSON valid', received: rawBody.substring(0, 100) }, 400);
     }
     
     const { email, password } = body;
