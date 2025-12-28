@@ -117,8 +117,9 @@ app.use((err, req, res, next) => {
 // Initialize backup scheduler
 initBackupScheduler();
 
-// Start server - localhost only
-httpServer.listen(PORT, 'localhost', () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+// Start server - bind to 0.0.0.0 for cloud deployment
+const HOST = process.env.HOST || '0.0.0.0';
+httpServer.listen(PORT, HOST, () => {
+  console.log(`🚀 Server running on http://${HOST}:${PORT}`);
   console.log(`🔌 WebSocket server ready`);
 });
