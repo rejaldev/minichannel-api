@@ -41,11 +41,17 @@ const allowedOrigins = [
 app.use('*', cors({
   origin: (origin) => {
     if (!origin) return origin;
+    // Allow Vercel preview deployments
     if (origin.endsWith('.vercel.app')) return origin;
+    // Allow custom domains ending with ziqrishahab.com
+    if (origin.endsWith('.ziqrishahab.com') || origin === 'https://ziqrishahab.com') return origin;
+    // Allow configured origins
     if (allowedOrigins.includes(origin)) return origin;
     return null;
   },
-  credentials: true
+  credentials: true,
+  allowHeaders: ['Content-Type', 'Authorization'],
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 }));
 
 // Logger middleware
