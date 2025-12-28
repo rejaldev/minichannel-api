@@ -56,7 +56,14 @@ auth.post('/register', async (c) => {
 // Login
 auth.post('/login', async (c) => {
   try {
-    const { email, password } = await c.req.json();
+    let body;
+    try {
+      body = await c.req.json();
+    } catch {
+      return c.json({ error: 'Request body harus berupa JSON valid' }, 400);
+    }
+    
+    const { email, password } = body;
 
     if (!email || !password) {
       return c.json({ error: 'Email dan password wajib diisi' }, 400);
