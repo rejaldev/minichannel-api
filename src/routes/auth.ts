@@ -56,19 +56,7 @@ auth.post('/register', async (c) => {
 // Login
 auth.post('/login', async (c) => {
   try {
-    // Debug: log raw body
-    const rawBody = await c.req.text();
-    console.log('Login raw body:', rawBody);
-    console.log('Content-Type:', c.req.header('content-type'));
-    
-    let body;
-    try {
-      body = JSON.parse(rawBody);
-    } catch {
-      return c.json({ error: 'Request body harus berupa JSON valid', received: rawBody.substring(0, 100) }, 400);
-    }
-    
-    const { email, password } = body;
+    const { email, password } = await c.req.json();
 
     if (!email || !password) {
       return c.json({ error: 'Email dan password wajib diisi' }, 400);
