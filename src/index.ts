@@ -93,34 +93,65 @@ app.notFound((c) => {
 
 // Create HTTP server with Socket.io
 const server = createServer(async (req, res) => {
-  // Collect body chunks
-  const chunks: Buffer[] = [];
-  for await (const chunk of req) {
-    chunks.push(chunk);
-  }
-  const body = Buffer.concat(chunks);
-  
-  // Let Hono handle the request
-  const url = new URL(req.url || '/', `http://${req.headers.host}`);
-  const headers: Record<string, string> = {};
-  for (const [key, value] of Object.entries(req.headers)) {
-    if (typeof value === 'string') {
-      headers[key] = value;
-    } else if (Array.isArray(value)) {
-      headers[key] = value.join(', ');
+  try {
+    // Collect body chunks
+    const chunks: Buffer[] = [];
+    for await (const chunk of req) {
+      chunks.push(chunk);
+    }
+    const body = Buffer.concat(chunks);
+    
+    // Let Hono handle the request
+    const url = new URL(req.url || '/', `http://${req.headers.host}`);
+    const headers: Record<string, string> = {};
+    for (const [key, value] of Object.entries(req.headers)) {
+      if (typeof value === 'string') {
+        headers[key] = value;
+      } else if (Array.isArray(value)) {
+        headers[key] = value.join(', ');
+      }
+    }
+    
+    const request = new Request(url.toString(), {
+      method: req.method,
+      headers,
+      body: ['GET', 'HEAD'].includes(req.method || '') ? undefined : body,
+    });
+    
+    const response = await app.fetch(request);
+    res.writeHead(response.status, Object.fromEntries(response.headers));
+    const responseBody = await response.text();
+    res.end(responseBody);
+  } catch (error: unknown) {
+    // Handle connection errors gracefully
+    const errorMessage = error instanceof Error ? error.message : '';
+    const errorCode = (error as NodeJS.ErrnoException)?.code;
+    
+    // Ignore client disconnect errors
+    if (errorMessage === 'aborted' || errorCode === 'ECONNRESET') {
+      return;
+    }
+    
+    console.error('Server error:', error);
+    if (!res.headersSent) {
+      res.writeHead(500);
+      res.end('Internal Server Error');
     }
   }
-  
-  const request = new Request(url.toString(), {
-    method: req.method,
-    headers,
-    body: ['GET', 'HEAD'].includes(req.method || '') ? undefined : body,
-  });
-  
-  const response = await app.fetch(request);
-  res.writeHead(response.status, Object.fromEntries(response.headers));
-  const responseBody = await response.text();
-  res.end(responseBody);
+});
+
+// Handle server errors
+server.on('error', (error) => {
+  console.error('Server error:', error);
+});
+
+// Handle uncaught errors to prevent crash
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
 // Initialize Socket.io
