@@ -93,6 +93,13 @@ app.notFound((c) => {
 
 // Create HTTP server with Socket.io
 const server = createServer(async (req, res) => {
+  // Collect body chunks
+  const chunks: Buffer[] = [];
+  for await (const chunk of req) {
+    chunks.push(chunk);
+  }
+  const body = Buffer.concat(chunks);
+  
   // Let Hono handle the request
   const url = new URL(req.url || '/', `http://${req.headers.host}`);
   const headers: Record<string, string> = {};
@@ -103,14 +110,17 @@ const server = createServer(async (req, res) => {
       headers[key] = value.join(', ');
     }
   }
+  
   const request = new Request(url.toString(), {
     method: req.method,
     headers,
+    body: ['GET', 'HEAD'].includes(req.method || '') ? undefined : body,
   });
+  
   const response = await app.fetch(request);
   res.writeHead(response.status, Object.fromEntries(response.headers));
-  const body = await response.text();
-  res.end(body);
+  const responseBody = await response.text();
+  res.end(responseBody);
 });
 
 // Initialize Socket.io
