@@ -1,1 +1,1 @@
-web: npx prisma db seed && npm run start
+web: npm run start
