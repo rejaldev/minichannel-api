@@ -399,7 +399,7 @@ router.patch('/:id/approve', authMiddleware, async (req, res) => {
     res.json({ return: updatedReturn });
   } catch (error) {
     console.error('Error approving return:', error);
-    res.status(500).json({ error: 'Failed to approve return' });
+    res.status(500).json({ error: 'Failed to approve return', details: error.message });
   }
 });
 
@@ -434,7 +434,7 @@ router.patch('/:id/reject', authMiddleware, async (req, res) => {
     res.json({ return: updatedReturn });
   } catch (error) {
     console.error('Error rejecting return:', error);
-    res.status(500).json({ error: 'Failed to reject return' });
+    res.status(500).json({ error: 'Failed to reject return', details: error.message });
   }
 });
 
