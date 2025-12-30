@@ -38,7 +38,8 @@ router.post('/', authMiddleware, async (req, res) => {
       bankName2,
       referenceNo2,
       notes,
-      cabangId: bodyCabangId // Allow cabangId from body for Owner/Manager
+      cabangId: bodyCabangId, // Allow cabangId from body for Owner/Manager
+      deviceSource // WEB, ANDROID, IOS, WINDOWS, etc
     } = req.body;
 
     // Get cabangId from authenticated user's token or from body (for Owner/Manager)
@@ -184,6 +185,7 @@ router.post('/', authMiddleware, async (req, res) => {
           bankName2: isSplitPayment ? (bankName2 || null) : null,
           referenceNo2: isSplitPayment ? (referenceNo2 || null) : null,
           notes: notes || null,
+          deviceSource: deviceSource || null,
           items: {
             create: itemsWithDetails.map(item => ({
               productVariantId: item.productVariantId,

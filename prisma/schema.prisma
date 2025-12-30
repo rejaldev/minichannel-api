@@ -384,6 +384,9 @@ model Transaction {
   externalStatus   String?         // Status asli dari marketplace
   externalData     Json?           // Data tambahan (shipping, courier, etc)
   
+  // Device/Platform Source
+  deviceSource     String?         // WEB, ANDROID, IOS, WINDOWS, TOKOPEDIA, SHOPEE, etc
+  
   notes          String?
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
