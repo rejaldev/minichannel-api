@@ -234,11 +234,15 @@ auth.put('/users/:id', authMiddleware, ownerOnly, async (c) => {
 
     // Only update cabangId if explicitly provided in request
     if (cabangId !== undefined) {
+      // Convert empty string to null for OWNER/ADMIN
+      const normalizedCabangId = cabangId === '' ? null : cabangId;
+      
       // Validate: non-OWNER/ADMIN must have cabangId
-      if (role !== 'OWNER' && role !== 'ADMIN' && !cabangId) {
+      if (role !== 'OWNER' && role !== 'ADMIN' && !normalizedCabangId) {
         return c.json({ error: 'cabangId wajib diisi untuk role KASIR/MANAGER' }, 400);
       }
-      updateData.cabangId = cabangId;
+      
+      updateData.cabangId = normalizedCabangId;
     }
 
     if (password && password.trim() !== '') {
