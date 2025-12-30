@@ -8,7 +8,7 @@
     "start:legacy": "node server.legacy.cjs",
     "dev": "tsx watch src/index.ts",
     "dev:legacy": "nodemon server.legacy.cjs",
-    "build": "npx prisma generate",
+    "build": "npx prisma generate && npx prisma db push --skip-generate",
     "postinstall": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
