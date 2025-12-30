@@ -195,6 +195,20 @@ router.post('/', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    // Check if transaction already has a PENDING return
+    const existingPendingReturn = await prisma.return.findFirst({
+      where: {
+        transactionId,
+        status: 'PENDING',
+      },
+    });
+
+    if (existingPendingReturn) {
+      return res.status(400).json({ 
+        error: 'Transaksi ini sudah memiliki permintaan return yang sedang menunggu persetujuan' 
+      });
+    }
+
     // Get transaction
     const transaction = await prisma.transaction.findUnique({
       where: { id: transactionId },
