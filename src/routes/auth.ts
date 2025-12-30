@@ -229,9 +229,17 @@ auth.put('/users/:id', authMiddleware, ownerOnly, async (c) => {
     const updateData: any = {
       name,
       role,
-      cabangId,
       isActive: isActive !== undefined ? isActive : existingUser.isActive
     };
+
+    // Only update cabangId if explicitly provided in request
+    if (cabangId !== undefined) {
+      // Validate: non-OWNER/ADMIN must have cabangId
+      if (role !== 'OWNER' && role !== 'ADMIN' && !cabangId) {
+        return c.json({ error: 'cabangId wajib diisi untuk role KASIR/MANAGER' }, 400);
+      }
+      updateData.cabangId = cabangId;
+    }
 
     if (password && password.trim() !== '') {
       updateData.password = await bcrypt.hash(password, 10);
