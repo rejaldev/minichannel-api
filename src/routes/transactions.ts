@@ -347,13 +347,31 @@ transactions.get('/', authMiddleware, async (c) => {
             email: true
           }
         },
-        channel: true
+        channel: true,
+        returns: {
+          select: {
+            id: true,
+            returnNo: true,
+            status: true,
+            refundAmount: true,
+            createdAt: true
+          },
+          orderBy: { createdAt: 'desc' },
+          take: 1
+        }
       },
       orderBy: { createdAt: 'desc' },
       take: 100
     });
 
-    return c.json(transactionList);
+    // Add returnStatus helper field
+    const transactionsWithReturnStatus = transactionList.map(t => ({
+      ...t,
+      returnStatus: t.returns[0]?.status || null,
+      hasReturn: t.returns.length > 0
+    }));
+
+    return c.json(transactionsWithReturnStatus);
   } catch (error) {
     console.error('Get transactions error:', error);
     return c.json({ error: 'Internal server error' }, 500);
