@@ -359,19 +359,25 @@ router.patch('/:id/approve', authMiddleware, async (req, res) => {
 
     // Approve and update stock
     const updatedReturn = await prisma.$transaction(async (tx) => {
-      // Update stock
+      // Update stock - use upsert in case stock record doesn't exist
       for (const item of returnData.items) {
-        await tx.stock.update({
+        await tx.stock.upsert({
           where: {
             productVariantId_cabangId: {
               productVariantId: item.productVariantId,
               cabangId: returnData.cabangId,
             },
           },
-          data: {
+          update: {
             quantity: {
               increment: item.quantity,
             },
+          },
+          create: {
+            productVariantId: item.productVariantId,
+            cabangId: returnData.cabangId,
+            quantity: item.quantity,
+            price: item.price || 0,
           },
         });
       }

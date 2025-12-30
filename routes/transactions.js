@@ -320,13 +320,31 @@ router.get('/', authMiddleware, async (req, res) => {
             email: true
           }
         },
-        channel: true
+        channel: true,
+        returns: {
+          select: {
+            id: true,
+            returnNo: true,
+            status: true,
+            refundAmount: true,
+            createdAt: true
+          },
+          orderBy: { createdAt: 'desc' },
+          take: 1 // Only get latest return
+        }
       },
       orderBy: { createdAt: 'desc' },
       take: 100 // Limit results
     });
 
-    res.json(transactions);
+    // Add returnStatus helper field
+    const transactionsWithReturnStatus = transactions.map(t => ({
+      ...t,
+      returnStatus: t.returns[0]?.status || null,
+      hasReturn: t.returns.length > 0
+    }));
+
+    res.json(transactionsWithReturnStatus);
   } catch (error) {
     console.error('Get transactions error:', error);
     res.status(500).json({ error: 'Internal server error' });
