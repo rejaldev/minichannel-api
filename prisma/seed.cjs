@@ -19,18 +19,20 @@ async function main() {
 
   console.log('✅ Cabang created:', cabang.name);
 
-  // Buat User Owner
+  // Buat User Owner (tanpa cabang - bisa akses semua cabang)
   const hashedPassword = await bcrypt.hash('owner123', 10);
   
   const owner = await prisma.user.upsert({
     where: { email: 'owner@toko.com' },
-    update: {},
+    update: {
+      cabangId: null // Fix: OWNER tidak terkait cabang manapun
+    },
     create: {
       email: 'owner@toko.com',
       password: hashedPassword,
       name: 'Owner Toko',
       role: 'OWNER',
-      cabangId: cabang.id
+      cabangId: null // OWNER bisa akses semua cabang
     }
   });
 

@@ -202,9 +202,10 @@ router.post('/users', authMiddleware, ownerOnly, async (req, res) => {
       return res.status(400).json({ error: 'Email, password, name, dan role wajib diisi' });
     }
 
-    // Validate cabangId for non-ADMIN roles
-    if (role !== 'ADMIN' && role !== 'OWNER' && !cabangId) {
-      return res.status(400).json({ error: 'cabangId wajib diisi untuk role KASIR/MANAGER' });
+    // Validate cabangId - hanya KASIR dan ADMIN yang wajib punya cabangId
+    // OWNER dan MANAGER bisa akses semua cabang (cabangId = null)
+    if ((role === 'KASIR' || role === 'ADMIN') && !cabangId) {
+      return res.status(400).json({ error: 'cabangId wajib diisi untuk role KASIR/ADMIN' });
     }
 
     // Cek email sudah terdaftar
@@ -220,13 +221,14 @@ router.post('/users', authMiddleware, ownerOnly, async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Buat user baru
+    // OWNER dan MANAGER tidak terkait cabang (cabangId = null)
     const user = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
         name,
         role,
-        cabangId
+        cabangId: (role === 'OWNER' || role === 'MANAGER') ? null : cabangId
       },
       select: {
         id: true,
@@ -261,8 +263,13 @@ router.put('/users/:id', authMiddleware, ownerOnly, async (req, res) => {
     const { name, role, cabangId, password, isActive } = req.body;
 
     // Validasi
-    if (!name || !role || !cabangId) {
-      return res.status(400).json({ error: 'Nama, role, dan cabangId wajib diisi' });
+    if (!name || !role) {
+      return res.status(400).json({ error: 'Nama dan role wajib diisi' });
+    }
+
+    // KASIR dan ADMIN wajib punya cabangId, OWNER dan MANAGER tidak
+    if ((role === 'KASIR' || role === 'ADMIN') && !cabangId) {
+      return res.status(400).json({ error: 'cabangId wajib diisi untuk role KASIR/ADMIN' });
     }
 
     // Cek user exists
@@ -275,10 +282,11 @@ router.put('/users/:id', authMiddleware, ownerOnly, async (req, res) => {
     }
 
     // Prepare update data
+    // OWNER dan MANAGER tidak terkait cabang (cabangId = null)
     const updateData = {
       name,
       role,
-      cabangId,
+      cabangId: (role === 'OWNER' || role === 'MANAGER') ? null : cabangId,
       isActive: isActive !== undefined ? isActive : existingUser.isActive
     };
 
