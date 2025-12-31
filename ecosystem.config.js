@@ -1,9 +1,9 @@
 // PM2 Ecosystem Configuration for MiniChannel Backend
-// Usage: pm2 start ecosystem.config.js
+// Usage: pm2 start ecosystem.config.cjs
 
 module.exports = {
   apps: [{
-    name: 'anekabuana-backend',
+    name: 'minichannel-api',
     script: 'npm',
     args: 'start',
     interpreter: 'none',
