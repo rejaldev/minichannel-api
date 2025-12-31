@@ -7,33 +7,29 @@ import { Server } from 'socket.io';
 import 'dotenv/config';
 
 // Import routes
-import auth from './routes/auth';
-import products from './routes/products';
-import transactions from './routes/transactions';
-import cabang from './routes/cabang';
-import settings from './routes/settings';
-import sync from './routes/sync';
-import returns from './routes/returns';
-import stockTransfers from './routes/stock-transfers';
-import backup from './routes/backup';
-import stock from './routes/stock';
-import channels from './routes/channels';
+import auth from './routes/auth.js';
+import products from './routes/products.js';
+import transactions from './routes/transactions.js';
+import cabang from './routes/cabang.js';
+import settings from './routes/settings.js';
+import sync from './routes/sync.js';
+import returns from './routes/returns.js';
+import stockTransfers from './routes/stock-transfers.js';
+import backup from './routes/backup.js';
+import stock from './routes/stock.js';
+import channels from './routes/channels.js';
 
 // Import socket helper
-import { initSocket } from './lib/socket';
+import { initSocket } from './lib/socket.js';
 
 const app = new Hono();
-const PORT = parseInt(process.env.PORT || '5000');
+const PORT = parseInt(process.env.PORT || '5100');
 
 // CORS Configuration
 const allowedOrigins = [
-  'http://localhost:3000',
   'http://localhost:3100',
-  'http://localhost:3500',
   'http://localhost:4000',
-  'http://127.0.0.1:3000',
   'http://127.0.0.1:3100',
-  'http://127.0.0.1:3500',
   'http://127.0.0.1:4000',
   process.env.CORS_ORIGIN,
 ].filter(Boolean) as string[];

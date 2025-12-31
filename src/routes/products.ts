@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
-import prisma from '../lib/prisma';
-import { authMiddleware, ownerOrManager, type AuthUser } from '../middleware/auth';
-import { emitProductCreated, emitProductUpdated, emitProductDeleted, emitCategoryUpdated, emitStockUpdated } from '../lib/socket';
+import prisma from '../lib/prisma.js';
+import { authMiddleware, ownerOrManager, type AuthUser } from '../middleware/auth.js';
+import { emitProductCreated, emitProductUpdated, emitProductDeleted, emitCategoryUpdated, emitStockUpdated } from '../lib/socket.js';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as XLSX from 'xlsx';
@@ -985,18 +985,326 @@ products.put('/stock/:variantId/:cabangId', authMiddleware, ownerOrManager, asyn
   }
 });
 
-// Import Products from Excel - simplified version without file upload
-// Note: Hono file uploads need different handling (body parsing)
+// Import Products from Excel - Full implementation with Hono multipart
 products.post('/import', authMiddleware, ownerOrManager, async (c) => {
+  let tempFilePath: string | null = null;
+  
   try {
-    // For now, return a message that import needs frontend multipart handling
-    // Full implementation would use c.req.parseBody() for file uploads
-    return c.json({ 
-      error: 'Import endpoint needs multipart form-data. Use frontend to handle file upload.',
-      note: 'Consider using @hono/node-server with multer middleware for file uploads'
-    }, 501);
+    // Parse multipart form data
+    const body = await c.req.parseBody();
+    const file = body['file'];
+    
+    if (!file || !(file instanceof File)) {
+      return c.json({ error: 'File tidak ditemukan' }, 400);
+    }
+
+    const fileExtension = path.extname(file.name).toLowerCase();
+    
+    if (!['.xlsx', '.xls'].includes(fileExtension)) {
+      return c.json({ error: 'Format file tidak didukung. Gunakan Excel (.xlsx atau .xls)' }, 400);
+    }
+
+    // Save file temporarily
+    const uploadsDir = path.join(process.cwd(), 'uploads');
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+    
+    tempFilePath = path.join(uploadsDir, `import_${Date.now()}${fileExtension}`);
+    const arrayBuffer = await file.arrayBuffer();
+    fs.writeFileSync(tempFilePath, Buffer.from(arrayBuffer));
+
+    // Parse Excel - read "Template Import" sheet
+    const workbook = XLSX.readFile(tempFilePath);
+    
+    // Try to find the template sheet
+    let sheetName = 'Template Import';
+    if (!workbook.SheetNames.includes(sheetName)) {
+      sheetName = workbook.SheetNames.find(s => s.toLowerCase().includes('template')) || workbook.SheetNames[0];
+    }
+    
+    const worksheet = workbook.Sheets[sheetName];
+    
+    // Parse with header row at index 1 (row 2 in Excel)
+    const products_data: any[] = XLSX.utils.sheet_to_json(worksheet, { 
+      range: 1,
+      defval: ''
+    });
+
+    if (products_data.length === 0) {
+      return c.json({ error: 'File kosong atau format tidak valid. Pastikan Sheet "Template Import" berisi data dengan header di baris 2.' }, 400);
+    }
+
+    // Get all categories and cabangs
+    const categories = await prisma.category.findMany();
+    const cabangs = await prisma.cabang.findMany();
+
+    const errors: any[] = [];
+    const success: any[] = [];
+    const productsToCreate = new Map<string, any>();
+
+    // Collect all SKUs from Excel first
+    const allSkus = products_data
+      .map((row: any) => row['SKU']?.toString().trim() || row['SKU*']?.toString().trim())
+      .filter(Boolean);
+
+    // Fetch existing SKUs with product and stock data for upsert
+    const existingVariants = await prisma.productVariant.findMany({
+      where: { sku: { in: allSkus } },
+      include: {
+        product: { include: { category: true } },
+        stocks: { include: { cabang: true } }
+      }
+    });
+    
+    const existingVariantsMap = new Map(
+      existingVariants.map(v => [v.sku, v])
+    );
+
+    // Process each row
+    for (let i = 0; i < products_data.length; i++) {
+      const row = products_data[i];
+      const rowNum = i + 2;
+
+      try {
+        const hasData = Object.values(row).some(val => val !== '' && val !== null && val !== undefined);
+        if (!hasData) continue;
+
+        // Support both formats (with and without asterisks)
+        const sku = (row['SKU*'] || row['SKU'])?.toString().trim();
+        const productName = (row['Nama Produk*'] || row['Nama Produk'])?.toString().trim();
+        const categoryName = (row['Kategori*'] || row['Kategori'])?.toString().trim();
+        const productType = (row['Tipe Produk*'] || row['Tipe Produk'])?.toString().toUpperCase().trim();
+        const price = parseInt(row['Harga*'] || row['Harga']);
+        const stock = parseInt(row['Stok*'] || row['Stok']);
+        const cabangName = (row['Cabang*'] || row['Cabang'])?.toString().trim();
+
+        if (!sku || !productName || !categoryName || !productType || isNaN(price) || isNaN(stock) || !cabangName) {
+          errors.push({ row: rowNum, error: 'Data tidak lengkap. Pastikan SKU, Nama Produk, Kategori, Tipe Produk, Harga, Stok, dan Cabang diisi' });
+          continue;
+        }
+
+        if (!['SINGLE', 'VARIANT'].includes(productType)) {
+          errors.push({ row: rowNum, error: 'Tipe Produk harus SINGLE atau VARIANT' });
+          continue;
+        }
+
+        const category = categories.find(cat => cat.name.toLowerCase() === categoryName.toLowerCase());
+        if (!category) {
+          errors.push({ row: rowNum, error: `Kategori "${categoryName}" tidak ditemukan` });
+          continue;
+        }
+
+        const cabang = cabangs.find(cab => cab.name.toLowerCase() === cabangName.toLowerCase());
+        if (!cabang) {
+          errors.push({ row: rowNum, error: `Cabang "${cabangName}" tidak ditemukan` });
+          continue;
+        }
+
+        // UPSERT: Check if SKU exists
+        const existingVariant = existingVariantsMap.get(sku);
+        
+        if (existingVariant) {
+          const existingProduct = existingVariant.product;
+          
+          if (existingProduct.productType !== productType) {
+            errors.push({ row: rowNum, error: `SKU "${sku}" sudah terdaftar dengan tipe ${existingProduct.productType}` });
+            continue;
+          }
+          
+          const existingStock = existingVariant.stocks.find(s => s.cabangId === cabang.id);
+          
+          if (existingStock) {
+            await prisma.stock.update({
+              where: { id: existingStock.id },
+              data: { quantity: stock, price: price }
+            });
+            
+            success.push({
+              row: rowNum, sku, product: productName, action: 'updated',
+              message: `Stock di ${cabangName} diupdate: ${stock} pcs @ Rp ${price.toLocaleString('id-ID')}`
+            });
+            
+            emitStockUpdated({
+              productId: existingProduct.id,
+              variantId: existingVariant.id,
+              cabangId: cabang.id,
+              quantity: stock,
+              price: price
+            });
+          } else {
+            await prisma.stock.create({
+              data: { productVariantId: existingVariant.id, cabangId: cabang.id, quantity: stock, price: price }
+            });
+            
+            success.push({
+              row: rowNum, sku, product: productName, action: 'stock_added',
+              message: `Stock baru ditambahkan di ${cabangName}: ${stock} pcs @ Rp ${price.toLocaleString('id-ID')}`
+            });
+            
+            emitStockUpdated({
+              productId: existingProduct.id,
+              variantId: existingVariant.id,
+              cabangId: cabang.id,
+              quantity: stock,
+              price: price
+            });
+          }
+          continue;
+        }
+        
+        // NEW SKU - CREATE mode
+        const productKey = productName.toLowerCase();
+        
+        if (!productsToCreate.has(productKey)) {
+          productsToCreate.set(productKey, {
+            name: productName,
+            description: (row['Deskripsi'] || '')?.toString().trim(),
+            categoryId: category.id,
+            productType,
+            isActive: true,
+            variants: []
+          });
+        }
+
+        const productData = productsToCreate.get(productKey);
+
+        if (productData.productType !== productType) {
+          errors.push({ row: rowNum, error: `Produk "${productName}" memiliki tipe yang berbeda dalam file` });
+          continue;
+        }
+
+        // Parse variant attributes
+        let variantName = 'Default';
+        let variantValue = 'Default';
+        
+        if (productType === 'VARIANT') {
+          const types: string[] = [];
+          const values: string[] = [];
+          
+          for (let n = 1; n <= 3; n++) {
+            const typeN = row[`Type ${n}`]?.toString().trim();
+            const valueN = row[`Value ${n}`]?.toString().trim();
+            if (typeN && valueN) {
+              types.push(typeN);
+              values.push(valueN);
+            }
+          }
+          
+          if (types.length === 0) {
+            errors.push({ row: rowNum, error: 'Produk VARIANT harus memiliki minimal 1 pasang Type dan Value' });
+            continue;
+          }
+          
+          variantName = types.join(' | ');
+          variantValue = values.join(' | ');
+        }
+
+        const weight = row['Berat (g)'] ? parseInt(row['Berat (g)']) : null;
+        const length = row['Panjang (cm)'] ? parseInt(row['Panjang (cm)']) : null;
+        const width = row['Lebar (cm)'] ? parseInt(row['Lebar (cm)']) : null;
+        const height = row['Tinggi (cm)'] ? parseInt(row['Tinggi (cm)']) : null;
+        const imageUrl = row['Link Gambar']?.toString().trim() || null;
+
+        productData.variants.push({
+          sku, variantName, variantValue, weight, length, width, height, imageUrl,
+          stocks: [{ cabangId: cabang.id, quantity: stock, price: price }]
+        });
+
+      } catch (error: any) {
+        errors.push({ row: rowNum, error: error.message });
+      }
+    }
+
+    // Preview mode
+    const isPreview = c.req.query('preview') === 'true';
+    
+    if (isPreview) {
+      if (tempFilePath && fs.existsSync(tempFilePath)) fs.unlinkSync(tempFilePath);
+      
+      return c.json({
+        preview: true,
+        success: errors.length === 0,
+        totalRows: products_data.length,
+        validRows: productsToCreate.size,
+        invalidRows: errors.length,
+        productsToCreate: Array.from(productsToCreate.values()).map(p => ({
+          name: p.name, type: p.productType, variants: p.variants.length,
+          category: categories.find(cat => cat.id === p.categoryId)?.name
+        })),
+        errors
+      });
+    }
+
+    // Create products in database
+    for (const [productKey, productData] of productsToCreate) {
+      try {
+        const variantValues = productData.variants.map((v: any) => v.variantValue);
+        const duplicates = variantValues.filter((val: string, idx: number) => variantValues.indexOf(val) !== idx);
+        
+        if (duplicates.length > 0) {
+          errors.push({ product: productData.name, error: `Variant duplikat: "${duplicates[0]}"` });
+          continue;
+        }
+
+        const product = await prisma.product.create({
+          data: {
+            name: productData.name,
+            description: productData.description,
+            categoryId: productData.categoryId,
+            productType: productData.productType,
+            isActive: productData.isActive,
+            variants: {
+              create: productData.variants.map((v: any) => ({
+                sku: v.sku,
+                variantName: v.variantName,
+                variantValue: v.variantValue,
+                weight: v.weight,
+                length: v.length,
+                width: v.width,
+                height: v.height,
+                imageUrl: v.imageUrl,
+                stocks: { create: v.stocks }
+              }))
+            }
+          },
+          include: { variants: { include: { stocks: true } } }
+        });
+
+        success.push({
+          product: product.name, variants: product.variants.length, action: 'created',
+          message: `Berhasil import produk baru dengan ${product.variants.length} varian`
+        });
+
+        emitProductCreated(product);
+
+      } catch (error: any) {
+        let errorMsg = 'Gagal membuat produk';
+        if (error.code === 'P2002') {
+          if (error.meta?.target?.includes('sku')) errorMsg = 'SKU sudah terdaftar';
+          else errorMsg = `Data duplikat: ${error.meta?.target?.join(', ') || 'unknown'}`;
+        }
+        errors.push({ product: productData.name, error: errorMsg });
+      }
+    }
+
+    // Cleanup temp file
+    if (tempFilePath && fs.existsSync(tempFilePath)) fs.unlinkSync(tempFilePath);
+
+    const warnings = errors.filter(e => e.type === 'warning');
+    const actualErrors = errors.filter(e => e.type !== 'warning');
+
+    return c.json({
+      success: success.length > 0,
+      imported: success.length,
+      failed: actualErrors.length,
+      warnings: warnings.length,
+      details: { success, errors: actualErrors, warnings }
+    });
+
   } catch (error: any) {
     console.error('Import error:', error);
+    if (tempFilePath && fs.existsSync(tempFilePath)) fs.unlinkSync(tempFilePath);
     return c.json({ error: 'Gagal import produk: ' + error.message }, 500);
   }
 });

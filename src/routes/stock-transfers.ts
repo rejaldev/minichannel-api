@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
-import prisma from '../lib/prisma';
-import { authMiddleware, type AuthUser } from '../middleware/auth';
-import { emitStockUpdated } from '../lib/socket';
+import prisma from '../lib/prisma.js';
+import { authMiddleware, type AuthUser } from '../middleware/auth.js';
+import { emitStockUpdated } from '../lib/socket.js';
 
 type Variables = {
   user: AuthUser;

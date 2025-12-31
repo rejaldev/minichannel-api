@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import prisma from '../lib/prisma';
-import { authMiddleware } from '../middleware/auth';
+import prisma from '../lib/prisma.js';
+import { authMiddleware } from '../middleware/auth.js';
 
 const sync = new Hono();
 

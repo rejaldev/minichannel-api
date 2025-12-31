@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import prisma from '../lib/prisma';
-import { authMiddleware, type AuthUser } from '../middleware/auth';
+import prisma from '../lib/prisma.js';
+import { authMiddleware, type AuthUser } from '../middleware/auth.js';
 
 type Variables = {
   user: AuthUser;

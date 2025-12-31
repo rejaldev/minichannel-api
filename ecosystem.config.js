@@ -4,7 +4,9 @@
 module.exports = {
   apps: [{
     name: 'anekabuana-backend',
-    script: './server.js',
+    script: 'npm',
+    args: 'start',
+    interpreter: 'none',
     
     // Instance configuration
     instances: 1,

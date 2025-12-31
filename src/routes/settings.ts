@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import prisma from '../lib/prisma';
-import { authMiddleware, ownerOnly, ownerOrManager } from '../middleware/auth';
+import prisma from '../lib/prisma.js';
+import { authMiddleware, ownerOnly, ownerOrManager } from '../middleware/auth.js';
 
 const settings = new Hono();
 

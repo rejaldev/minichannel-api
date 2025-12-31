@@ -1,5 +1,5 @@
 import { Context, Next } from 'hono';
-import { verifyToken } from '../lib/jwt';
+import { verifyToken } from '../lib/jwt.js';
 
 export interface AuthUser {
   userId: string;

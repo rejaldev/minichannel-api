@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import bcrypt from 'bcryptjs';
-import prisma from '../lib/prisma';
-import { generateToken } from '../lib/jwt';
-import { authMiddleware, ownerOnly } from '../middleware/auth';
+import prisma from '../lib/prisma.js';
+import { generateToken } from '../lib/jwt.js';
+import { authMiddleware, ownerOnly } from '../middleware/auth.js';
 
 const auth = new Hono();
 

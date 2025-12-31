@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import prisma from '../lib/prisma';
-import { authMiddleware, ownerOnly, type AuthUser } from '../middleware/auth';
+import prisma from '../lib/prisma.js';
+import { authMiddleware, ownerOnly, type AuthUser } from '../middleware/auth.js';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
