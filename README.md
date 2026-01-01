@@ -1,12 +1,25 @@
 # MiniChannel API
 
-REST API backend for Point of Sale and inventory management system built with **Hono** and **TypeScript**.
+REST API backend for MiniChannel - Multi-tenant Point of Sale and inventory management system with marketplace integration.
 
 [![Hono](https://img.shields.io/badge/Hono-4.11-E36002?logo=hono)](https://hono.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?logo=typescript)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.19-2D3748?logo=prisma)](https://www.prisma.io/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16+-4169e1?logo=postgresql)](https://postgresql.org/)
 [![Socket.io](https://img.shields.io/badge/Socket.io-4.8-010101?logo=socket.io)](https://socket.io/)
+
+## Features
+
+- 🏪 **Multi-tenant Architecture** - Each store with independent settings
+- 🏢 **Multi-branch Management** - Unlimited branches per store
+- 📦 **Inventory Management** - Real-time stock tracking & alerts
+- 💰 **POS System** - Fast transaction processing with split payment
+- 🔄 **Stock Transfers** - Inter-branch inventory movement
+- 🛒 **Marketplace Integration** - Tokopedia, Shopee sync (coming soon)
+- 👥 **Role-based Access Control** - Owner, Manager, Kasir roles
+- 🔌 **Real-time Updates** - Socket.io for live data sync
+- 🧾 **Receipt Management** - Customizable thermal printer receipts
+- 📊 **Reporting** - Sales, inventory, and performance analytics
 
 ## Quick Start
 

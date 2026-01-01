@@ -38,7 +38,7 @@ settings.get('/printer', authMiddleware, async (c) => {
 settings.put('/printer', authMiddleware, ownerOrManager, async (c) => {
   try {
     const body = await c.req.json();
-    const { cabangId, ...data } = body;
+    const { cabangId, storeName, ...data } = body; // Exclude storeName from update
 
     if (!cabangId) {
       return c.json({ error: 'cabangId diperlukan' }, 400);
@@ -61,6 +61,7 @@ settings.put('/printer', authMiddleware, ownerOrManager, async (c) => {
       }, 404);
     }
 
+    // Note: storeName is excluded from update - only editable by admin via database
     const printerSettings = await prisma.printerSettings.upsert({
       where: { cabangId },
       update: data,
