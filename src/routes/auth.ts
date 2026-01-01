@@ -118,7 +118,19 @@ auth.get('/me', authMiddleware, async (c) => {
       return c.json({ error: 'User tidak ditemukan' }, 404);
     }
 
-    return c.json({ user });
+    // Get storeName from printer settings (first cabang)
+    let storeName = 'MiniChannel'; // default
+    if (user.cabang?.id) {
+      const printerSettings = await prisma.printerSettings.findUnique({
+        where: { cabangId: user.cabang.id },
+        select: { storeName: true }
+      });
+      if (printerSettings?.storeName) {
+        storeName = printerSettings.storeName;
+      }
+    }
+
+    return c.json({ user: { ...user, storeName } });
   } catch (error) {
     console.error('Get user error:', error);
     return c.json({ error: 'Terjadi kesalahan server' }, 500);
