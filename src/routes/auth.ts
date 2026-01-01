@@ -9,7 +9,7 @@ const auth = new Hono();
 // Register (hanya untuk testing)
 auth.post('/register', async (c) => {
   try {
-    const { email, password, name, role, cabangId } = await c.req.json();
+    const { email, password, name, role, cabangId, storeName, branchName } = await c.req.json();
 
     if (!email || !password || !name) {
       return c.json({ error: 'Email, password, dan nama wajib diisi' }, 400);
@@ -25,13 +25,35 @@ auth.post('/register', async (c) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // If no cabangId provided and storeName is provided, create default cabang
+    let finalCabangId = cabangId;
+    if (!finalCabangId && storeName) {
+      const newCabang = await prisma.cabang.create({
+        data: {
+          name: branchName || 'Pusat',
+          address: null,
+          phone: null
+        }
+      });
+      finalCabangId = newCabang.id;
+
+      // Create printer settings for the new cabang with store name
+      await prisma.printerSettings.create({
+        data: {
+          cabangId: finalCabangId,
+          storeName: storeName,
+          branchName: branchName || 'Pusat'
+        }
+      });
+    }
+
     const user = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
         name,
-        role: role || 'KASIR',
-        cabangId: cabangId || null
+        role: role || 'OWNER',
+        cabangId: finalCabangId || null
       },
       select: {
         id: true,
@@ -44,9 +66,9 @@ auth.post('/register', async (c) => {
       }
     });
 
-    const token = generateToken(user.id, user.email, user.role, null);
+    const token = generateToken(user.id, user.email, user.role, finalCabangId);
 
-    return c.json({ message: 'User berhasil dibuat', user, token }, 201);
+    return c.json({ message: 'User berhasil dibuat', user, token, storeName }, 201);
   } catch (error) {
     console.error('Register error:', error);
     return c.json({ error: 'Terjadi kesalahan server' }, 500);
