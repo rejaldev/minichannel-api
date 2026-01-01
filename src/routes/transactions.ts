@@ -154,10 +154,21 @@ transactions.post('/', authMiddleware, async (c) => {
       const itemSubtotal = price * quantity;
       subtotal += itemSubtotal;
 
+      // Hide default variant info for cleaner display
+      let variantInfo = `${variant.variantName}: ${variant.variantValue}`;
+      const defaultVariants = ['default', 'standar', 'standard'];
+      const isDefaultVariant = defaultVariants.some(v => 
+        variant.variantName.toLowerCase().includes(v) || 
+        variant.variantValue.toLowerCase().includes(v)
+      );
+      if (isDefaultVariant) {
+        variantInfo = '';
+      }
+
       itemsWithDetails.push({
         productVariantId,
         productName: variant.product.name,
-        variantInfo: `${variant.variantName}: ${variant.variantValue}`,
+        variantInfo,
         quantity,
         price,
         subtotal: itemSubtotal,
