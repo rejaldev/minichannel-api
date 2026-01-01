@@ -110,7 +110,19 @@ auth.post('/login', async (c) => {
     const token = generateToken(user.id, user.email, user.role, user.cabangId);
     const { password: _, ...userWithoutPassword } = user;
 
-    return c.json({ message: 'Login berhasil', user: userWithoutPassword, token });
+    // Get storeName from printer settings
+    let storeName = 'MiniChannel'; // default
+    if (user.cabangId) {
+      const printerSettings = await prisma.printerSettings.findUnique({
+        where: { cabangId: user.cabangId },
+        select: { storeName: true }
+      });
+      if (printerSettings?.storeName) {
+        storeName = printerSettings.storeName;
+      }
+    }
+
+    return c.json({ message: 'Login berhasil', user: { ...userWithoutPassword, storeName }, token });
   } catch (error) {
     console.error('Login error:', error);
     return c.json({ error: 'Terjadi kesalahan server' }, 500);

@@ -55,7 +55,7 @@ app.use('*', logger());
 
 // Root endpoint
 app.get('/', (c) => {
-  return c.json({ message: 'MiniChannel API - Toko Inventory System (Hono)' });
+  return c.json({ message: 'MiniChannel API - Omnichannel System (Hono)' });
 });
 
 // Health check
