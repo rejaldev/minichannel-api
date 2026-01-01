@@ -250,6 +250,7 @@ backup.get('/export/products', authMiddleware, ownerOnly, async (c) => {
               include: {
                 cabang: {
                   select: {
+                    id: true,
                     name: true
                   }
                 }
@@ -262,6 +263,23 @@ backup.get('/export/products', authMiddleware, ownerOnly, async (c) => {
       orderBy: {
         name: 'asc'
       }
+    });
+    
+    // Get all stock alerts
+    const alerts = await prisma.stockAlert.findMany({
+      select: {
+        productVariantId: true,
+        cabangId: true,
+        minStock: true,
+        isActive: true
+      }
+    });
+    
+    // Create alert lookup map for fast access
+    const alertMap = new Map<string, { minStock: number; isActive: boolean }>();
+    alerts.forEach(alert => {
+      const key = `${alert.productVariantId}-${alert.cabangId}`;
+      alertMap.set(key, { minStock: alert.minStock, isActive: alert.isActive });
     });
     
     // Convert to CSV
@@ -278,7 +296,8 @@ backup.get('/export/products', authMiddleware, ownerOnly, async (c) => {
       'Price',
       'Branch',
       'Stock Quantity',
-      'Min Stock',
+      'Min Alert',
+      'Alert Active',
       'Created Date'
     ].join(','));
     
@@ -286,6 +305,9 @@ backup.get('/export/products', authMiddleware, ownerOnly, async (c) => {
     products.forEach(product => {
       product.variants.forEach(variant => {
         variant.stocks.forEach(stock => {
+          const alertKey = `${variant.id}-${stock.cabang.id}`;
+          const alert = alertMap.get(alertKey);
+          
           csvRows.push([
             product.id,
             product.name,
@@ -296,7 +318,8 @@ backup.get('/export/products', authMiddleware, ownerOnly, async (c) => {
             stock.price || 0,
             stock.cabang.name,
             stock.quantity,
-            (stock as any).minStock || 0,
+            alert?.minStock || '',
+            alert?.isActive ? 'Yes' : (alert ? 'No' : ''),
             new Date(product.createdAt).toLocaleDateString('id-ID')
           ].map(val => `"${val}"`).join(','));
         });

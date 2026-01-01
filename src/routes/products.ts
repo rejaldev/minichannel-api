@@ -266,7 +266,7 @@ products.get('/template', authMiddleware, async (c) => {
 
     // Sheet 2: Panduan
     const infoData: any[] = [];
-    infoData.push(['📋 PANDUAN IMPORT PRODUK']);
+    infoData.push(['PANDUAN IMPORT PRODUK']);
     infoData.push([]);
     infoData.push(['LANGKAH-LANGKAH:']);
     infoData.push(['1. Pindah ke Sheet "Template Import"']);
@@ -288,12 +288,14 @@ products.get('/template', authMiddleware, async (c) => {
 
     // Sheet 3: Template Import
     const templateData: any[] = [];
+    // Header group row
     templateData.push([
       'INFO PRODUK', '', '', '', '',
       'VARIANT ATTRIBUTES', '', '', '', '', '',
       'PRICING & STOCK', '', '',
       'SPESIFIKASI MARKETPLACE', '', '', '', ''
     ]);
+    // Column headers
     templateData.push([
       'SKU*', 'Nama Produk*', 'Deskripsi', 'Kategori*', 'Tipe Produk*',
       'Type 1', 'Value 1', 'Type 2', 'Value 2', 'Type 3', 'Value 3',
@@ -304,21 +306,69 @@ products.get('/template', authMiddleware, async (c) => {
       templateData.push(['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']);
     }
     const templateSheet = XLSX.utils.aoa_to_sheet(templateData);
+    
+    // Merge cells for header groups
     templateSheet['!merges'] = [
-      { s: { r: 0, c: 0 }, e: { r: 0, c: 4 } },
-      { s: { r: 0, c: 5 }, e: { r: 0, c: 10 } },
-      { s: { r: 0, c: 11 }, e: { r: 0, c: 13 } },
-      { s: { r: 0, c: 14 }, e: { r: 0, c: 18 } }
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 4 } },   // INFO PRODUK
+      { s: { r: 0, c: 5 }, e: { r: 0, c: 10 } },  // VARIANT ATTRIBUTES
+      { s: { r: 0, c: 11 }, e: { r: 0, c: 13 } }, // PRICING & STOCK
+      { s: { r: 0, c: 14 }, e: { r: 0, c: 18 } }  // SPESIFIKASI MARKETPLACE
     ];
+    
+    // Set column widths
+    templateSheet['!cols'] = [
+      { wch: 15 }, // SKU
+      { wch: 25 }, // Nama Produk
+      { wch: 20 }, // Deskripsi
+      { wch: 15 }, // Kategori
+      { wch: 12 }, // Tipe Produk
+      { wch: 12 }, // Type 1
+      { wch: 15 }, // Value 1
+      { wch: 12 }, // Type 2
+      { wch: 15 }, // Value 2
+      { wch: 12 }, // Type 3
+      { wch: 15 }, // Value 3
+      { wch: 12 }, // Harga
+      { wch: 10 }, // Stok
+      { wch: 15 }, // Cabang
+      { wch: 10 }, // Berat
+      { wch: 12 }, // Panjang
+      { wch: 12 }, // Lebar
+      { wch: 12 }, // Tinggi
+      { wch: 30 }, // Link Gambar
+    ];
+    
     XLSX.utils.book_append_sheet(workbook, templateSheet, 'Template Import');
 
-    const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+    // Write to file and return as base64
+    const fileName = `template-import-produk-${Date.now()}.xlsx`;
+    const filePath = path.join(process.cwd(), 'uploads', fileName);
+    
+    // Ensure uploads directory exists
+    if (!fs.existsSync(path.join(process.cwd(), 'uploads'))) {
+      fs.mkdirSync(path.join(process.cwd(), 'uploads'), { recursive: true });
+    }
+    
+    XLSX.writeFile(workbook, filePath);
+    
+    // Read file as base64 and return as JSON with download info
+    const fileBuffer = fs.readFileSync(filePath);
+    const base64Data = fileBuffer.toString('base64');
+    
+    // Clean up old template files (keep only last 10)
+    const uploadsDir = path.join(process.cwd(), 'uploads');
+    const templateFiles = fs.readdirSync(uploadsDir)
+      .filter((f: string) => f.startsWith('template-import-produk-'))
+      .sort()
+      .reverse();
+    templateFiles.slice(10).forEach((f: string) => {
+      fs.unlinkSync(path.join(uploadsDir, f));
+    });
 
-    return new Response(excelBuffer, {
-      headers: {
-        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'Content-Disposition': 'attachment; filename=template-import-produk.xlsx'
-      }
+    return c.json({
+      filename: 'template-import-produk.xlsx',
+      data: base64Data,
+      mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     });
   } catch (error) {
     console.error('Download template error:', error);
@@ -388,15 +438,37 @@ products.get('/export', authMiddleware, async (c) => {
     ];
     const worksheetData = [header, ...exportData];
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Template Import');
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Export Produk');
     
-    const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+    // Write to file instead of buffer response
+    const fileName = `export-produk-${Date.now()}.xlsx`;
+    const filePath = path.join(process.cwd(), 'uploads', fileName);
+    
+    // Ensure uploads directory exists
+    if (!fs.existsSync(path.join(process.cwd(), 'uploads'))) {
+      fs.mkdirSync(path.join(process.cwd(), 'uploads'), { recursive: true });
+    }
+    
+    XLSX.writeFile(workbook, filePath);
+    
+    // Read file as base64 and return as JSON
+    const fileBuffer = fs.readFileSync(filePath);
+    const base64Data = fileBuffer.toString('base64');
+    
+    // Clean up old export files (keep only last 10)
+    const uploadsDir = path.join(process.cwd(), 'uploads');
+    const exportFiles = fs.readdirSync(uploadsDir)
+      .filter((f: string) => f.startsWith('export-produk-'))
+      .sort()
+      .reverse();
+    exportFiles.slice(10).forEach((f: string) => {
+      fs.unlinkSync(path.join(uploadsDir, f));
+    });
 
-    return new Response(excelBuffer, {
-      headers: {
-        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'Content-Disposition': `attachment; filename=export-produk-${Date.now()}.xlsx`
-      }
+    return c.json({
+      filename: fileName,
+      data: base64Data,
+      mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     });
   } catch (error) {
     console.error('Export error:', error);
@@ -475,41 +547,6 @@ products.get('/search/sku/:sku', authMiddleware, async (c) => {
   } catch (error) {
     console.error('Search SKU error:', error);
     return c.json({ success: false, error: 'Gagal mencari SKU' }, 500);
-  }
-});
-
-// Get low stock alert
-products.get('/alerts/low-stock', authMiddleware, async (c) => {
-  try {
-    const cabangId = c.req.query('cabangId');
-
-    const minStockSetting = await prisma.settings.findUnique({
-      where: { key: 'minStock' }
-    });
-    const minStock = parseInt(minStockSetting?.value || '5');
-
-    const where: any = {
-      quantity: { lte: minStock }
-    };
-    if (cabangId) where.cabangId = cabangId;
-
-    const lowStocks = await prisma.stock.findMany({
-      where,
-      include: {
-        cabang: true,
-        productVariant: {
-          include: {
-            product: { include: { category: true } }
-          }
-        }
-      },
-      orderBy: { quantity: 'asc' }
-    });
-
-    return c.json(lowStocks);
-  } catch (error) {
-    console.error('Get low stock error:', error);
-    return c.json({ error: 'Internal server error' }, 500);
   }
 });
 
@@ -1025,7 +1062,7 @@ products.post('/import', authMiddleware, ownerOrManager, async (c) => {
     
     const worksheet = workbook.Sheets[sheetName];
     
-    // Parse with header row at index 1 (row 2 in Excel)
+    // Parse with header row at index 1 (row 2 in Excel - row 1 is group header)
     const products_data: any[] = XLSX.utils.sheet_to_json(worksheet, { 
       range: 1,
       defval: ''
@@ -1047,6 +1084,24 @@ products.post('/import', authMiddleware, ownerOrManager, async (c) => {
     const allSkus = products_data
       .map((row: any) => row['SKU']?.toString().trim() || row['SKU*']?.toString().trim())
       .filter(Boolean);
+    
+    // Check for duplicate SKUs within Excel file
+    const skuCounts = new Map<string, number[]>();
+    allSkus.forEach((sku, idx) => {
+      if (!skuCounts.has(sku)) {
+        skuCounts.set(sku, []);
+      }
+      skuCounts.get(sku)!.push(idx + 2); // +2 because: +1 for header, +1 for 1-based indexing
+    });
+    
+    const duplicateSkus = Array.from(skuCounts.entries()).filter(([_, rows]) => rows.length > 1);
+    if (duplicateSkus.length > 0) {
+      duplicateSkus.forEach(([sku, rows]) => {
+        errors.push({ 
+          error: `SKU "${sku}" duplikat ditemukan di baris: ${rows.join(', ')}. Setiap SKU harus unik.` 
+        });
+      });
+    }
 
     // Fetch existing SKUs with product and stock data for upsert
     const existingVariants = await prisma.productVariant.findMany({
@@ -1078,6 +1133,11 @@ products.post('/import', authMiddleware, ownerOrManager, async (c) => {
         const price = parseInt(row['Harga*'] || row['Harga']);
         const stock = parseInt(row['Stok*'] || row['Stok']);
         const cabangName = (row['Cabang*'] || row['Cabang'])?.toString().trim();
+        
+        // Parse alert data (optional)
+        const minAlert = row['Min Alert'] ? parseInt(row['Min Alert']) : null;
+        const alertActive = row['Alert Active']?.toString().trim().toLowerCase();
+        const isAlertActive = alertActive === 'yes' || alertActive === 'ya' || alertActive === '1' || alertActive === 'true';
 
         if (!sku || !productName || !categoryName || !productType || isNaN(price) || isNaN(stock) || !cabangName) {
           errors.push({ row: rowNum, error: 'Data tidak lengkap. Pastikan SKU, Nama Produk, Kategori, Tipe Produk, Harga, Stok, dan Cabang diisi' });
@@ -1120,9 +1180,31 @@ products.post('/import', authMiddleware, ownerOrManager, async (c) => {
               data: { quantity: stock, price: price }
             });
             
+            // Handle alert update/create for existing variant
+            if (minAlert !== null && minAlert > 0) {
+              await prisma.stockAlert.upsert({
+                where: {
+                  productVariantId_cabangId: {
+                    productVariantId: existingVariant.id,
+                    cabangId: cabang.id
+                  }
+                },
+                update: {
+                  minStock: minAlert,
+                  isActive: isAlertActive
+                },
+                create: {
+                  productVariantId: existingVariant.id,
+                  cabangId: cabang.id,
+                  minStock: minAlert,
+                  isActive: isAlertActive
+                }
+              });
+            }
+            
             success.push({
               row: rowNum, sku, product: productName, action: 'updated',
-              message: `Stock di ${cabangName} diupdate: ${stock} pcs @ Rp ${price.toLocaleString('id-ID')}`
+              message: `Stock di ${cabangName} diupdate: ${stock} pcs @ Rp ${price.toLocaleString('id-ID')}${minAlert ? ` (Alert: ${minAlert})` : ''}`
             });
             
             emitStockUpdated({
@@ -1137,9 +1219,31 @@ products.post('/import', authMiddleware, ownerOrManager, async (c) => {
               data: { productVariantId: existingVariant.id, cabangId: cabang.id, quantity: stock, price: price }
             });
             
+            // Handle alert create for new stock
+            if (minAlert !== null && minAlert > 0) {
+              await prisma.stockAlert.upsert({
+                where: {
+                  productVariantId_cabangId: {
+                    productVariantId: existingVariant.id,
+                    cabangId: cabang.id
+                  }
+                },
+                update: {
+                  minStock: minAlert,
+                  isActive: isAlertActive
+                },
+                create: {
+                  productVariantId: existingVariant.id,
+                  cabangId: cabang.id,
+                  minStock: minAlert,
+                  isActive: isAlertActive
+                }
+              });
+            }
+            
             success.push({
               row: rowNum, sku, product: productName, action: 'stock_added',
-              message: `Stock baru ditambahkan di ${cabangName}: ${stock} pcs @ Rp ${price.toLocaleString('id-ID')}`
+              message: `Stock baru ditambahkan di ${cabangName}: ${stock} pcs @ Rp ${price.toLocaleString('id-ID')}${minAlert ? ` (Alert: ${minAlert})` : ''}`
             });
             
             emitStockUpdated({
@@ -1208,7 +1312,8 @@ products.post('/import', authMiddleware, ownerOrManager, async (c) => {
 
         productData.variants.push({
           sku, variantName, variantValue, weight, length, width, height, imageUrl,
-          stocks: [{ cabangId: cabang.id, quantity: stock, price: price }]
+          stocks: [{ cabangId: cabang.id, quantity: stock, price: price }],
+          alert: minAlert !== null && minAlert > 0 ? { minStock: minAlert, isActive: isAlertActive, cabangId: cabang.id } : null
         });
 
       } catch (error: any) {
@@ -1239,6 +1344,24 @@ products.post('/import', authMiddleware, ownerOrManager, async (c) => {
     // Create products in database
     for (const [productKey, productData] of productsToCreate) {
       try {
+        // Validate: VARIANT must have at least 2 variants
+        if (productData.productType === 'VARIANT' && productData.variants.length < 2) {
+          errors.push({ 
+            product: productData.name, 
+            error: `Produk VARIANT harus memiliki minimal 2 varian (ditemukan ${productData.variants.length}). Ubah ke SINGLE jika hanya 1 varian.` 
+          });
+          continue;
+        }
+        
+        // Validate: SINGLE should have exactly 1 variant
+        if (productData.productType === 'SINGLE' && productData.variants.length > 1) {
+          errors.push({ 
+            product: productData.name, 
+            error: `Produk SINGLE tidak boleh memiliki lebih dari 1 varian (ditemukan ${productData.variants.length}). Ubah ke VARIANT atau gabungkan data.` 
+          });
+          continue;
+        }
+        
         const variantValues = productData.variants.map((v: any) => v.variantValue);
         const duplicates = variantValues.filter((val: string, idx: number) => variantValues.indexOf(val) !== idx);
         
@@ -1270,6 +1393,23 @@ products.post('/import', authMiddleware, ownerOrManager, async (c) => {
           },
           include: { variants: { include: { stocks: true } } }
         });
+        
+        // Create alerts after product creation
+        for (const variant of productData.variants) {
+          if (variant.alert) {
+            const createdVariant = product.variants.find(pv => pv.sku === variant.sku);
+            if (createdVariant) {
+              await prisma.stockAlert.create({
+                data: {
+                  productVariantId: createdVariant.id,
+                  cabangId: variant.alert.cabangId,
+                  minStock: variant.alert.minStock,
+                  isActive: variant.alert.isActive
+                }
+              });
+            }
+          }
+        }
 
         success.push({
           product: product.name, variants: product.variants.length, action: 'created',
