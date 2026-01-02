@@ -1041,18 +1041,12 @@ products.post('/import', authMiddleware, ownerOrManager, async (c) => {
       return c.json({ error: 'Format file tidak didukung. Gunakan Excel (.xlsx atau .xls)' }, 400);
     }
 
-    // Save file temporarily
-    const uploadsDir = path.join(process.cwd(), 'uploads');
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
-    }
-    
-    tempFilePath = path.join(uploadsDir, `import_${Date.now()}${fileExtension}`);
+    // Read file as buffer and parse directly (ESM compatible)
     const arrayBuffer = await file.arrayBuffer();
-    fs.writeFileSync(tempFilePath, Buffer.from(arrayBuffer));
-
+    const buffer = Buffer.from(arrayBuffer);
+    
     // Parse Excel - read "Template Import" sheet
-    const workbook = XLSX.readFile(tempFilePath);
+    const workbook = XLSX.read(buffer, { type: 'buffer' });
     
     // Try to find the template sheet
     let sheetName = 'Template Import';
@@ -1131,7 +1125,8 @@ products.post('/import', authMiddleware, ownerOrManager, async (c) => {
         const categoryName = (row['Kategori*'] || row['Kategori'])?.toString().trim();
         const productType = (row['Tipe Produk*'] || row['Tipe Produk'])?.toString().toUpperCase().trim();
         const price = parseInt(row['Harga*'] || row['Harga']);
-        const stock = parseInt(row['Stok*'] || row['Stok']);
+        const stockRaw = row['Stok*'] || row['Stok'];
+        const stock = (stockRaw === '' || stockRaw === null || stockRaw === undefined) ? 0 : parseInt(stockRaw);
         const cabangName = (row['Cabang*'] || row['Cabang'])?.toString().trim();
         
         // Parse alert data (optional)
@@ -1139,8 +1134,15 @@ products.post('/import', authMiddleware, ownerOrManager, async (c) => {
         const alertActive = row['Alert Active']?.toString().trim().toLowerCase();
         const isAlertActive = alertActive === 'yes' || alertActive === 'ya' || alertActive === '1' || alertActive === 'true';
 
-        if (!sku || !productName || !categoryName || !productType || isNaN(price) || isNaN(stock) || !cabangName) {
-          errors.push({ row: rowNum, error: 'Data tidak lengkap. Pastikan SKU, Nama Produk, Kategori, Tipe Produk, Harga, Stok, dan Cabang diisi' });
+        // Validate required fields (stock defaults to 0 if empty)
+        if (!sku || !productName || !categoryName || !productType || isNaN(price) || !cabangName) {
+          errors.push({ row: rowNum, error: 'Data tidak lengkap. Pastikan SKU, Nama Produk, Kategori, Tipe Produk, Harga, dan Cabang diisi' });
+          continue;
+        }
+        
+        // Validate stock is a valid number (including 0)
+        if (isNaN(stock) || stock < 0) {
+          errors.push({ row: rowNum, error: 'Stok harus berupa angka >= 0' });
           continue;
         }
 

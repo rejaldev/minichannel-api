@@ -133,7 +133,6 @@ sync.post('/transactions/batch', authMiddleware, async (c) => {
 
           // If transaction already exists, skip creation and return existing
           if (existingTransaction) {
-            console.log(`[Sync] Transaction ${txData.transactionNo} already exists, skipping...`);
             return existingTransaction;
           }
 
