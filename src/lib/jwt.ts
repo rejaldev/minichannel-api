@@ -7,6 +7,14 @@ interface TokenPayload {
   cabangId: string | null;
 }
 
+// Validate JWT_SECRET on module load
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required');
+}
+
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+
 export const generateToken = (
   userId: string,
   email: string,
@@ -14,18 +22,18 @@ export const generateToken = (
   cabangId: string | null = null
 ): string => {
   const options: SignOptions = {
-    expiresIn: (process.env.JWT_EXPIRES_IN || '7d') as jwt.SignOptions['expiresIn']
+    expiresIn: JWT_EXPIRES_IN as jwt.SignOptions['expiresIn']
   };
   return jwt.sign(
     { userId, email, role, cabangId },
-    process.env.JWT_SECRET as string,
+    JWT_SECRET,
     options
   );
 };
 
 export const verifyToken = (token: string): TokenPayload | null => {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET as string) as TokenPayload;
+    return jwt.verify(token, JWT_SECRET) as TokenPayload;
   } catch {
     return null;
   }

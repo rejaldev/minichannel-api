@@ -26,23 +26,52 @@ const app = new Hono();
 const PORT = parseInt(process.env.PORT || '5100');
 
 // CORS Configuration
-const allowedOrigins = [
+// Parse comma-separated origins from environment variable
+const envOrigins = process.env.CORS_ORIGINS 
+  ? process.env.CORS_ORIGINS.split(',').map(o => o.trim())
+  : [];
+
+// Fallback to default origins for development
+const defaultOrigins = [
   'http://localhost:3100',
   'http://localhost:4000',
   'http://127.0.0.1:3100',
   'http://127.0.0.1:4000',
-  process.env.CORS_ORIGIN,
+];
+
+const allowedOrigins = [
+  ...envOrigins,
+  ...(process.env.NODE_ENV === 'development' ? defaultOrigins : []),
 ].filter(Boolean) as string[];
 
 app.use('*', cors({
   origin: (origin) => {
     if (!origin) return origin;
+    
     // Allow Vercel preview deployments
     if (origin.endsWith('.vercel.app')) return origin;
-    // Allow custom domains ending with ziqrishahab.com
-    if (origin.endsWith('.ziqrishahab.com') || origin === 'https://ziqrishahab.com') return origin;
+    
+    // Allow default production domain (ziqrishahab.com)
+    if (origin.endsWith('.ziqrishahab.com') || origin === 'https://ziqrishahab.com') {
+      return origin;
+    }
+    
+    // Allow additional production domain from environment (if specified)
+    const productionDomain = process.env.PRODUCTION_DOMAIN;
+    if (productionDomain && productionDomain !== 'ziqrishahab.com') {
+      if (origin.endsWith(productionDomain) || origin === `https://${productionDomain}`) {
+        return origin;
+      }
+    }
+    
     // Allow configured origins
     if (allowedOrigins.includes(origin)) return origin;
+    
+    // Log rejected origins in development
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`[CORS] Rejected origin: ${origin}`);
+    }
+    
     return null;
   },
   credentials: true,
